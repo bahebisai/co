@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginTop="5dip"
+              android:orientation="vertical"
+              android:background="@drawable/general_loading_bg"
+            >
+
+   <RelativeLayout
+        android:id="@+id/ll_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="20dip"
+        android:visibility="gone"
+         >
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:text="@string/tips"
+            android:layout_marginTop="20dip"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/title_textsize" />
+
+        <ImageView
+            android:id="@+id/iv_pay_stop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:src="@drawable/icon_input_box_delete"
+            android:padding="12dp"
+             />
+
+    </RelativeLayout>
+  <ImageView android:visibility="gone"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/n_line" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="15dip">
+
+        <ProgressBar
+            android:id="@+id/dialog"
+            style="?android:attr/progressBarStyleSmall"
+            android:layout_width="40dip"
+            android:layout_height="40dip"
+            android:layout_marginTop="5dip"
+            android:indeterminateDrawable="@drawable/my_process_loading" />
+
+        <TextView
+            android:id="@+id/tv_dialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dip"
+            android:layout_marginTop="10dip"
+            android:gravity="center"
+            android:text="aaaaaaaaaa"
+            android:textColor="#DDDDDD"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+
+</LinearLayout>

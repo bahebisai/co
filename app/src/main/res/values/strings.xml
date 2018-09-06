@@ -1,0 +1,429 @@
+<resources xmlns:xliff="http://schemas.android.com/tools">
+    <string name="app_name">EMM</string>
+    <string name="emm_name">EMM</string>
+
+    <string name="disable_open">无法打开，请安装相应的软件</string>
+    <string name="none_software">您当前还没有相关文件信息</string>
+    <string name="none_message">您当前还没有相关消息通知</string>
+    <string name="please_install_app">请安装应用</string>
+    <string name="app">应用</string>
+    <string name="open">打开</string>
+    <string name="tips">温馨提示</string>
+    <string name="no_information">暂无信息</string>
+    <!-- mobile data -->
+    <string name="limited_data">额定流量</string>
+
+    <!-- about -->
+    <string name="device_name">设备名称：<xliff:g>%s</xliff:g> </string>
+    <string name="softwares_model">软件型号：<xliff:g>%s</xliff:g> </string>
+    <string name="version_number">版本：<xliff:g>%s</xliff:g> </string>
+    <!-- Permission -->
+    <string name="permission_quit">退出</string>
+    <string name="permission_setting">设置</string>
+    <string name="permission_tip">权限</string>
+    <string name="permission_about">请点击“设置”-“权限”打开所需权限。</string>
+    <string name="usage_access">未获得如下权限 ：若用户未开启权限，则引导用户开启“Apps with usage access”权限!</string>
+    <string name="usage_permission_tip">请打开EMM查看使用情况的应用权限否则无法访问EMM!</string>
+    <string name="permissions_tips">未获得如下权限 ：<xliff:g>%s</xliff:g>因此无法访问!</string>
+    <!-- login -->
+    <string name="net_not_allow">手机无网络无法访问，请检查网络连接!</string>
+    <string name="ip_or_port_error">您输入的网址或端口不对，请您重新检查!</string>
+    <string name="device_had_bind">登录失败：该设备已绑定!</string>
+    <string name="user_had_bind">登录失败：该用户已绑定!</string>
+    <string name="user_no_exist">登录失败：该用户不存在!</string>
+    <string name="password_error">登录失败：账户或密码错误!</string>
+    <string name="net_timeout">登录失败：网络连接超时!</string>
+    <string name="server_error">登录失败：服务器出错!</string>
+    <string name="server_dismiss">登录失败：找不到服务器!</string>
+    <string name="backdata_error">登录失败!</string>
+    <string name="unkown_error">登录失败：未知错误!//Code：<xliff:g>%s</xliff:g></string>
+
+    <string name="input_ip">请输入Ip地址</string>
+    <string name="input_port">请输入端口号</string>
+    <string name="input_username">请输入用户名</string>
+    <string name="input_password">请输入密码</string>
+    <string name="input_password_again">请再次输入密码</string>
+    <string name="open_camera_permission">请打开此应用的摄像头权限!</string>
+
+    <!-- Navigation -->
+    <string name="work_bench">主页</string>
+    <string name="app_store">我的应用</string>
+    <string name="light_app">轻应用</string>
+    <string name="message">消息通知</string>
+    <string name="message1">通知</string>
+    <string name="appfence_message1">应用围栏消息通知</string>
+    <string name="person_message">个人信息</string>
+    <string name="stratege">我的策略</string>
+    <string name="setting">设置</string>
+    <string name="tel_white">电话白名单</string>
+    <string name="message_detail">详情</string>
+    <!-- Work Bench -->
+    <string name="app_update">我的应用</string>
+    <string name="file_update">我的文件</string>
+    <string name="traffic_info">流量信息</string>
+    <string name="wifi_text">WIFI使用</string>
+    <string name="traffic_text">流量使用</string>
+    <string name="storage_space">存储空间</string>
+    <string name="app_install">应用安装</string>
+    <string name="remain_storage">已用空间</string>
+    <string name="my_app">我的应用</string>
+    <string name="used_storary">已使用空间<xliff:g>%s</xliff:g> </string>
+    <string name="app_total">总应用<xliff:g>%s</xliff:g>个</string>
+    <string name="download_avatar">同步用户头像</string>
+    <string name="security_manager">安全区域管理配置</string>
+    <!-- Telephony White List -->
+    <string name="search_hint">请输入您要查找的内容</string>
+
+    <!-- File -->
+    <string name="file">文件</string>
+
+    <!-- Message -->
+    <string name="message_time">时间：<xliff:g>%s</xliff:g></string>
+    <!-- MDM order -->
+    <string name="uninstall_app">删除应用</string>
+    <string name="install_app">安装应用</string>
+    <string name="download_file">下发文件</string>
+    <string name="delete_file">删除文件</string>
+    <string name="location_info">获取定位信息</string>
+    <string name="play_ringtones">播放铃声</string>
+    <string name="switch_life">切换到生活域</string>
+    <string name="switch_security">切换到安全域</string>
+    <string name="device_reboot">设备重启</string>
+    <string name="device_shut">设备关机</string>
+    <string name="device_lock">设备锁定</string>
+    <string name="device_unlock">设备解锁</string>
+    <string name="message_notification">消息通知</string>
+    <string name="get_device_info">获取设备信息</string>delete_app
+    <string name="delete_app">删除应用</string>
+    <!-- setting -->
+    <string name="password_set">密码设置</string>
+    <string name="emm">EMM相关</string>
+    <string name="modify_login_password">修改登录密码</string>
+    <string name="modify_unlock_password">修改解锁密码</string>
+    <string name="app_auto_install">应用自动安装/卸载</string>
+    <string name="help">帮助</string>
+    <string name="about">关于</string>
+    <string name="agreement">许可协议</string>
+    <string name="exitworkfragement">退出工作台</string>
+    <string name="vpn">VPN</string>
+    <string name="stand_by">支持</string>
+    <string name="check_notify">检测更新</string>
+    <string name="login_out">登出账号</string>
+
+    <!-- stratege -->
+    <string name="send_system_strategy">系统违规</string>
+    <string name="send_system_strategy_msg">系统违规</string>
+    <string name="delete_system_strategy">删除系统违规</string>
+    <string name="send_app_strategy">应用违规</string>
+    <string name="send_app_strategy_msg">应用违规</string>
+    <string name="delete_app_strategy">删除应用违规</string>
+    <string name="send_loseCouplet_strategy">失联违规</string>
+    <string name="send_loseCouplet_strategy_msg">失联违规</string>
+    <string name="delete_loseCouplet_strategy">删除失联违规</string>
+    <string name="send_geographical_Fence">地理围栏</string>
+    <string name="send_geographical_Fence_msg">地理围栏</string>
+    <string name="delete_geographical_Fence">删除地理围栏</string>
+    <string name="send_black_White_list">黑白名单</string>
+    <string name="send_black_White_list_msg">黑白名单</string>
+    <string name="delete_black_White_list">删除黑白名单</string>
+    <string name="send_White_list">应用白名单</string>
+    <string name="send_White_list_msg">应用白名单</string>
+    <string name="delete_White_list">删除应用白名单</string>
+    <string name="send_black_list">应用黑名单</string>
+    <string name="send_black_list_msg">应用黑名单</string>
+    <string name="delete_black_list">删除应用黑名单</string>
+    <string name="send_limit_strategy">限制策略</string>
+    <string name="send_limit_strategy_msg">限制策略</string>
+    <string name="delete_limit_strategy">删除限制策略</string>
+    <string name="add_telephone_number">更新电话白名单</string>
+    <string name="modifyTelephonyWhiteList">修改电话白名单</string>
+    <string name="delete_telephone_number">删除电话白名单</string>
+    <string name="send_configure_Strategy">配置策略</string>
+    <string name="send_configure_Strategy_msg">配置策略</string>
+    <string name="delete_configure_Strategy">删除配置策略</string>
+    <string name="machine_card_binding">机卡绑定</string>
+    <string name="delete_machine_card_binding">取消机卡绑定</string>
+    <string name="wipe_data">擦除用户数据</string>
+    <string name="start_phone_white">开启电话白名单</string>
+    <string name="stop_phone_white">关闭电话白名单</string>
+    <string name="device_update">设备更新</string>
+    <string name="upload_debug_log">上传调试日志</string>
+    <string name="SetFactoryReset">淘汰设备</string>
+    <string name="enter_sercurity_stratege">安全策略切换</string>
+    <string name="enter_life_stratege">生活策略切换</string>
+    <string name="put_down_application_fence_msg">应用围栏：</string>
+    <string name="put_down_application_fence_msg_content">应用围栏消息通知</string>
+    <string name="put_down_application_fence">应用围栏</string>
+    <string name="unstall_application_fence">删除应用围栏</string>
+    <string name="login_out_and_delete_data">删除用户</string>
+    <string name="delete_sensitive_word">删除敏感词</string>
+    <string name="send_sensitive_word_policy">敏感词策略</string>
+    <string name="delete_sms_backup_policy">删除短信备份策略</string>
+    <string name="send_sms_backup_policy">短信备份策略</string>
+    <string name="send_call_recorder_policy">电话录音备份策略</string>
+    <string name="delete_call_recorder_policy">删除电话录音备份策略</string>
+
+    <string name="send_safe_desk">安全桌面策略</string>
+    <string name="send_safe_desk_msg">安全桌面策略</string>
+    <string name="delete_safe_desk">删除安全桌面策略</string>
+    <string name="revocation_safe_desk">撤销安全桌面策略</string>
+    <string name="send_time_Frence">时间围栏策略</string>
+    <string name="send_time_Frence_msg">时间围栏策略</string>
+    <string name="delete_time_Frence">删除时间围栏策略</string>
+    <string name="revocation_time_Frence">撤销时间围栏策略</string>
+    <string name="send_security_chrome">安全浏览器</string>
+    <string name="send_security_chrome_msg">安全浏览器</string>
+    <string name="delete_security_chrome">删除安全浏览器</string>
+    <string name="flow_quota">设置额定流量</string>
+
+    <string name="send_Entrance_guard">门禁策略</string>
+    <string name="delete_Entrance_guard">删除门禁策略</string>
+    <string name="send_Entrance_guard_key">门禁卡</string>
+    <string name="delete_Entrance_guard_key">删除门禁卡</string>
+    <string name="send_trajectory_Strategy">轨迹策略</string>
+    <string name="delete_trajectory_Strategy">删除轨迹策略</string>
+    <string name="frequency">轨迹上传间隔时间:<xliff:g>%s</xliff:g>分钟</string>
+
+    <!--=======-->
+    <!-- 描述数字键盘按下 -->
+    <string name="numeric_keyboard_down">numeric keyboard down</string>
+    <!-- 描述数字键盘弹起 -->
+    <string name="numeric_keyboard_up">numeric keyboard up</string>
+    <!-- 描述数字键盘取消 -->
+    <string name="numeric_keyboard_cancel">numeric keyboard cancel</string>
+
+
+    <string name="please_input_pwd">请输入密码</string>
+    <string name="please_input_pwd_again">确认密码</string>
+    <string name="not_equals">两次输入的密码不一致,请重新输入！</string>
+    <string name="setting_pwd_success">密码设置成功！</string>
+    <string name="forget_pwd">忘记密码?</string>
+    <string name="delete">删除</string>
+
+    <!--  <string name="app_name">LockDemo</string>--><!--NumberLockDemo-->
+    <string name="action_settings">Settings</string>
+    <string name="screenName">屏保密码设置</string>
+    <string name="appPassword">应用密码设置</string>
+    <!--===========-->
+
+    <!--network && uninstall-->
+    <string name="forbidden_net">禁止上网</string>
+    <string name="allow_net">允许上网</string>
+    <string name="forbidden_un">禁止卸载</string>
+    <string name="allow_un">允许卸载</string>
+    -
+    <string name="IPAddress">IP地址</string>
+    <string name="IPport">IP端口</string>
+    <string name="username">用户名</string>
+    <string name="password">密码</string>
+    <string name="login">登  录</string>
+    <string name="QR_code">二维码</string>
+    <string name="login_loading">正在登录中...</string>
+
+    <!--card emulate-->
+    <string name="servicedes">servicedes</string>aiddescription
+    <string name="aiddescription">aiddescription</string>
+    <!--裁剪-->
+    <string name="images">图片</string>
+    <string name="select_ok">完成(0/3)</string>
+    <string name="ip_all_images">所有图片</string>
+    <string name="ip_folder_image_count">共%1$d张</string>
+    <string name="ip_preview_image_count">%1$d/%2$d</string>
+    <string name="ip_select_limit">最多选择%1$d张图片</string>
+    <string name="ip_complete">完成</string>
+    <string name="ip_select_complete">完成(%1$d/%2$d)</string>
+    <string name="ip_preview">预览</string>
+    <string name="ip_preview_count">预览(%1$d)</string>
+    <string name="ip_photo_crop">图片裁剪</string>
+    <string name="ip_origin">原图</string>
+    <string name="ip_origin_size">原图(%1$s)</string>
+
+    <!--dailao-->
+    <string name="btnCancel">取消</string>
+    <string name="bt_dialog_ok">知道了</string>
+    <string name="bt_dialog_sure">确定</string>
+    <string name="tv_loading">正在加载中...</string>
+    <string name="tv_Logining">正在中...</string>
+    <string name="tv_uptate">正在上传中...</string>
+    <string name="tv_compress">正在压缩中...</string>
+    <!-- 头部字体 -->
+    <dimen name="title_textsize">19sp</dimen>
+    <!-- 内容字体大小 -->
+    <dimen name="content_text_size">20sp</dimen>
+    <!-- 底部按钮字体大小 -->
+    <dimen name="bottombar_text_size">12sp</dimen>
+
+
+    <!--发表留言-->
+    <string name="community_ui_asma_publish">发表留言</string>
+    <string name="community_ui_asma_nodata">还没评论内容哦</string>
+    <string name="community_ui_asma_message">全部留言</string>
+    <string name="community_ui_asma_total">(共</string>
+    <string name="community_ui_asma_item">条)</string>
+    <string name="community_ui_asma_publishfail">发表失败</string>
+    <string name="community_ui_asma_alsosay">我也说一句</string>
+    <string name="community_ui_asma_announce">发表</string>
+    <string name="device_more_said">好凄凉</string>
+    <!-- Error View -->
+    <string name="error_view_click_to_refresh">点击屏幕,重新加载</string>
+    <string name="error_view_no_data">暂无内容</string>
+    <string name="error_view_loading">加载中…</string>
+    <string name="error_view_load_error_click_to_refresh">内容加载失败\r\n点击重新加载</string>
+    <string name="error_view_network_error_click_to_refresh">没有可用的网络\r\n点击重新加载</string>
+    <string name="tip_network_error">没有可用的网络</string>
+    <string name="view_aasv_write">请输入一个大于0的数字</string>
+    <string name="view_aasv_wlanwrong">网络异常</string>
+    <string name="view_aasv_checkwlan">请检查您的网络连接</string>
+    <string name="view_aasv_payfail">支付失败，请重试</string>
+    <string name="device_getnetdate">点击重新加载</string>
+    <string name="emm_descri">emm_辅助服务</string>
+    <string name="emm_demo">MDM_辅助服务</string>
+
+    <!--stratege detail-->
+    <!--lost couplet strategy-->
+    <string name="lost_time">失联时间：<xliff:g>%s</xliff:g></string><!--天-->
+    <!--app strategy-->
+    <string name="black_list">黑名单：<xliff:g>%s</xliff:g></string>
+    <string name="white_list">白名单：<xliff:g>%s</xliff:g></string>
+    <!--system strategy-->
+    <string name="sd_change">SD卡变更：<xliff:g>%s</xliff:g></string>
+    <string name="machine_card">SIM卡绑定：<xliff:g>%s</xliff:g></string>
+    <!--geographical fence-->
+    <string name="longitude">经度：<xliff:g>%s</xliff:g></string>
+    <string name="latitude">纬度：<xliff:g>%s</xliff:g></string>
+    <string name="radius">半径：<xliff:g>%s</xliff:g></string>
+    <!--device config-->
+    <string name="lock_screen">锁屏：<xliff:g>%s</xliff:g></string>
+    <string name="mobile_data">移动数据：<xliff:g>%s</xliff:g></string>
+    <string name="wifi_config">WIFI：<xliff:g>%s</xliff:g></string>
+    <string name="mobile_ap">移动热点：<xliff:g>%s</xliff:g></string>
+    <string name="usb_config">USB传输：<xliff:g>%s</xliff:g></string>
+    <string name="allow_location">定位：<xliff:g>%s</xliff:g></string>
+    <string name="sms_config">短信：<xliff:g>%s</xliff:g></string>
+    <string name="reconder">录音：<xliff:g>%s</xliff:g></string>
+    <string name="camera">相机：<xliff:g>%s</xliff:g></string>
+    <string name="bluetooth">蓝牙：<xliff:g>%s</xliff:g></string>
+    <string name="drop_status">下拉栏：<xliff:g>%s</xliff:g></string>
+    <string name="reset">复位：<xliff:g>%s</xliff:g></string>
+    <string name="NFC">NFC：<xliff:g>%s</xliff:g></string>
+    <string name="screen_shot">截屏：<xliff:g>%s</xliff:g></string>
+    <string name="modify_sys_time">修改系统时间：<xliff:g>%s</xliff:g></string>
+    <string name="domain_switch">双域控制一：<xliff:g>%s</xliff:g></string>
+    <string name="two_domain">双域控制二：<xliff:g>%s</xliff:g></string>
+
+    <string name="allow_telephone">电话：<xliff:g>%s</xliff:g></string>
+    <string name="open_telephone_white">开启电话白名单：<xliff:g>%s</xliff:g></string>
+    <!--device config-->
+    <string name="security_chrome_config">安全浏览器：<xliff:g>%s</xliff:g></string>
+    <!--custom desk-->
+    <string name="set_security_desk">设置为安全桌面：<xliff:g>%s</xliff:g></string>
+    <string name="resume_phone">显示通话：<xliff:g>%s</xliff:g></string>
+    <string name="resume_contacts">显示联系人：<xliff:g>%s</xliff:g></string>
+    <string name="resume_sms">显示短信：<xliff:g>%s</xliff:g></string>
+
+    <string name="password_modify_success">密码修改成功!</string>
+    <string name="input_success_password">请输入正确密码!</string>
+    <string name="password_inconsistent">两次密码不一致，请重新输入!</string>
+    <string name="input_new_password">请输入新密码</string>
+    <string name="input_old_password">请输入旧密码</string>
+    <!-- setting -->
+    <string name="input_password_error">输入密码错误</string>
+    <string name="stratege_information">您当前还没有相关策略信息</string>
+    <string name="telephone_information">您当前还没有相关电话白名单信息</string>
+    <string name="app_information">您当前还没有相关应用</string>
+    <string name="telephone_call">呼叫</string>
+    <string name="one_unit"><xliff:g>%s</xliff:g>个</string>
+
+    <!-- person -->
+    <string name="person_account">用户账号：<xliff:g>%s</xliff:g></string>
+    <string name="login_address">用户账号：<xliff:g>%s</xliff:g></string>
+    <string name="file_not_exist">文件不存在!</string>
+    <string name="image_not_exist">该图片不存在!</string>
+    <string name="file_size_limit">文件大小不能超过1M!</string>
+    <string name="photo_upload_success">照片上传成功!</string>
+    <string name="upload_timeout">上传超时!</string>
+    <string name="permission_refuse">权限被拒绝!</string>
+    <string name="pick_one_photo">请选择一张图片!</string>
+    <string name="finish">完成</string>
+    <string name="photo_limit">最多只能选择<xliff:g>%s</xliff:g>张图片</string>
+    <string name="pick_photos">请选择<xliff:g>%s</xliff:g>张图片</string>
+    <string name="had_pick_photos">已经选择<xliff:g>%s</xliff:g>张图片</string>
+    <string name="take_photos">拍摄</string>
+    <string name="pick_from_gallery">从手机相册选择</string>
+    <string name="camera_photo">相机照片</string>
+    <string name="load_failed">加载失败</string>
+    <string name="do_not_worry">别灰心,要不要重试一下?</string>
+    <string name="load_refresh">重新加载</string>
+
+    <!-- app fence -->
+    <string name="limit_type">限制方式：</string>
+    <string name="fence_allow">在时间/地理围栏内允许使用</string>
+    <string name="voice_notice">语音通知：<xliff:g>%s</xliff:g></string>
+    <string name="msg_notice">消息通知：<xliff:g>%s</xliff:g></string>
+    <string name="msg_notice_content">消息通知内容：<xliff:g>%s</xliff:g></string>
+    <string name="always_allow">始终允许使用</string>
+    <string name="always_forbidden">始终禁止使用</string>
+    <string name="about_app">关联应用：<xliff:g>%s</xliff:g></string>
+    <string name="time_setting">时间围栏设置</string>
+    <string name="geo_setting">地理围栏设置</string>
+    <string name="app_fence_is_running">应用围栏正在运行!</string>
+
+    <!--time fence-->
+    <string name="time_range">时间范围：<xliff:g>%s</xliff:g></string>
+    <string name="time_unit">时间单元：</string>
+    <string name="every_day">每天：</string>
+    <string name="every_week">每周：</string>
+    <string name="time_work">工作日：</string>
+    <string name="special_time">特定时间：</string>
+    <string name="week_one">星期一 </string>
+    <string name="week_two">星期二 </string>
+    <string name="week_three">星期三 </string>
+    <string name="week_four">星期四 </string>
+    <string name="week_five">星期五 </string>
+    <string name="week_six">星期六 </string>
+    <string name="week_seven">星期日 </string>
+
+    <string name="exit_security">退出安全域：<xliff:g>%s</xliff:g></string>
+    <string name="use_security_desk">使用安全桌面：<xliff:g>%s</xliff:g></string>
+
+    <string name="allow">允许</string>
+    <string name="forbidden">禁止</string>
+    <string name="yes">是</string>
+    <string name="no">否</string>
+
+    <string name="geo_fence_service">地理围栏服务正在运行</string>
+    <string name="time_fence_service">时间围栏服务正在运行</string>
+    <string name="app_fence_service">应用围栏服务正在运行</string>
+    <string name="emm_runing">EMM正在运行</string>
+    <string name="long_link_service">长连接正在运行</string>
+    <string name="order_back">命令反馈服务正在运行</string>
+    <string name="system_service">系统违规服务正在运行</string>
+    <string name="net_change">网络状态发生改变</string>
+    <string name="location_service">定位服务正在运行</string>
+    <string name="word_detect_service">EMM敏感词检测</string>
+
+    <string name="app_install_package">应用安装：<xliff:g>%s</xliff:g></string>
+    <string name="app_uninstall_package">应用卸载：<xliff:g>%s</xliff:g></string>
+    <string name="systen_compliance_excute">系统违规执行</string>
+
+    <string name="card_bind_excute">机卡绑定执行</string>
+    <string name="card_bind_service">机卡绑定服务正在运行</string>
+
+    <string name="call_manager">请联系管理员</string>
+    <string name="can_login">你可以登录了</string>
+    <string name="pwd_right">密码正确</string>
+    <string name="wrong_pwd">密码错误,请重新输入</string>
+
+    <string name="security_desk">安全桌面</string>
+    <string name="more_app">更多应用</string>
+
+    <string name="illegal_picture">图片非法</string>
+    <string name="no_face">图片不包含人脸</string>
+    <string name="multiple_faces">图片中包含多个人脸</string>
+
+    <string name="disable_warning">取消激活后将导致本软件的部分功能无法正常工作，您确定要取消激活么？</string>
+
+    <string name="tel_white_list">电话白名单：</string>
+    <string name="short_num">短号：</string>
+    <string name="telephone_num">手机号：</string>
+</resources>

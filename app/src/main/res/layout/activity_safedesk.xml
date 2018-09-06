@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@mipmap/security_desk"
+              android:orientation="vertical">
+    <!-- @drawable/bg-->
+    <!--<android.support.v7.widget.RecyclerView
+        android:layout_marginTop="10dp"
+        android:id="@+id/app_launcher"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>-->
+    <!--<ScrollView
+        android:layout_marginTop="18dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <GridView xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:id="@+id/app_launcher"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:columnWidth="60dp"
+                  android:gravity="center"
+                  android:horizontalSpacing="10dp"
+                  android:numColumns="auto_fit"
+                  android:padding="10dp"
+                  android:stretchMode="columnWidth"
+
+                  android:verticalSpacing="10dp"
+            />
+    </ScrollView>-->
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_marginTop="36dp"
+        android:id="@+id/app_launcher"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="12px"
+        android:paddingRight="12px"/>
+
+</LinearLayout>

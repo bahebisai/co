@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="@color/bg_gray"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <com.xiaomi.emm.view.viewutils.ViewLoadingLayout
+        android:id="@+id/viewloading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+
+        />
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/message_list"
+        android:headerDividersEnabled="true"
+        android:divider="@null"
+        android:layout_gravity="center_vertical"/>
+</LinearLayout>
+

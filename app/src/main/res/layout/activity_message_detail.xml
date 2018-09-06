@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="#EFEFF4"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#1487fb"
+        app:title="@string/file"
+        app:navigationIcon="@mipmap/arrow_back"
+        app:titleTextColor="#fff"/>
+    <!--android:background="@mipmap/nagative_bar"-->
+    <android.support.v7.widget.CardView
+        app:cardBackgroundColor="@color/white"
+        android:minHeight="80dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="7dp"
+        android:layout_marginRight="7dp"
+        android:layout_marginBottom="10dp"
+        android:layout_width="match_parent"
+        app:cardCornerRadius="10dp"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+    <TextView
+        android:text="MDM"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/message_detail_from"
+        android:textColor="#222222"
+        android:textSize="18dp"/>
+
+    <TextView
+        android:text="2017/11/21 14:38"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="2dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/message_detail_time"
+        android:textColor="#999999"
+        android:textSize="11dp"/>
+
+    <View
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#f5f5f5"/>
+
+    <TextView
+
+        android:layout_marginLeft="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/message_detail_about"
+        android:text="@string/please_install_app"
+        android:textColor="#777777"
+        android:textSize="12dp"/>
+<!-- android:textColor="#9E9E9E"-->
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+</LinearLayout>

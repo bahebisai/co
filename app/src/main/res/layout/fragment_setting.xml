@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="8dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:gravity="bottom"
+                android:paddingBottom="5dp"
+                android:paddingLeft="5dp"
+                android:text="@string/password_set"
+                android:textColor="@color/grey"
+                android:textSize="12dp" />
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:alpha="0.5"
+                android:background="@color/grey" />
+        </LinearLayout>
+
+        <!--<LinearLayout
+            android:id="@+id/modify_login_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="5dp"
+                android:text="@string/modify_login_password"
+                android:textColor="@color/litter_black"
+                android:textSize="16dp" />
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="0.5dp"
+                android:alpha="0.3"
+                android:background="@color/grey" />
+        </LinearLayout>-->
+
+        <LinearLayout
+            android:id="@+id/modify_unlock_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="5dp"
+                android:text="@string/modify_unlock_password"
+                android:textColor="@color/litter_black"
+                android:textSize="16dp" />
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="0.5dp"
+                android:alpha="0.3"
+                android:background="@color/grey" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:gravity="bottom"
+                android:paddingBottom="5dp"
+                android:paddingLeft="5dp"
+                android:text="@string/emm"
+                android:textColor="@color/grey"
+                android:textSize="12dp" />
+
+            <View
+                android:alpha="0.5"
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:background="@color/grey" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="5dp"
+                    android:text="@string/app_auto_install"
+                    android:textColor="@color/litter_black"
+                    android:textSize="16dp" />
+                <Switch
+                    android:id="@+id/switch_app"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_alignParentEnd="true"
+                    android:gravity="center_vertical"
+                    android:layout_marginEnd="5dp" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="0.5dp"
+                android:alpha="0.3"
+                android:background="@color/grey" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/help"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="5dp"
+                android:text="@string/help"
+                android:textColor="@color/litter_black"
+                android:textSize="16dp" />
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="0.5dp"
+                android:alpha="0.3"
+                android:background="@color/grey" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/about"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="5dp"
+                android:text="@string/about"
+                android:textColor="@color/litter_black"
+                android:textSize="16dp" />
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="0.5dp"
+                android:alpha="0.3"
+                android:background="@color/grey" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/agreement"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="5dp"
+                android:text="@string/agreement"
+                android:textColor="@color/litter_black"
+                android:textSize="16dp" />
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="0.5dp"
+                android:alpha="0.3"
+                android:background="@color/grey" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/exitworkfragement"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="5dp"
+                android:text="@string/exitworkfragement"
+                android:textColor="@color/litter_black"
+                android:textSize="16dp" />
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="0.5dp"
+                android:alpha="0.3"
+                android:background="@color/grey" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/vpn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="5dp"
+                android:text="@string/vpn"
+                android:textColor="@color/litter_black"
+                android:textSize="16dp" />
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="0.5dp"
+                android:alpha="0.3"
+                android:background="@color/grey" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/stand_by"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="5dp"
+                android:text="@string/stand_by"
+                android:textColor="@color/litter_black"
+                android:textSize="16dp" />
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="0.5dp"
+                android:alpha="0.3"
+                android:background="@color/grey" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/check_notify"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="5dp"
+                android:text="@string/check_notify"
+                android:textColor="@color/litter_black"
+                android:textSize="16dp" />
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="0.5dp"
+                android:alpha="0.3"
+                android:background="@color/grey" />
+        </LinearLayout>
+
+        <!--<Button
+            android:id="@+id/login_out"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="5dp"
+            android:text="@string/login_out"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:background="@drawable/bg_qr_btn"
+            android:layout_gravity="center_horizontal"/>-->
+    </LinearLayout>
+</ScrollView>

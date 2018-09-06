@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/white"
+              android:orientation="vertical">
+    <!--<LinearLayout
+        android:background="@mipmap/work_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="200dp">-->
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#1487fb"
+        android:padding="6dp"
+        app:navigationIcon="@mipmap/arrow_back"
+        app:title="@string/person_message"
+        app:titleTextColor="#fff"/>
+
+
+    <!--android:background="@mipmap/nagative_bar"-->
+    <RelativeLayout
+        android:id="@+id/rl_back"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="#333333"
+        android:padding="@dimen/base_padding"
+        >
+        <!--android:background="@color/light"  @mipmap/work_fragment-->
+
+        <com.xiaomi.emm.view.photoview.CircleImageView
+            android:id="@+id/iv_personpoto"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="1dp"
+            android:src="@drawable/avatar"
+            app:civ_border_color="@color/dark"
+            app:civ_border_width="2dp"/>
+    </RelativeLayout>
+
+    <!--</LinearLayout>-->
+    <LinearLayout
+        android:paddingLeft="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_userName"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/white"
+            android:gravity="center_vertical"/>
+
+        <TextView
+            android:id="@+id/address"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/white"
+            android:gravity="center_vertical"/>
+
+    </LinearLayout>
+
+</LinearLayout>

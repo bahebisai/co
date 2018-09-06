@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorNavigation">#3F51B5</color>
+    <color name="colorPrimary">#2196F3</color>
+    <color name="colorPrimaryDark">#1976d2</color>
+    <color name="colorAccent">#FF4081</color>
+    <!-- QRCode scanner color begin -->
+    <color name="viewfinder_mask">#60000000</color>
+    <color name="result_view">#B0000000</color>
+    <color name="viewfinder_frame">#90FFFFFF</color>
+    <color name="result_point_color">#C0FFFF00</color>
+    <color name="laser_color">#0F0</color>
+    <color name="corner_color">#00FF00</color>
+    <color name="actionbar">#1487fb</color>
+    <!-- QRCode scanner color end -->
+
+    <color name="grey">#9E9E9E</color>
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="litter_black">#424242</color>
+    <color name="litter_blue">#64B5F6</color>
+
+    <!--======-->
+    <color name="colorLockBackground">#4a5559</color>
+    <!--=========-->
+    <color name="dark">#FF222222</color>
+    <color name="light">#FFEEEEEE</color>
+
+    <color name="blue">#54B6B7</color>
+
+    <color name="pale_gray">#55000000</color>
+    <color name="dark_gray">#88000000</color>
+    <color name="gray">#444444</color>
+    <color name="_33333">#333333</color>
+
+    <color name="text_getnum_color">#E0E0E0</color>
+    <color name="transparent">#00ffffff</color>
+
+<!--  裁减-->
+    <color name="ic_back_press">#323336</color>
+    <color name="ip_color_primary">#393A3F</color>
+    <color name="ip_color_primary_dark">#303135</color>
+    <color name="ip_color_primary_trans">#ec2f3335</color>
+    <color name="ip_color_press">#ffe0e0e0</color>
+    <color name="ip_camera_pre">#353535</color>
+    <color name="ip_color_accent">#1AAD19</color>
+    <color name="ip_text_secondary_inverted">#66ffffff</color>
+    <color name="ip_text_primary_inverted">#ffffff</color>
+    <!---->
+    <color name="line_color">#DDDDDD</color>
+    <color name="blacks">#000</color>
+    <color name="whites">#fff</color>
+
+    <!--规则 2： 背景，所有布局默认背景引用  bg_gray（请手动设置）
+       actionbar背景引用 bg_title_black（继承已实现）-->
+    <color name="bg_gray">#f5f5f5</color><!--f4f3f3-->
+    <color name="bg_title_black">#252e3d</color>
+    <color name="bg_room_green">#3d8a8b</color>
+    </resources>

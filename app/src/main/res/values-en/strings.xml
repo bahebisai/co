@@ -1,0 +1,381 @@
+<resources xmlns:xliff="http://schemas.android.com/tools">
+    <string name="app_name">EMM</string>
+    <string name="emm_name">EMM Mobile management platform</string>
+
+    <string name="disable_open">Cannot open it, please install the related software</string>
+    <string name="none_software">Currently, You do not have related file</string>
+    <string name="none_message">Currently, You do not have related message</string>
+    <string name="please_install_app">Please install the application</string>
+    <string name="app">Application</string>
+    <string name="open">Open</string>
+    <string name="tips">Kindly reminder</string>
+    <string name="no_information">No information available now</string>
+    <!-- mobile data -->
+    <string name="limited_data">Rated flow</string>
+
+    <!-- about -->
+    <string name="device_name">Device name：<xliff:g>%s</xliff:g> </string>
+    <string name="softwares_model">Software model：<xliff:g>%s</xliff:g> </string>
+    <string name="version_number">Version：<xliff:g>%s</xliff:g> </string>
+    <!-- Permission -->
+    <string name="permission_quit">Exit</string>
+    <string name="permission_setting">Setting</string>
+    <string name="permission_tip">Permission</string>
+    <string name="permission_about">Please click "Settings"-"Permission" to open the required permission.</string>
+    <string name="usage_access">Not obtained the following permissions: If the permissions are not open for the user, please guide to open the "Apps with usage access" permission:</string>
+    <string name="usage_permission_tip">Please start the EMM to check the application permission for the usage, otherwise, you may fail to access the EMM!</string>
+    <string name="permissions_tips">Not obtained the following permissions: <xliff:g>%s</xliff:g>,therefore cannot be accessed!</string>
+    <!-- login -->
+    <string name="net_not_allow">The mobile phone cannot access the network, please check the network connection!</string>
+    <string name="ip_or_port_error">The website or port you input is not correct, please check!</string>
+    <string name="device_had_bind">Login failed: The device has already been bound with an account!</string>
+    <string name="user_no_exist">Login failed: This user does not exist!</string>
+    <string name="password_error">Login failed: Wrong account or password!</string>
+    <string name="net_timeout">Login failed: Network connection timeout!</string>
+    <string name="server_error">Login failed: Sever error!</string>
+    <string name="server_dismiss">Login failed: Cannot find the server!</string>
+    <string name="backdata_error">Login failed!</string>
+    <string name="unkown_error">Login failed: unknown error!//Code：<xliff:g>%s</xliff:g></string>
+
+    <string name="input_ip">Please input IP address</string>
+    <string name="input_port">Please input the port No.</string>
+    <string name="input_username">Please input the user name</string>
+    <string name="input_password">Please input the password</string>
+    <string name="input_password_again">Please input the password again</string>
+    <string name="open_camera_permission">Please open the camera permission for the application!</string>
+
+    <!-- Navigation -->
+    <string name="work_bench">Home page</string>
+    <string name="app_store">My Applications</string>
+    <string name="light_app">Light App</string>
+    <string name="message">Messages</string>
+    <string name="message1">Notification</string>
+    <string name="appfence_message1">App Fence Message Notification</string>
+    <string name="person_message">Personal information</string>
+    <string name="stratege">My strategy</string>
+    <string name="setting">Setting</string>
+    <string name="tel_white">Call white list</string>
+    <string name="message_detail">Detail</string>
+    <!-- Work Bench -->
+    <string name="app_update">My Applications</string>
+    <string name="file_update">My file</string>
+    <string name="traffic_info">Flow information</string>
+    <string name="wifi_text">WIFI usage</string>
+    <string name="traffic_text">Flow usage</string>
+    <string name="storage_space">Storage space</string>
+    <string name="app_install">App installation</string>
+    <string name="remain_storage">Used space</string>
+    <string name="my_app">My application</string>
+    <string name="used_storary">Used space <xliff:g>%s</xliff:g> </string>
+    <string name="app_total">Total applications <xliff:g>%s</xliff:g>个</string>
+    <string name="download_avatar">Sync user profile picture</string>
+    <string name="security_manager">Security zone management configuration</string>
+    <!-- Telephony White List -->
+    <string name="search_hint">Please input the contents to search</string>
+
+    <!-- File -->
+    <string name="file">File</string>
+
+    <!-- Message -->
+    <string name="message_time">Time：<xliff:g>%s</xliff:g></string>
+    <!-- MDM order -->
+    <string name="uninstall_app">Delete application</string>
+    <string name="install_app">Install application</string>
+    <string name="download_file">Issue file</string>
+    <string name="delete_file">Delete file</string>
+    <string name="location_info">Obtain positioning information</string>
+    <string name="play_ringtones">Play ringtone</string>
+    <string name="switch_life">Switch to life domain</string>
+    <string name="switch_security">Switch to security domain</string>
+    <string name="device_reboot">Device reset</string>
+    <string name="device_shut">Device shutdown</string>
+    <string name="device_lock">Device lock</string>
+    <string name="device_unlock">Device unlock</string>
+    <string name="message_notification">Message notification</string>
+    <string name="get_device_info">Obtain device information</string>
+    <string name="delete_app">Delete application</string>
+    <!-- setting -->
+    <string name="password_set">Password setting</string>
+    <string name="emm">EMM About</string>
+    <string name="modify_login_password">Modify login password</string>
+    <string name="modify_unlock_password">Modify unlocking password</string>
+    <string name="app_auto_install">Application auto install/uninstall</string>
+    <string name="help">Help</string>
+    <string name="about">About</string>
+    <string name="agreement">Agreement</string>
+    <string name="exitworkfragement">Exit working table</string>
+    <string name="vpn">VPN</string>
+    <string name="stand_by">Support</string>
+    <string name="check_notify">Check for update</string>
+    <string name="login_out">Log out</string>
+
+    <!-- stratege -->
+    <string name="send_system_strategy">System violation</string>
+    <string name="send_system_strategy_msg">System violation</string>
+    <string name="delete_system_strategy">Delete system violation</string>
+    <string name="send_app_strategy">Application violation</string>
+    <string name="send_app_strategy_msg">Application violation</string>
+    <string name="delete_app_strategy">Delete application violation</string>
+    <string name="send_loseCouplet_strategy">Loss of communication violation</string>
+    <string name="send_loseCouplet_strategy_msg">Loss of communication violation</string>
+    <string name="delete_loseCouplet_strategy">Delete loss of communication violation</string>
+    <string name="send_geographical_Fence">Geofence</string>
+    <string name="send_geographical_Fence_msg">Geofence</string>
+    <string name="delete_geographical_Fence">Delete geofence</string>
+    <string name="send_black_White_list">Black and white list</string>
+    <string name="send_black_White_list_msg">Black and white list</string>
+    <string name="delete_black_White_list">Delete black and white list</string>
+    <string name="send_White_list">Application white list</string>
+    <string name="send_White_list_msg">Application white list</string>
+    <string name="delete_White_list">Delete application white list</string>
+    <string name="send_black_list">Application black list</string>
+    <string name="send_black_list_msg">Application black list</string>
+    <string name="delete_black_list">Delete application black list</string>
+    <string name="send_limit_strategy">Restriction strategy</string>
+    <string name="send_limit_strategy_msg">Restriction strategy</string>
+    <string name="delete_limit_strategy">Delete restriction strategy</string>
+    <string name="add_telephone_number">Update call white list</string>
+    <string name="modifyTelephonyWhiteList">Modify call white list</string>
+    <string name="delete_telephone_number">Delete call white list</string>
+    <string name="send_configure_Strategy">Configure strategy</string>
+    <string name="send_configure_Strategy_msg">Configure strategy</string>
+    <string name="delete_configure_Strategy">Delete configuration strategy</string>
+    <string name="machine_card_binding">Bind machine with card</string>
+    <string name="delete_machine_card_binding">Unbind machine and card </string>
+    <string name="wipe_data">Erase user data</string>
+    <string name="start_phone_white">Enable call white list</string>
+    <string name="stop_phone_white">Disable call white list</string>
+    <string name="device_update">Device update</string>
+    <string name="upload_debug_log">Upload debug log</string>
+    <string name="SetFactoryReset">Obsolete device</string>
+    <string name="enter_sercurity_stratege">Switch security strategy</string>
+    <string name="enter_life_stratege">Switch life strategy</string>
+    <string name="put_down_application_fence_msg">Application fence</string>
+    <string name="put_down_application_fence_msg_content">Application fence message notification</string>
+    <string name="put_down_application_fence">Application fence</string>
+    <string name="unstall_application_fence">Delete application fence</string>
+    <string name="login_out_and_delete_data">Delete user</string>
+
+    <string name="send_safe_desk">Security desktop strategy</string>
+    <string name="send_safe_desk_msg">Security desktop strategy</string>
+    <string name="delete_safe_desk">Delete security desktop strategy</string>
+    <string name="revocation_safe_desk">Cancel security desktop strategy</string>
+    <string name="send_time_Frence">Time fence strategy</string>
+    <string name="send_time_Frence_msg">Time fence strategy</string>
+    <string name="delete_time_Frence">Delete time fence strategy</string>
+    <string name="revocation_time_Frence">Cancel time fence strategy</string>
+    <string name="send_security_chrome">Secure browser</string>
+    <string name="send_security_chrome_msg">Secure browser</string>
+    <string name="delete_security_chrome">Delete secure browser</string>
+    <string name="flow_quota">Set rated flow</string>
+
+    <!--=======-->
+    <!-- 描述数字键盘按下 -->
+    <string name="numeric_keyboard_down">numeric keyboard down</string>
+    <!-- 描述数字键盘弹起 -->
+    <string name="numeric_keyboard_up">numeric keyboard up</string>
+    <!-- 描述数字键盘取消 -->
+    <string name="numeric_keyboard_cancel">numeric keyboard cancel</string>
+
+
+    <string name="please_input_pwd">Please input the password</string>
+    <string name="please_input_pwd_again">Confirm password</string>
+    <string name="not_equals">The two passwords are inconsistent, please input again!</string>
+    <string name="setting_pwd_success">Password set successfully</string>
+    <string name="forget_pwd">Forgotten password?</string>
+    <string name="delete">Delete</string>
+
+    <!--  <string name="app_name">LockDemo</string>--><!--NumberLockDemo-->
+    <string name="action_settings">Settings</string>
+    <string name="screenName">Screensaver password setting</string>
+    <string name="appPassword">Application password setting</string>
+    <!--===========-->
+
+    <!--network && uninstall-->
+    <string name="forbidden_net">Internet access disabled</string>
+    <string name="allow_net">Internet access enabled</string>
+    <string name="forbidden_un">Uninstall not allowed</string>
+    <string name="allow_un">Uninstall allowed</string>
+    -
+    <string name="IPAddress">IP Addr</string>
+    <string name="IPport">IP Port</string>
+    <string name="username">User Name</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="QR_code">QR Code</string>
+    <string name="login_loading">Logging in...</string>
+
+    <!--card emulate-->
+    <string name="servicedes">servicedes</string>
+    <string name="aiddescription">aiddescription</string>
+    <!--裁剪-->
+    <string name="images">Picture</string>
+    <string name="select_ok">Finish(0/3)</string>
+    <string name="ip_all_images">All pictures</string>
+    <string name="ip_folder_image_count">total %1$d pictures</string>
+    <string name="ip_preview_image_count">%1$d/%2$d</string>
+    <string name="ip_select_limit">Select a maximum of %1$d pictures</string>
+    <string name="ip_complete">finish</string>
+    <string name="ip_select_complete">finish (%1$d/%2$d)</string>
+    <string name="ip_preview">Preview</string>
+    <string name="ip_preview_count">Preview (%1$d)</string>
+    <string name="ip_photo_crop">Image cropping</string>
+    <string name="ip_origin">Original picture</string>
+    <string name="ip_origin_size">Original picture (%1$s)</string>
+
+    <!--dailao-->
+    <string name="btnCancel">Cancel</string>
+    <string name="bt_dialog_ok">Got it</string>
+    <string name="bt_dialog_sure">Determine</string>
+    <string name="tv_loading">Loading...</string>
+    <string name="tv_uptate">Uploading...</string>
+    <!-- 头部字体 -->
+    <dimen name="title_textsize">19sp</dimen>
+    <!-- 内容字体大小 -->
+    <dimen name="content_text_size">20sp</dimen>
+    <!-- 底部按钮字体大小 -->
+    <dimen name="bottombar_text_size">12sp</dimen>
+
+
+    <!--发表留言-->
+    <string name="community_ui_asma_publish">Publish comment</string>
+    <string name="community_ui_asma_nodata">No comment contents</string>
+    <string name="community_ui_asma_message">All comments</string>
+
+    <!--stratege detail-->
+    <!--lost couplet strategy-->
+    <string name="lost_time">Lost time：<xliff:g>%s</xliff:g> day</string>
+    <!--app strategy-->
+    <string name="black_list">black list：<xliff:g>%s</xliff:g></string>
+    <string name="white_list">white list：<xliff:g>%s</xliff:g></string>
+    <!--system strategy-->
+    <string name="sd_change">SD card change：<xliff:g>%s</xliff:g></string>
+    <string name="machine_card">Card binding：<xliff:g>%s</xliff:g></string>
+    <!--geographical fence-->
+    <string name="longitude">Longitude：<xliff:g>%s</xliff:g></string>
+    <string name="latitude">Latitude：<xliff:g>%s</xliff:g></string>
+    <string name="radius">Radius：<xliff:g>%s</xliff:g></string>
+    <!--device config-->
+    <string name="lock_screen">Lock screen：<xliff:g>%s</xliff:g></string>
+    <string name="mobile_data">Mobile data：<xliff:g>%s</xliff:g></string>
+    <string name="wifi_config">WIFI：<xliff:g>%s</xliff:g></string>
+    <string name="mobile_ap">Mobile hotspot：<xliff:g>%s</xliff:g></string>
+    <string name="usb_config">transmission：<xliff:g>%s</xliff:g></string>
+    <string name="allow_location">location：<xliff:g>%s</xliff:g></string>
+    <string name="sms_config">SMS：<xliff:g>%s</xliff:g></string>
+    <string name="reconder">Reconder：<xliff:g>%s</xliff:g></string>
+    <string name="camera">Camera：<xliff:g>%s</xliff:g></string>
+    <string name="bluetooth">Bluetooth：<xliff:g>%s</xliff:g></string>
+    <string name="drop_status">Drop-down list：<xliff:g>%s</xliff:g></string>
+    <string name="reset">Reset：<xliff:g>%s</xliff:g></string>
+    <string name="NFC">NFC：<xliff:g>%s</xliff:g></string>
+    <string name="screen_shot">Screenshot：<xliff:g>%s</xliff:g></string>
+    <string name="modify_sys_time">Change system time：<xliff:g>%s</xliff:g></string>
+    <string name="domain_switch">Domain switchover：<xliff:g>%s</xliff:g></string>
+    <string name="two_domain">Dual-domain control：<xliff:g>%s</xliff:g></string>
+    <!--device config-->
+    <string name="security_chrome_config">Secure browser：<xliff:g>%s</xliff:g></string>
+    <!--custom desk-->
+    <string name="set_security_desk">Set as secure desktop：<xliff:g>%s</xliff:g></string>
+    <string name="resume_phone">Display calls：<xliff:g>%s</xliff:g></string>
+    <string name="resume_contacts">Display contacts：<xliff:g>%s</xliff:g></string>
+    <string name="resume_sms">Display SMS：<xliff:g>%s</xliff:g></string>
+
+    <string name="password_modify_success">Password changed successfully!</string>
+    <string name="input_success_password">Please input correct password!</string>
+    <string name="password_inconsistent">The two passwords are inconsistent, please input again!</string>
+    <string name="input_new_password">Please input new password</string>
+    <string name="input_old_password">Please input old password</string>
+    <!-- setting -->
+    <string name="input_password_error">Wrong password inputted</string>
+    <string name="stratege_information">Currently, you do not have related strategy!</string>
+    <string name="telephone_information">Currently, you do not have related call white list!</string>
+    <string name="app_information">Currently, you do not have related application</string>
+    <string name="telephone_call">Call</string>
+    <string name="one_unit"><xliff:g>%s</xliff:g></string>
+
+    <!-- person -->
+    <string name="person_account">User account：<xliff:g>%s</xliff:g></string>
+    <string name="login_address">User account：<xliff:g>%s</xliff:g></string>
+    <string name="file_not_exist">File does not exist!</string>
+    <string name="image_not_exist">Image does not exist!</string>
+    <string name="file_size_limit">Photo size shall not exceed 1M!</string>
+    <string name="photo_upload_success">Photo uploaded successfully!</string>
+    <string name="upload_timeout">Uploading timeout!</string>
+    <string name="permission_refuse">Permission rejected!</string>
+    <string name="pick_one_photo">Please select a picture!</string>
+    <string name="finish">finish</string>
+    <string name="photo_limit">You can select a maximum of <xliff:g>%s</xliff:g> pictures</string>
+    <string name="pick_photos">Please select <xliff:g>%s</xliff:g> pictures</string>
+    <string name="had_pick_photos">Had selected <xliff:g>%s</xliff:g> pictures</string>
+    <string name="take_photos">take photos</string>
+    <string name="pick_from_gallery">select from mobile album</string>
+    <string name="camera_photo">camera photos </string>
+    <string name="load_failed">loading failed</string>
+    <string name="load_refresh">reload</string>
+
+    <!-- app fence -->
+    <string name="limit_type">Restriction method：</string>
+    <string name="fence_allow">Allowed within time/geographic fence</string>
+    <string name="voice_notice">Voice notification：<xliff:g>%s</xliff:g></string>
+    <string name="msg_notice">Message notification：<xliff:g>%s</xliff:g></string>
+    <string name="msg_notice_content">Message notification content：<xliff:g>%s</xliff:g></string>
+    <string name="always_allow">Always allow use</string>
+    <string name="always_forbidden">Never use</string>
+    <string name="about_app">Associated applications：<xliff:g>%s</xliff:g></string>
+    <string name="time_setting">Time fence setting</string>
+    <string name="geo_setting">Geofence settings</string>
+    <string name="app_fence_is_running">Application fence is running!</string>
+
+    <!--time fence-->
+    <string name="time_range">Time range：<xliff:g>%s</xliff:g></string>
+    <string name="time_unit">Time unit：</string>
+    <string name="every_day">every day：</string>
+    <string name="every_week">weekly：</string>
+    <string name="time_work">Working day：</string>
+    <string name="special_time">Specific time：</string>
+    <string name="week_one">Monday </string>
+    <string name="week_two">Tuesday </string>
+    <string name="week_three">Wednesday </string>
+    <string name="week_four">Thursday </string>
+    <string name="week_five">Friday </string>
+    <string name="week_six">Saturday </string>
+    <string name="week_seven">Sunday </string>
+
+    <string name="exit_security">Exit the security domain：<xliff:g>%s</xliff:g></string>
+    <string name="use_security_desk">Use a secure desktop：<xliff:g>%s</xliff:g></string>
+
+    <string name="allow">allow</string>
+    <string name="forbidden">forbidden</string>
+    <string name="yes">true</string>
+    <string name="no">false</string>
+
+    <string name="geo_fence_service">GeoFence service is running</string>
+    <string name="time_fence_service">Time fence service is running</string>
+    <string name="app_fence_service">App fence service is running</string>
+    <string name="emm_runing">EMM is running</string>
+    <string name="long_link_service">Long connection is running</string>
+    <string name="order_back">Command feedback service is running</string>
+    <string name="system_service">System compliance service is running</string>
+    <string name="net_change">NetWork had Change</string>
+    <string name="location_service">Location service is running</string>
+
+    <string name="app_install_package">App Install: <xliff:g>%s</xliff:g></string>
+    <string name="app_uninstall_package">App Uninstall: <xliff:g>%s</xliff:g></string>
+    <string name="systen_compliance_excute">System compliance excute</string>
+
+    <string name="card_bind_excute">card binding excute</string>
+    <string name="card_bind_service">card binding service is running</string>
+
+    <string name="call_manager">Please contact the administrator</string>
+    <string name="can_login">You can log in</string>
+    <string name="pwd_right">The password is correct</string>
+    <string name="wrong_pwd">Wrong password, please input again</string>
+
+    <string name="security_desk">Secure desktop</string>
+    <string name="more_app">More applications</string>
+
+    <string name="illegal_picture">Illegal picture</string>
+    <string name="no_face">The picture does not contains face</string>
+    <string name="multiple_faces">The picture contains multiple faces</string>
+</resources>

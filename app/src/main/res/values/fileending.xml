@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 文件类型—MIME类型
+
+
+    {".bin",    "application/octet-stream"},
+    {".class",  "application/octet-stream"},
+
+    //Word
+    {".doc",    "application/msword"},
+    {".exe",    "application/octet-stream"},
+    {".gtar",   "application/x-gtar"},
+    {".tgz",    "application/x-compressed"},
+
+    {".js",     "application/x-javascript"},
+    {".mpc",    "application/vnd.mpohun.certificate"},
+    {".msg",    "application/vnd.ms-outlook"},
+
+    //PDF
+    {".pdf",    "application/pdf"},
+    {".pps",    "application/vnd.ms-powerpoint"},
+
+    //PPT
+    {".ppt",    "application/vnd.ms-powerpoint"},
+
+    //打包
+    {".jar",    "application/java-archive"},
+    {".rar",    "application/x-rar-compressed"},
+    {".zip",    "application/zip"},
+    {".gz",     "application/x-gzip"},
+    {".apk",    "application/vnd.android.package-archive"},
+
+    {".rtf",    "application/rtf"},
+    {".tar",    "application/x-tar"},
+
+    {".wps",    "application/vnd.ms-works"},
+    {".z",      "application/x-compress"},
+
+    //Image
+    {".bmp",    "image/bmp"},
+    {".gif",    "image/gif"},
+    {".jpeg",   "image/jpeg"},
+    {".jpg",    "image/jpeg"},
+    {".png",    "image/png"},
+
+    //Text
+    {".txt",    "text/plain"},
+    {".java",   "text/plain"},
+    {".c",      "text/plain"},
+    {".conf",   "text/plain"},
+    {".cpp",    "text/plain"},
+    {".h",      "text/plain"},
+    {".xml",    "text/xml"},
+    {".xml",    "text/plain"},
+
+    {".log",    "text/plain"},
+    {".prop",   "text/plain"},
+    {".rc",     "text/plain"},
+    {".sh",     "text/plain"},
+
+    //Web
+    {".htm",    "text/html"},
+    {".html",   "text/html"},
+
+    //Video
+    {".m4u",    "video/vnd.mpegurl"},
+    {".m4v",    "video/x-m4v"},
+    {".mov",    "video/quicktime"},
+    {".mp4",    "video/mp4"},
+    {".mpe",    "video/mpeg"},
+    {".mpeg",   "video/mpeg"},
+    {".mpg",    "video/mpeg"},
+    {".mpg4",   "video/mp4"},
+    {".3gp",    "video/3gpp"},
+    {".asf",    "video/x-ms-asf"},
+    {".avi",    "video/x-msvideo"},
+
+    //Audio
+    {".mp2",    "audio/x-mpeg"},
+    {".mp3",    "audio/x-mpeg"},
+    {".m3u",    "audio/x-mpegurl"},
+    {".m4a",    "audio/mp4a-latm"},
+    {".m4b",    "audio/mp4a-latm"},
+    {".m4p",    "audio/mp4a-latm"},
+    {".mpga",   "audio/mpeg"},
+    {".rmvb",   "audio/x-pn-realaudio"},
+    {".wav",    "audio/x-wav"},
+    {".wma",    "audio/x-ms-wma"},
+    {".wmv",    "audio/x-ms-wmv"},
+    {".ogg",    "audio/ogg"},
+
+    {"",        "*/*"} -->
+
+    <array name="fileEndingImage">
+        <item>.png</item>
+        <item>.gif</item>
+        <item>.jpg</item>
+        <item>.jpeg</item>
+        <item>.bmp</item>
+    </array>
+
+    <array name="fileEndingAudio">
+        <item>.mp2</item>
+        <item>.mp3</item>
+        <item>.m3u</item>
+        <item>.m4a</item>
+        <item>.m4b</item>
+        <item>.m4p</item>
+        <item>.mpga</item>
+        <item>.rmvb</item>
+        <item>.wav</item>
+        <item>.wma</item>
+        <item>.wmv</item>
+        <item>.ogg</item>
+    </array>
+
+    <array name="fileEndingVideo">
+        <item>.m4u</item>
+        <item>.m4v</item>
+        <item>.mov</item>
+        <item>.mp4</item>
+        <item>.mpe</item>
+        <item>.mpeg</item>
+        <item>.mpg</item>
+        <item>.mpg4</item>
+        <item>.3gp</item>
+        <item>.rmvb</item>
+        <item>.avi</item>
+    </array>
+
+    <array name="fileEndingPackage">
+        <item>.jar</item>
+        <item>.zip</item>
+        <item>.rar</item>
+        <item>.gz</item>
+        <item>.apk</item>
+    </array>
+
+    <array name="fileEndingWebText">
+        <item>.htm</item>
+        <item>.html</item>
+        <item>.php</item>
+        <item>.jsp</item>
+    </array>
+
+    <array name="fileEndingText">
+        <item>.txt</item>
+        <item>.java</item>
+        <item>.c</item>
+        <item>.cpp</item>
+        <item>.py</item>
+        <item>.xml</item>
+        <item>.json</item>
+        <item>.log</item>
+    </array>
+
+    <array name="fileEndingWord">
+        <item>.doc</item>
+        <item>.docx</item>
+    </array>
+    <array name="fileEndingExcel">
+        <item>.xls</item>
+        <item>.xlsx</item>
+    </array>
+    <array name="fileEndingPPT">
+        <item>.ppt</item>
+        <item>.pptx</item>
+    </array>
+
+    <array name="fileEndingPdf">
+        <item>.pdf</item>
+    </array>
+</resources>

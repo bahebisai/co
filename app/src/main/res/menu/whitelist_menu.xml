@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" tools:context=".view.activity.MainActivity">
+
+    <item android:id="@+id/menu_search"
+        android:title="搜索"
+        android:icon="@mipmap/search_white"
+        app:showAsAction="ifRoom"/>
+
+    <!--<item android:id="@+id/menu_delete"
+        android:title="全删"
+        android:icon="@mipmap/delete_forever"
+        app:showAsAction="ifRoom"/>
+
+    <item android:id="@+id/menu_selete"
+        android:title="全选"
+        android:icon="@mipmap/select_all"
+        app:showAsAction="ifRoom"/>-->
+</menu>

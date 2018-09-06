@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#1487fb"
+        app:title="@string/appPassword"
+        app:navigationIcon="@mipmap/arrow_back"
+        app:titleTextColor="#fff"/>
+
+    <!-- android:background="@mipmap/nagative_bar"-->
+    <android.support.v7.widget.CardView
+        style="@style/Animation.AppCompat.Dialog"
+        android:padding="30px"
+        android:layout_marginTop="60px"
+        android:layout_marginLeft="21px"
+        android:layout_marginRight="21px"
+        android:layout_marginBottom="6px"
+        android:layout_width="match_parent"
+        app:cardCornerRadius="30px"
+        android:layout_height="600px">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="150px"
+                android:text="@string/input_password_again"
+                android:textSize="60px"/>
+            <View
+                android:layout_marginTop="9px"
+                android:layout_marginBottom="15px"
+                android:layout_width="match_parent"
+                android:layout_height="3px"/>
+            <com.xiaomi.emm.features.password.PasswordView
+                android:id="@+id/new_password"
+                android:layout_marginTop="60px"
+                android:layout_width="match_parent"
+                android:layout_height="123px"
+                android:layout_marginLeft="30px"
+                android:layout_marginRight="20px"
+                android:background="@null"
+                android:focusableInTouchMode="true"
+                android:numeric="integer"
+                android:maxLength="6"
+                android:cursorVisible="false"
+                android:focusable="true"/>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+</LinearLayout>

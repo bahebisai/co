@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<!-- android:background="#222333"-->
+    <android.support.v7.widget.CardView
+        android:padding="10dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginLeft="7dp"
+        android:layout_marginRight="7dp"
+        android:layout_marginBottom="2dp"
+        android:layout_width="match_parent"
+        app:cardCornerRadius="10dp"
+        android:minHeight="56dp"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_marginLeft="3dp"
+            android:minHeight="56dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:layout_marginBottom="2dp"
+            android:orientation="vertical">
+            <!--android:padding="5dp"-->
+
+            <LinearLayout
+
+                android:id="@+id/message"
+                android:layout_width="match_parent"
+                android:layout_height="28dp"
+                android:orientation="horizontal"
+                android:layout_alignBottom="@+id/message_time"
+                android:layout_alignParentStart="true">
+
+                <TextView
+                    android:id="@+id/message_icon"
+                    android:layout_width="5dp"
+                    android:layout_height="5dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/red_point" />
+<!--android:layout_marginLeft="5dp"-->
+                <TextView
+                    android:id="@+id/message_from"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="5dp"
+                    android:text="EMM"
+                    android:textColor="#222222"
+                    android:singleLine="true"
+                    android:textSize="19dp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/message_time"
+                android:layout_width="wrap_content"
+                android:layout_height="28dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="2dp"
+                android:gravity="center"
+                android:text="昨天 15:49"
+                android:textColor="#9E9E9E"
+                android:textSize="14dp" />
+
+          <!--  <View
+                    android:layout_above="@+id/message_about"
+                    android:background="#f5f5f5"
+                    android:layout_below="@+id/message"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"/>-->
+            <!-- android:layout_alignParentBottom="true"-->
+            <TextView
+                android:layout_marginTop="7dp"
+                android:id="@+id/message_about"
+                android:layout_width="wrap_content"
+                android:layout_height="28dp"
+                android:layout_below="@id/message"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"
+                android:singleLine="true"
+                android:text="@string/install_app"
+                android:textColor="#777777"
+                android:textSize="14dp" />
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

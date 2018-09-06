@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+
+    android:layout_height="match_parent">
+    <EditText
+        android:inputType="textPassword"
+        android:cursorVisible="true"
+        android:textCursorDrawable="@null"
+        android:id="@+id/edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <!-- android:cursorVisible="true" 显示-->
+    <View
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:background="#DCDCDC"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+
+
+</LinearLayout>

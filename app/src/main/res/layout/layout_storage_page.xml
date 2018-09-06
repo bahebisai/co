@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="130dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#1487fb">
+
+    <ImageView
+        android:id="@+id/arrow_right"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="10dp"
+        android:src="@mipmap/arrow_r"/>
+
+    <com.xiaomi.emm.features.progress.CircleProgress
+        android:id="@+id/storage_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:antiAlias="true"
+        app:arcWidth="5dp"
+        app:bgArcWidth="5dp"
+        app:hint="@string/remain_storage"
+        app:hintSize="12sp"
+        app:startAngle="135"
+        app:sweepAngle="270"
+        app:unit="M"
+        app:unitSize="12sp"
+        app:valueSize="15sp"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"/>
+</RelativeLayout>

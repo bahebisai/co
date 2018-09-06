@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="@color/bg_gray"
+    android:layout_height="match_parent">
+  <LinearLayout
+      android:gravity="center"
+      android:layout_width="match_parent"
+      android:orientation="vertical"
+      android:background="@color/bg_gray"
+      android:layout_height="match_parent">
+      <ImageView
+          android:id="@+id/iv_pic"
+          android:layout_width="wrap_content"
+          android:background="@drawable/nothing_icon_nodevice1"
+          android:layout_height="wrap_content" />
+      <TextView
+          android:visibility="gone"
+          android:layout_marginTop="20dp"
+          android:id="@+id/tv_content"
+          android:layout_width="wrap_content"
+          android:text="好凄凉"
+          android:textSize="16sp"
+          android:textColor="#333333"
+          android:layout_height="wrap_content" />
+      <TextView
+          android:id="@+id/tv_describe"
+          android:layout_marginTop="5dp"
+          android:layout_width="wrap_content"
+          android:text="您还没有相关数据"
+          android:textSize="14sp"
+          android:textColor="#999999"
+          android:layout_height="wrap_content" />
+
+      <LinearLayout
+          android:id="@+id/ll_btn"
+          android:layout_width="wrap_content"
+          android:orientation="vertical"
+          android:layout_marginBottom="40dp"
+          android:layout_marginTop="80dp"
+          android:layout_height="wrap_content">
+          <Button
+              android:visibility="gone"
+              android:id="@+id/btn_1"
+              android:layout_marginTop="12dp"
+              android:textSize="16dp"
+              android:textColor="#e9af44"
+              android:text="重新加载"
+              android:background="@drawable/nothing_btn_goadd"
+              android:layout_width="190dp"
+              android:layout_height="35dp" />
+          <Button
+                android:visibility="gone"
+              android:id="@+id/btn_2"
+              android:layout_marginTop="25dp"
+              android:textSize="16dp"
+              android:textColor="#e9af44"
+              android:text="重新加载11"
+              android:background="@drawable/nothing_btn_goadd"
+              android:layout_width="190dp"
+              android:layout_height="35dp"  />
+          <!--<Button-->
+              <!--android:id="@+id/btn_3"-->
+              <!--android:layout_marginTop="12dp"-->
+              <!--android:textSize="16dp"-->
+              <!--android:textColor="#e9af44"-->
+              <!--android:text="重新加载11"-->
+              <!--android:background="@drawable/nothing_btn_goadd"-->
+              <!--android:layout_width="wrap_content"-->
+              <!--android:layout_height="wrap_content" />-->
+      </LinearLayout>
+  </LinearLayout>
+</LinearLayout>

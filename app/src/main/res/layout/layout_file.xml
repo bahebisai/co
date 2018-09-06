@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+
+              android:layout_height="match_parent">
+    <!-- android:background="#f5f5f5"-->
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="2dp"
+        android:layout_marginLeft="7dp"
+        android:layout_marginRight="7dp"
+        android:layout_marginTop="7dp"
+        android:minHeight="56dp"
+        android:padding="10dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="10dp">
+        <!--  android:layout_marginBottom="10dp"-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="56dp">
+
+            <ImageView
+                android:id="@+id/file_icon"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="10dp"
+                android:src="@mipmap/doc"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@id/file_icon"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:singleLine="true"
+                    android:id="@+id/file_name"
+                    android:layout_width="234dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@id/file_icon"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toEndOf="@id/file_icon"
+                    android:text="MDM"
+                    android:textSize="18sp"
+                    android:textColor="#222222"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@id/file_icon"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@id/file_icon"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/file_size"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="27MB"
+                        android:textSize="14sp"
+                        android:textColor="#777777"/>
+
+                    <TextView
+                        android:id="@+id/file_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_toEndOf="@id/file_size"
+                        android:text="2017-07-06 18:39"
+                        android:textColor="#9E9E9E"
+                        android:textSize="14sp"
+                        />
+                </LinearLayout>
+            </LinearLayout>
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+</LinearLayout>
