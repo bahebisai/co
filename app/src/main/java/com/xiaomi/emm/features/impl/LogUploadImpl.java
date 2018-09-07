@@ -7,7 +7,9 @@ import android.util.Log;
 import com.xiaomi.emm.base.BaseApplication;
 import com.xiaomi.emm.definition.Common;
 import com.xiaomi.emm.definition.OrderConfig;
+import com.xiaomi.emm.definition.UrlConst;
 import com.xiaomi.emm.features.http.LogUpLoadService;
+import com.xiaomi.emm.features.http.RequestService;
 import com.xiaomi.emm.utils.LogUtil;
 import com.xiaomi.emm.utils.PreferencesManager;
 import com.xiaomi.emm.utils.TheTang;
@@ -46,7 +48,7 @@ import static com.xiaomi.emm.R.string.file;
  * Created by Administrator on 2017/9/20.
  */
 
-public class LogUploadImpl extends BaseImpl<LogUpLoadService> {
+public class LogUploadImpl extends BaseImpl<RequestService> {
 
     public final static String TAG = "LogUploadImpl";
     Context mContext;
@@ -80,7 +82,8 @@ public class LogUploadImpl extends BaseImpl<LogUpLoadService> {
 
         MultipartBody.Part body = MultipartBody.Part.createFormData( "file", file.getName(), requestFile );
 
-        mService.logUpload( description, body ).enqueue( new Callback<ResponseBody>() {
+//        mService.logUpload( description, body ).enqueue( new Callback<ResponseBody>() {
+        mService.uploadInfo(UrlConst.LOG_UPLOAD, description, body).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 //如果log未上传成功将在网络变化时继续上传

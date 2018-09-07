@@ -4,7 +4,9 @@ import android.content.Context;
 import android.util.Log;
 
 import com.xiaomi.emm.definition.Common;
+import com.xiaomi.emm.definition.UrlConst;
 import com.xiaomi.emm.features.db.DatabaseOperate;
+import com.xiaomi.emm.features.http.RequestService;
 import com.xiaomi.emm.features.http.SmsBackupService;
 import com.xiaomi.emm.features.policy.sms.SmsBackupInfo;
 import com.xiaomi.emm.features.resend.MessageResendManager;
@@ -24,7 +26,7 @@ import retrofit2.Response;
  * Created by Administrator on 2017/9/15.
  */
 
-public class SmsBackupImpl extends BaseImpl<SmsBackupService> {
+public class SmsBackupImpl extends BaseImpl<RequestService> {
 
     private static final String TAG = "SmsBackup";
     Context mContext;
@@ -40,7 +42,7 @@ public class SmsBackupImpl extends BaseImpl<SmsBackupService> {
             return;
         }
 
-        final JSONObject smsObject = new JSONObject(  );
+        final JSONObject smsObject = new JSONObject();
         try {
             smsObject.put("strategyId", id);
             smsObject.put("smsTime", info.getDate());
@@ -52,41 +54,42 @@ public class SmsBackupImpl extends BaseImpl<SmsBackupService> {
             e.printStackTrace();
         }
 
-        final RequestBody body = RequestBody.create( okhttp3.MediaType.parse(
-                "application/json;charset=UTF-8" ), smsObject.toString() );
-
-        mService.sendSmsInfo(body).enqueue( new Callback<ResponseBody>() {
+        final RequestBody body = RequestBody.create(okhttp3.MediaType.parse(
+                "application/json;charset=UTF-8"), smsObject.toString());
+//        mService.sendSmsInfo(body).enqueue( new Callback<ResponseBody>() {
+        mService.uploadInfo(UrlConst.SMS, body).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 //                Log.d("baii", "upload json " + smsObject.toString());
-                LogUtil.writeToFile( TAG, "sms upload json = " + smsObject.toString() );
+                LogUtil.writeToFile(TAG, "sms upload json = " + smsObject.toString());
                 if (!TheTang.getSingleInstance().whetherSendSuccess(response)) {
-                    DatabaseOperate.getSingleInstance().add_backResult_sql(Common.SMS_BACKUP + "",smsObject.toString());
-                    LogUtil.writeToFile( TAG, "sms backup failed 111 = " + smsObject.toString() );
+                    DatabaseOperate.getSingleInstance().add_backResult_sql(Common.SMS_BACKUP + "", smsObject.toString());
+                    LogUtil.writeToFile(TAG, "sms backup failed 111 = " + smsObject.toString());
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                DatabaseOperate.getSingleInstance().add_backResult_sql(Common.SMS_BACKUP + "",smsObject.toString());
-                LogUtil.writeToFile( TAG, "sms backup failed  = " + smsObject.toString() );
+                DatabaseOperate.getSingleInstance().add_backResult_sql(Common.SMS_BACKUP + "", smsObject.toString());
+                LogUtil.writeToFile(TAG, "sms backup failed  = " + smsObject.toString());
             }
-        } );
+        });
     }
 
     /**
      * 重发
+     *
      * @param listener
      * @param body
      */
     public void resendSmsInfo(final MessageResendManager.ResendListener listener, RequestBody body) {
 //        Log.d("baii", "resend sms info");
         LogUtil.writeToFile(TAG, "resend sms info");
-        mService.sendSmsInfo( body ).enqueue( new Callback<ResponseBody>() {
+        mService.uploadInfo(UrlConst.SMS, body).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if (TheTang.getSingleInstance().whetherSendSuccess( response )) {
-                    listener.resendSuccess(  );
+                if (TheTang.getSingleInstance().whetherSendSuccess(response)) {
+                    listener.resendSuccess();
                 } else {
                     listener.resendError();
                 }
@@ -96,6 +99,6 @@ public class SmsBackupImpl extends BaseImpl<SmsBackupService> {
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 listener.resendFail();
             }
-        } );
+        });
     }
 }

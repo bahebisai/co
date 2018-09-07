@@ -5,6 +5,7 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
+import retrofit2.http.Url;
 
 /**
  * Created by Administrator on 2017/9/15.
@@ -13,4 +14,7 @@ import retrofit2.http.POST;
 public interface SmsBackupService {
     @POST("/userSmsStrategy/upload")
     public Call<ResponseBody> sendSmsInfo(@Body RequestBody body);
+
+    @POST()
+    Call<ResponseBody> sendSmsInfo(@Url String url, @Body RequestBody body);
 }

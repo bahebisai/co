@@ -4,7 +4,9 @@ import android.content.Context;
 import android.util.Log;
 
 import com.xiaomi.emm.definition.Common;
+import com.xiaomi.emm.definition.UrlConst;
 import com.xiaomi.emm.features.http.PhotoUploadService;
+import com.xiaomi.emm.features.http.RequestService;
 import com.xiaomi.emm.features.luban.PhotoUploadListener;
 import com.xiaomi.emm.utils.DataParseUtil;
 import com.xiaomi.emm.utils.LogUtil;
@@ -29,7 +31,7 @@ import retrofit2.Response;
  * Created by Administrator on 2017/11/9.
  */
 
-public class PhotoUploadImpl extends BaseImpl<PhotoUploadService>{
+public class PhotoUploadImpl extends BaseImpl<RequestService>{
 
     private static final String TAG = "PhotoUploadImpl";
     Context mContext;
@@ -62,7 +64,8 @@ public class PhotoUploadImpl extends BaseImpl<PhotoUploadService>{
 
         MultipartBody.Part body = MultipartBody.Part.createFormData( "file", file.getName(), requestFile );
 
-        mService.photoUpload( body, description ).enqueue( new Callback<ResponseBody>() {
+//        mService.photoUpload( body, description ).enqueue( new Callback<ResponseBody>() {
+        mService.uploadInfo(UrlConst.USER_AVATAR, description, body).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 

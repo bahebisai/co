@@ -6,9 +6,11 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.xiaomi.emm.definition.Common;
+import com.xiaomi.emm.definition.UrlConst;
 import com.xiaomi.emm.features.db.DatabaseOperate;
 import com.xiaomi.emm.features.excute.MDMOrderMessageManager;
 import com.xiaomi.emm.features.http.FeedBackService;
+import com.xiaomi.emm.features.http.RequestService;
 import com.xiaomi.emm.features.resend.MessageResendManager;
 import com.xiaomi.emm.model.StrategyFeedBackData;
 import com.xiaomi.emm.utils.DataParseUtil;
@@ -26,7 +28,7 @@ import retrofit2.Response;
  * Created by Administrator on 2017/6/16.
  */
 
-public class FeedBackImpl extends BaseImpl<FeedBackService> {
+public class FeedBackImpl extends BaseImpl<RequestService> {
     private static final String TAG = "FeedBackImpl";
     Context mContext;
     int repeatCount;
@@ -194,7 +196,8 @@ public class FeedBackImpl extends BaseImpl<FeedBackService> {
 
         RequestBody body = TheTang.getSingleInstance().jsonToRequestBody(data);
 
-        mService.feedBack(body).enqueue(new Callback<ResponseBody>() {
+//        mService.feedBack(body).enqueue(new Callback<ResponseBody>() {
+        mService.uploadInfo(UrlConst.FEEDBACK, body).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, final Response<ResponseBody> response) {
 
@@ -246,7 +249,8 @@ public class FeedBackImpl extends BaseImpl<FeedBackService> {
      * @param body
      */
     public void reSendFeedback(final MessageResendManager.ResendListener listener, RequestBody body) {
-        mService.feedBack(body).enqueue(new Callback<ResponseBody>() {
+//        mService.feedBack(body).enqueue(new Callback<ResponseBody>() {
+        mService.uploadInfo(UrlConst.FEEDBACK, body).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 

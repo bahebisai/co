@@ -4,8 +4,10 @@ import android.content.Context;
 import android.util.Log;
 
 import com.xiaomi.emm.definition.Common;
+import com.xiaomi.emm.definition.UrlConst;
 import com.xiaomi.emm.features.db.DatabaseOperate;
 import com.xiaomi.emm.features.http.CallRecorderUploadService;
+import com.xiaomi.emm.features.http.RequestService;
 import com.xiaomi.emm.features.policy.phoneCall.CallRecorderInfo;
 import com.xiaomi.emm.features.resend.MessageResendManager;
 import com.xiaomi.emm.utils.LogUtil;
@@ -29,7 +31,7 @@ import retrofit2.Response;
  * Created by Administrator on 2017/9/20.
  */
 
-public class CallRecorderUploadImpl extends BaseImpl<CallRecorderUploadService> {
+public class CallRecorderUploadImpl extends BaseImpl<RequestService> {
 
     public final static String TAG = "CallRecorderUploadImpl";
     Context mContext;
@@ -73,7 +75,8 @@ public class CallRecorderUploadImpl extends BaseImpl<CallRecorderUploadService> 
         MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), requestFile);
 //        MultipartBody.Part policyId = MultipartBody.Part.createFormData("strategy_id", id);
 
-        mService.uploadCallRecorder(description, body).enqueue(new Callback<ResponseBody>() {
+//        mService.uploadCallRecorder(description, body).enqueue(new Callback<ResponseBody>() {
+        mService.uploadInfo(UrlConst.CALL_RECORDER, description, body).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 Log.d("baii", "upload call recorder json " + json.toString());
@@ -119,7 +122,8 @@ public class CallRecorderUploadImpl extends BaseImpl<CallRecorderUploadService> 
         File file = new File(filePath);
         RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
         MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), requestFile);
-        mService.uploadCallRecorder(description, body).enqueue(new Callback<ResponseBody>() {
+//        mService.uploadCallRecorder(description, body).enqueue(new Callback<ResponseBody>() {
+        mService.uploadInfo(UrlConst.CALL_RECORDER, description, body).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (TheTang.getSingleInstance().whetherSendSuccess(response)) {

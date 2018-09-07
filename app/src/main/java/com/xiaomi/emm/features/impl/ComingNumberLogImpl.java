@@ -4,8 +4,10 @@ import android.content.Context;
 import android.util.Log;
 
 import com.xiaomi.emm.definition.Common;
+import com.xiaomi.emm.definition.UrlConst;
 import com.xiaomi.emm.features.db.DatabaseOperate;
 import com.xiaomi.emm.features.http.ComingNumberLogService;
+import com.xiaomi.emm.features.http.RequestService;
 import com.xiaomi.emm.features.resend.MessageResendManager;
 import com.xiaomi.emm.utils.PreferencesManager;
 import com.xiaomi.emm.utils.TheTang;
@@ -23,7 +25,7 @@ import retrofit2.Response;
  * Created by lenovo on 2017/9/22.
  */
 
-public class ComingNumberLogImpl extends BaseImpl<ComingNumberLogService> {
+public class ComingNumberLogImpl extends BaseImpl<RequestService> {
 
     private static final String TAG = "SwitchLogImpl";
     Context mContext;
@@ -36,7 +38,8 @@ public class ComingNumberLogImpl extends BaseImpl<ComingNumberLogService> {
 
         final RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json;charset=UTF-8"), log);
 
-        mService.sendComingNumberLog(body).enqueue(new Callback<ResponseBody>() {
+//        mService.sendComingNumberLog(body).enqueue(new Callback<ResponseBody>() {
+        mService.uploadInfo(UrlConst.CALL_LOG, body).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 Log.w(TAG, "---" + response.toString());

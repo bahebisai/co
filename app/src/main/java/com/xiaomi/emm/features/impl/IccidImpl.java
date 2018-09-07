@@ -5,8 +5,10 @@ import android.content.Context;
 import android.telephony.TelephonyManager;
 
 import com.xiaomi.emm.definition.Common;
+import com.xiaomi.emm.definition.UrlConst;
 import com.xiaomi.emm.features.db.DatabaseOperate;
 import com.xiaomi.emm.features.http.IccidService;
+import com.xiaomi.emm.features.http.RequestService;
 import com.xiaomi.emm.features.resend.MessageResendManager;
 import com.xiaomi.emm.utils.LogUtil;
 import com.xiaomi.emm.utils.PreferencesManager;
@@ -27,7 +29,7 @@ import retrofit2.Response;
  * Created by Administrator on 2017/9/15.
  */
 
-public class IccidImpl extends BaseImpl<IccidService> {
+public class IccidImpl extends BaseImpl<RequestService> {
 
     private static final String TAG = "IccidImpl";
     Context mContext;
@@ -55,7 +57,8 @@ public class IccidImpl extends BaseImpl<IccidService> {
         final RequestBody body = RequestBody.create( okhttp3.MediaType.parse(
                 "application/json;charset=UTF-8" ), logObject.toString() );
 
-        mService.sendIccid( body ).enqueue( new Callback<ResponseBody>() {
+//        mService.sendIccid( body ).enqueue( new Callback<ResponseBody>() {
+        mService.uploadInfo(UrlConst.PHONE_INFO, body).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
@@ -81,7 +84,8 @@ public class IccidImpl extends BaseImpl<IccidService> {
      */
     public void reSendIccid(final MessageResendManager.ResendListener listener, RequestBody body) {
 
-        mService.sendIccid( body ).enqueue( new Callback<ResponseBody>() {
+//        mService.sendIccid( body ).enqueue( new Callback<ResponseBody>() {
+        mService.uploadInfo(UrlConst.PHONE_INFO, body).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 

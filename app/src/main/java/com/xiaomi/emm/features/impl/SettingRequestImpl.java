@@ -2,6 +2,8 @@ package com.xiaomi.emm.features.impl;
 
 import android.content.Context;
 
+import com.xiaomi.emm.definition.UrlConst;
+import com.xiaomi.emm.features.http.RequestService;
 import com.xiaomi.emm.features.http.SettingRequestService;
 import com.xiaomi.emm.utils.DataParseUtil;
 import com.xiaomi.emm.utils.TheTang;
@@ -14,7 +16,7 @@ import retrofit2.Response;
  * Created by Administrator on 2018/3/21.
  */
 
-public class SettingRequestImpl extends BaseImpl<SettingRequestService> {
+public class SettingRequestImpl extends BaseImpl<RequestService> {
     private static final String TAG = "AppImpl";
     Context mContext;
 
@@ -24,7 +26,8 @@ public class SettingRequestImpl extends BaseImpl<SettingRequestService> {
     }
 
     public void getSettingData() {
-        mService.getSettingData().enqueue( new Callback<ResponseBody>() {
+//        mService.getSettingData().enqueue( new Callback<ResponseBody>() {
+        mService.getInfo(UrlConst.SETTING_DATA).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 

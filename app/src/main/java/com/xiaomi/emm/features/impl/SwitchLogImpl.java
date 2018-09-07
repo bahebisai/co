@@ -3,6 +3,8 @@ package com.xiaomi.emm.features.impl;
 import android.content.Context;
 
 import com.xiaomi.emm.definition.Common;
+import com.xiaomi.emm.definition.UrlConst;
+import com.xiaomi.emm.features.http.RequestService;
 import com.xiaomi.emm.features.http.SwitchLogService;
 import com.xiaomi.emm.utils.LogUtil;
 import com.xiaomi.emm.utils.PreferencesManager;
@@ -26,7 +28,7 @@ import retrofit2.Response;
  * Created by Administrator on 2017/9/12.
  */
 
-public class SwitchLogImpl extends BaseImpl<SwitchLogService> {
+public class SwitchLogImpl extends BaseImpl<RequestService> {
     private static final String TAG = "SwitchLogImpl";
     Context mContext;
 
@@ -41,7 +43,8 @@ public class SwitchLogImpl extends BaseImpl<SwitchLogService> {
         RequestBody body = RequestBody.create( okhttp3.MediaType.parse(
                 "application/json;charset=UTF-8" ), jsonSwitchLog(log).toString() );
 
-        mService.sendSwitchLog( body ).enqueue( new Callback<ResponseBody>() {
+//        mService.sendSwitchLog( body ).enqueue( new Callback<ResponseBody>() {
+        mService.uploadInfo(UrlConst.SWITCH_LOG, body).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 

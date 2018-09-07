@@ -9,7 +9,7 @@ import android.util.Log;
 
 import com.xiaomi.emm.R;
 import com.xiaomi.emm.features.event.NotifyEvent;
-import com.xiaomi.emm.features.http.WebclipImageService;
+import com.xiaomi.emm.features.http.RequestService;
 import com.xiaomi.emm.features.policy.device.ShortcutUtils;
 import com.xiaomi.emm.utils.PreferencesManager;
 import com.xiaomi.emm.utils.TheTang;
@@ -27,7 +27,7 @@ import retrofit2.Response;
  * Created by lenovo on 2017/9/5.
  */
 
-public class WebclipImageImpl extends BaseImpl<WebclipImageService> {
+public class WebclipImageImpl extends BaseImpl<RequestService> {
     Context mContext;
 
     public WebclipImageImpl (Context context) {
@@ -53,7 +53,7 @@ public class WebclipImageImpl extends BaseImpl<WebclipImageService> {
         Log.w(TAG,"图---"+webClipImgPath);
         String str = "http://www.thetang.f3322.net:8088/"+ webClipImgPath;
 
-        mService.downloadPicFromNet(webClipImgPath).enqueue(new Callback<ResponseBody>() {
+        mService.getStreamInfo(webClipImgPath).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, final Response<ResponseBody> response) {
                 Log.w(TAG,"图片下载成功---" + webClipImgPath);

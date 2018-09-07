@@ -4,8 +4,10 @@ import android.content.Context;
 import android.util.Log;
 
 import com.xiaomi.emm.definition.Common;
+import com.xiaomi.emm.definition.UrlConst;
 import com.xiaomi.emm.features.db.DatabaseOperate;
 import com.xiaomi.emm.features.excute.MDMOrderMessageManager;
+import com.xiaomi.emm.features.http.RequestService;
 import com.xiaomi.emm.features.http.SendLocationService;
 import com.xiaomi.emm.utils.LogUtil;
 import com.xiaomi.emm.utils.PreferencesManager;
@@ -25,7 +27,7 @@ import retrofit2.Response;
  * Created by Administrator on 2018/1/4.
  */
 
-public class LocationImpl extends BaseImpl<SendLocationService> {
+public class LocationImpl extends BaseImpl<RequestService> {
     private static final String TAG = "LocationImpl";
     Context mContext;
 
@@ -50,7 +52,8 @@ public class LocationImpl extends BaseImpl<SendLocationService> {
         RequestBody description = RequestBody.create( okhttp3.MediaType.parse(
                 "application/json;charset=UTF-8" ), json.toString() );
 
-        mService.sendLocationData( description ).enqueue( new Callback<ResponseBody>() {
+//        mService.sendLocationData( description ).enqueue( new Callback<ResponseBody>() {
+        mService.uploadInfo(UrlConst.LOCATION_DATA, description).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 

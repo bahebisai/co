@@ -5,9 +5,11 @@ import android.content.Context;
 import com.xiaomi.emm.base.BaseApplication;
 import com.xiaomi.emm.definition.Common;
 import com.xiaomi.emm.definition.OrderConfig;
+import com.xiaomi.emm.definition.UrlConst;
 import com.xiaomi.emm.features.complete.CompleteMessageManager;
 import com.xiaomi.emm.features.db.DatabaseOperate;
 import com.xiaomi.emm.features.http.ExcuteCompleteService;
+import com.xiaomi.emm.features.http.RequestService;
 import com.xiaomi.emm.features.policy.container.ContainerStratege;
 import com.xiaomi.emm.features.policy.device.ConfigurationPolicy;
 import com.xiaomi.emm.model.DownLoadEntity;
@@ -31,7 +33,7 @@ import retrofit2.Response;
  * Created by Administrator on 2018/1/9.
  */
 
-public class ExcuteCompleteImpl extends BaseImpl<ExcuteCompleteService> {
+public class ExcuteCompleteImpl extends BaseImpl<RequestService> {
 
     private static final String TAG = "ExcuteCompleteImpl";
     Context mContext;
@@ -61,7 +63,8 @@ public class ExcuteCompleteImpl extends BaseImpl<ExcuteCompleteService> {
 
         RequestBody body = TheTang.getSingleInstance().jsonToRequestBody(data);
 
-        mService.sendExcuteComplete( body ).enqueue( new Callback<ResponseBody>() {
+//        mService.sendExcuteComplete( body ).enqueue( new Callback<ResponseBody>() {
+        mService.uploadInfo(UrlConst.EXE_COMPLETE, body ).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 

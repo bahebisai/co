@@ -2,15 +2,21 @@ package com.xiaomi.emm.features.impl;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.ArrayMap;
+import android.util.Log;
 
 import com.xiaomi.emm.definition.Common;
+import com.xiaomi.emm.definition.UrlConst;
 import com.xiaomi.emm.features.db.DatabaseOperate;
+import com.xiaomi.emm.features.http.RequestService;
 import com.xiaomi.emm.features.http.SystemComplianceService;
 import com.xiaomi.emm.features.resend.MessageResendManager;
 import com.xiaomi.emm.utils.LogUtil;
 import com.xiaomi.emm.utils.MDM;
 import com.xiaomi.emm.utils.PreferencesManager;
 import com.xiaomi.emm.utils.TheTang;
+
+import java.util.Map;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -21,7 +27,7 @@ import retrofit2.Response;
  * Created by Administrator on 2017/8/15.
  */
 
-public class SystemImpl extends BaseImpl<SystemComplianceService> {
+public class SystemImpl extends BaseImpl<RequestService> {
     private static final String TAG = "SystemImpl";
     Context mContext;
     String alias = PreferencesManager.getSingleInstance().getData( Common.alias);
@@ -38,8 +44,14 @@ public class SystemImpl extends BaseImpl<SystemComplianceService> {
         if (systemComplianceId == null || alias == null) {
             return;
         }
-
-        mService.systemCompliance(alias,Integer.parseInt(systemComplianceId),state,type).enqueue( new Callback<ResponseBody>() {
+//        public Call<ResponseBody> systemCompliance(@Query("alias") String alias, @Query("systemComplianceId") int systemComplianceId,  @Query("state") String state, @Query("type") String type);
+        Map<String, String> map = new ArrayMap<>();
+        map.put("alias", alias);
+        map.put("systemComplianceId", systemComplianceId);
+        map.put("state", state);
+        map.put("type", type);
+//        mService.systemCompliance(alias,Integer.parseInt(systemComplianceId),state,type).enqueue( new Callback<ResponseBody>() {
+        mService.getInfo(UrlConst.SYSTEM_COMPLIANCE, map).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (!TheTang.getSingleInstance().whetherSendSuccess(response)) {
@@ -76,8 +88,13 @@ public class SystemImpl extends BaseImpl<SystemComplianceService> {
         if (systemComplianceId == null || alias == null) {
             return;
         }
-
-        mService.systemCompliance(alias,Integer.parseInt(systemComplianceId),state,type).enqueue( new Callback<ResponseBody>() {
+        Map<String, String> map = new ArrayMap<>();
+        map.put("alias", alias);
+        map.put("systemComplianceId", systemComplianceId);
+        map.put("state", state);
+        map.put("type", type);
+//        mService.systemCompliance(alias,Integer.parseInt(systemComplianceId),state,type).enqueue( new Callback<ResponseBody>() {
+        mService.getInfo(UrlConst.SYSTEM_COMPLIANCE, map).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (TheTang.getSingleInstance().whetherSendSuccess( response )) {

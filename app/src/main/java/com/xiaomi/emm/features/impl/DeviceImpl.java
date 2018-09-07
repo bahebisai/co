@@ -3,9 +3,8 @@ package com.xiaomi.emm.features.impl;
 
 import android.content.Context;
 
-import com.xiaomi.emm.definition.Common;
-import com.xiaomi.emm.features.db.DatabaseOperate;
-import com.xiaomi.emm.features.http.PostDeviceInfoService;
+import com.xiaomi.emm.definition.UrlConst;
+import com.xiaomi.emm.features.http.RequestService;
 import com.xiaomi.emm.features.resend.MessageResendManager;
 import com.xiaomi.emm.utils.LogUtil;
 import com.xiaomi.emm.utils.TheTang;
@@ -20,7 +19,7 @@ import retrofit2.Response;
  * Created by Administrator on 2017/9/6.
  */
 
-public class DeviceImpl extends BaseImpl<PostDeviceInfoService>{
+public class DeviceImpl extends BaseImpl<RequestService>{
 
     private static final String TAG = "DeviceImpl";
     Context mContext;
@@ -34,7 +33,8 @@ public class DeviceImpl extends BaseImpl<PostDeviceInfoService>{
 
         RequestBody body = TheTang.getSingleInstance().jsonToRequestBody( deviceInfo );
         LogUtil.writeToFile( TAG,deviceInfo );
-        mService.postDeviceInfo( body ).enqueue( new Callback<ResponseBody>() {
+//        mService.postDeviceInfo( body ).enqueue( new Callback<ResponseBody>() {
+        mService.uploadInfo(UrlConst.DEVICE_INFO, body).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (!TheTang.getSingleInstance().whetherSendSuccess(response)) {
@@ -54,7 +54,8 @@ public class DeviceImpl extends BaseImpl<PostDeviceInfoService>{
      * @param deviceInfo
      */
     public void reSendDeviceInfo(final MessageResendManager.ResendListener listener, RequestBody deviceInfo) {
-        mService.postDeviceInfo( deviceInfo ).enqueue( new Callback<ResponseBody>() {
+//        mService.postDeviceInfo( deviceInfo ).enqueue( new Callback<ResponseBody>() {
+        mService.uploadInfo(UrlConst.DEVICE_INFO, deviceInfo).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (TheTang.getSingleInstance().whetherSendSuccess(response)) {

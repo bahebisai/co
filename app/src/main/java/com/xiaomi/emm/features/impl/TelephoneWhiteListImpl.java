@@ -13,7 +13,9 @@ import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.xiaomi.emm.definition.Common;
+import com.xiaomi.emm.definition.UrlConst;
 import com.xiaomi.emm.features.db.DatabaseOperate;
+import com.xiaomi.emm.features.http.RequestService;
 import com.xiaomi.emm.features.http.TelephoneWhiteListService;
 import com.xiaomi.emm.features.resend.MessageResendManager;
 import com.xiaomi.emm.model.TelephoyWhiteUser;
@@ -34,7 +36,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class TelephoneWhiteListImpl extends BaseImpl<TelephoneWhiteListService> {
+public class TelephoneWhiteListImpl extends BaseImpl<RequestService> {
     private static final String TAG = "TelephoneWhiteListImpl";
     Context mContext;
 
@@ -58,7 +60,8 @@ public class TelephoneWhiteListImpl extends BaseImpl<TelephoneWhiteListService> 
 
         final RequestBody body = RequestBody.create(okhttp3.MediaType.parse(
                 "application/json;charset=UTF-8"), telephoneObject.toString());
-        mService.getTelephoneWhiteList(body).enqueue(new Callback<ResponseBody>() {
+//        mService.getTelephoneWhiteList(body).enqueue(new Callback<ResponseBody>() {
+        mService.uploadInfo(UrlConst.PHONE_CONTACTS, body).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 final String content = TheTang.getSingleInstance().getResponseBodyString(response);
@@ -184,7 +187,8 @@ public class TelephoneWhiteListImpl extends BaseImpl<TelephoneWhiteListService> 
      */
     public void reSendGetTelephoneWhiteList(final MessageResendManager.ResendListener listener, RequestBody body) {
 
-        mService.getTelephoneWhiteList(body).enqueue(new Callback<ResponseBody>() {
+//        mService.getTelephoneWhiteList(body).enqueue(new Callback<ResponseBody>() {
+        mService.uploadInfo(UrlConst.PHONE_CONTACTS, body).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 

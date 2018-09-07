@@ -3,8 +3,9 @@ package com.xiaomi.emm.features.impl;
 import android.content.Context;
 
 import com.xiaomi.emm.definition.Common;
+import com.xiaomi.emm.definition.UrlConst;
 import com.xiaomi.emm.features.db.DatabaseOperate;
-import com.xiaomi.emm.features.http.DeviceUpdateService;
+import com.xiaomi.emm.features.http.RequestService;
 import com.xiaomi.emm.features.resend.MessageResendManager;
 import com.xiaomi.emm.utils.TheTang;
 
@@ -17,7 +18,7 @@ import retrofit2.Response;
  * Created by Administrator on 2017/9/27.
  */
 
-public class DeviceUpdateImpl extends BaseImpl<DeviceUpdateService> {
+public class DeviceUpdateImpl extends BaseImpl<RequestService> {
     private static final String TAG = "DeviceUpdateImpl";
     Context mContext;
 
@@ -27,7 +28,8 @@ public class DeviceUpdateImpl extends BaseImpl<DeviceUpdateService> {
     }
 
     public void deviceUpdate() {
-        mService.deviceUpdate().enqueue(new Callback<ResponseBody>() {
+//        mService.deviceUpdate().enqueue(new Callback<ResponseBody>() {
+        mService.getInfo(UrlConst.DEVICE_UPDATE).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (!TheTang.getSingleInstance().whetherSendSuccess(response)) {
@@ -46,7 +48,8 @@ public class DeviceUpdateImpl extends BaseImpl<DeviceUpdateService> {
      * 重发
      */
     public void reSendDeviceUpdate(final MessageResendManager.ResendListener listener) {
-        mService.deviceUpdate().enqueue(new Callback<ResponseBody>() {
+//        mService.deviceUpdate().enqueue(new Callback<ResponseBody>() {
+        mService.getInfo(UrlConst.DEVICE_UPDATE).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (TheTang.getSingleInstance().whetherSendSuccess(response)) {

@@ -14,7 +14,7 @@ import retrofit2.http.Url;
 public interface WebclipImageService {
     @Streaming
     @GET
-    Call<ResponseBody> downloadPicFromNet(@Url String fileUr);//l
+    Call<ResponseBody> downloadPicFromNet(@Url String fileUr);//l//TODO BAII
 
 
 

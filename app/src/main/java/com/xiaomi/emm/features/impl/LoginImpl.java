@@ -3,6 +3,8 @@ package com.xiaomi.emm.features.impl;
 import android.content.Context;
 import android.util.Log;
 
+import com.xiaomi.emm.definition.UrlConst;
+import com.xiaomi.emm.features.http.RequestService;
 import com.xiaomi.emm.utils.DataParseUtil;
 import com.xiaomi.emm.features.http.LoginCallBack;
 import com.xiaomi.emm.features.event.LoginEvent;
@@ -23,7 +25,7 @@ import okhttp3.RequestBody;
  * Created by Administrator on 2017/5/26.
  */
 
-public class LoginImpl extends BaseImpl<LoginService> {
+public class LoginImpl extends BaseImpl<RequestService> {
 
     Context context;
     public LoginImpl(Context context) {
@@ -40,7 +42,8 @@ public class LoginImpl extends BaseImpl<LoginService> {
         if (mService != null) {
             LoginCallBack callBack = new LoginCallBack(new LoginEvent(uuid));
             Log.w(TAG,"startCall = " + System.currentTimeMillis() );
-            mService.getToken(body).enqueue(callBack);
+//            mService.getToken(body).enqueue(callBack);
+            mService.uploadInfo(UrlConst.LOGIN, body).enqueue(callBack);
         }
     }
 

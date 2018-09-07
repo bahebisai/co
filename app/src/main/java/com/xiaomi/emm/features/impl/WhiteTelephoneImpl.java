@@ -1,20 +1,23 @@
 package com.xiaomi.emm.features.impl;
 
 import android.content.Context;
+import android.util.ArrayMap;
 
 import com.xiaomi.emm.definition.Common;
+import com.xiaomi.emm.definition.UrlConst;
 import com.xiaomi.emm.features.db.DatabaseOperate;
-import com.xiaomi.emm.features.http.WhiteTelephoneService;
+import com.xiaomi.emm.features.http.RequestService;
 import com.xiaomi.emm.features.resend.MessageResendManager;
 import com.xiaomi.emm.utils.TheTang;
 
-import okhttp3.RequestBody;
+import java.util.Map;
+
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class WhiteTelephoneImpl extends BaseImpl<WhiteTelephoneService> {
+public class WhiteTelephoneImpl extends BaseImpl<RequestService> {
 
     private static final String TAG = "WhiteTelephoneImpl";
     Context mContext;
@@ -25,8 +28,10 @@ public class WhiteTelephoneImpl extends BaseImpl<WhiteTelephoneService> {
     }
 
     public void sendWhiteTelephoneStatus(final String status) {
-
-        mService.sendWhiteTelephoneStatus(status).enqueue(new Callback<ResponseBody>() {
+        Map<String, String> map = new ArrayMap<>();
+        map.put("status", status);
+//        mService.sendWhiteTelephoneStatus(status).enqueue(new Callback<ResponseBody>() {
+        mService.getInfo(UrlConst.TELE_WHITELIST_STATUS, map).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (!TheTang.getSingleInstance().whetherSendSuccess(response)) {
@@ -44,17 +49,19 @@ public class WhiteTelephoneImpl extends BaseImpl<WhiteTelephoneService> {
 
     /**
      * 重发
+     *
      * @param listener
      * @param status
      */
     public void reSendWhiteTelephoneStatus(final MessageResendManager.ResendListener listener, String status) {
-
-        mService.sendWhiteTelephoneStatus( status ).enqueue( new Callback<ResponseBody>() {
+        Map<String, String> map = new ArrayMap<>();
+        map.put("status", status);
+//        mService.sendWhiteTelephoneStatus( status ).enqueue( new Callback<ResponseBody>() {
+        mService.getInfo(UrlConst.TELE_WHITELIST_STATUS, map).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-
-                if (TheTang.getSingleInstance().whetherSendSuccess( response )) {
-                    listener.resendSuccess(  );
+                if (TheTang.getSingleInstance().whetherSendSuccess(response)) {
+                    listener.resendSuccess();
                 } else {
                     listener.resendError();
                 }
@@ -64,6 +71,6 @@ public class WhiteTelephoneImpl extends BaseImpl<WhiteTelephoneService> {
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 listener.resendFail();
             }
-        } );
+        });
     }
 }

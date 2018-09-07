@@ -4,6 +4,8 @@ import android.content.Context;
 import android.util.Log;
 
 import com.xiaomi.emm.definition.Common;
+import com.xiaomi.emm.definition.UrlConst;
+import com.xiaomi.emm.features.http.RequestService;
 import com.xiaomi.emm.features.http.TrajectoryService;
 import com.xiaomi.emm.utils.PreferencesManager;
 import com.xiaomi.emm.utils.TheTang;
@@ -23,7 +25,7 @@ import retrofit2.Response;
  * Created by Administrator on 2018/1/4.
  */
 
-public class TrajectoryImpl extends BaseImpl<TrajectoryService> {
+public class TrajectoryImpl extends BaseImpl<RequestService> {
     private static final String TAG = "LocationImpl";
     Context mContext;
 
@@ -41,7 +43,8 @@ public class TrajectoryImpl extends BaseImpl<TrajectoryService> {
         RequestBody description = RequestBody.create( MediaType.parse(
                 "application/json;charset=UTF-8" ), json.toString() );
 
-        mService.sendTrajectoryData( description ).enqueue( new Callback<ResponseBody>() {
+//        mService.sendTrajectoryData( description ).enqueue( new Callback<ResponseBody>() {
+        mService.uploadInfo(UrlConst.USER_TRACK, description).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (!TheTang.getSingleInstance().whetherSendSuccess(response)) {
