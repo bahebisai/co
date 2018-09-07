@@ -5,7 +5,6 @@ import android.content.Context;
 import com.xiaomi.emm.definition.Common;
 import com.xiaomi.emm.definition.UrlConst;
 import com.xiaomi.emm.features.http.RequestService;
-import com.xiaomi.emm.features.http.SwitchLogService;
 import com.xiaomi.emm.utils.LogUtil;
 import com.xiaomi.emm.utils.PreferencesManager;
 import com.xiaomi.emm.utils.TheTang;

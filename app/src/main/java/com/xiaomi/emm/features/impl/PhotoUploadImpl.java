@@ -5,7 +5,6 @@ import android.util.Log;
 
 import com.xiaomi.emm.definition.Common;
 import com.xiaomi.emm.definition.UrlConst;
-import com.xiaomi.emm.features.http.PhotoUploadService;
 import com.xiaomi.emm.features.http.RequestService;
 import com.xiaomi.emm.features.luban.PhotoUploadListener;
 import com.xiaomi.emm.utils.DataParseUtil;
@@ -65,7 +64,7 @@ public class PhotoUploadImpl extends BaseImpl<RequestService>{
         MultipartBody.Part body = MultipartBody.Part.createFormData( "file", file.getName(), requestFile );
 
 //        mService.photoUpload( body, description ).enqueue( new Callback<ResponseBody>() {
-        mService.uploadInfo(UrlConst.USER_AVATAR, description, body).enqueue(new Callback<ResponseBody>() {
+        mService.uploadPhoto(UrlConst.USER_AVATAR, description, body).enqueue(new Callback<ResponseBody>() {//todo baii
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 

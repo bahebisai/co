@@ -6,7 +6,6 @@ import com.xiaomi.emm.base.BaseApplication;
 import com.xiaomi.emm.definition.Common;
 import com.xiaomi.emm.features.db.DatabaseOperate;
 import com.xiaomi.emm.features.event.CompleteEvent;
-import com.xiaomi.emm.features.http.DownloadService;
 import com.xiaomi.emm.features.http.RequestService;
 import com.xiaomi.emm.features.impl.BaseImpl;
 import com.xiaomi.emm.utils.MDM;

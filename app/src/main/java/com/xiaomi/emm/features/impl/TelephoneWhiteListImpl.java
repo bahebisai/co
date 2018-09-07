@@ -16,7 +16,6 @@ import com.xiaomi.emm.definition.Common;
 import com.xiaomi.emm.definition.UrlConst;
 import com.xiaomi.emm.features.db.DatabaseOperate;
 import com.xiaomi.emm.features.http.RequestService;
-import com.xiaomi.emm.features.http.TelephoneWhiteListService;
 import com.xiaomi.emm.features.resend.MessageResendManager;
 import com.xiaomi.emm.model.TelephoyWhiteUser;
 import com.xiaomi.emm.utils.DataParseUtil;

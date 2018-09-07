@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.xiaomi.emm.definition.UrlConst;
 import com.xiaomi.emm.features.http.RequestService;
-import com.xiaomi.emm.features.http.SettingRequestService;
 import com.xiaomi.emm.utils.DataParseUtil;
 import com.xiaomi.emm.utils.TheTang;
 import okhttp3.ResponseBody;

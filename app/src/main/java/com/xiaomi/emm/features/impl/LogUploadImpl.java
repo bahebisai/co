@@ -8,7 +8,6 @@ import com.xiaomi.emm.base.BaseApplication;
 import com.xiaomi.emm.definition.Common;
 import com.xiaomi.emm.definition.OrderConfig;
 import com.xiaomi.emm.definition.UrlConst;
-import com.xiaomi.emm.features.http.LogUpLoadService;
 import com.xiaomi.emm.features.http.RequestService;
 import com.xiaomi.emm.utils.LogUtil;
 import com.xiaomi.emm.utils.PreferencesManager;

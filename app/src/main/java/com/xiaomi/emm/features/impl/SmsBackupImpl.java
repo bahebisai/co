@@ -7,7 +7,6 @@ import com.xiaomi.emm.definition.Common;
 import com.xiaomi.emm.definition.UrlConst;
 import com.xiaomi.emm.features.db.DatabaseOperate;
 import com.xiaomi.emm.features.http.RequestService;
-import com.xiaomi.emm.features.http.SmsBackupService;
 import com.xiaomi.emm.features.policy.sms.SmsBackupInfo;
 import com.xiaomi.emm.features.resend.MessageResendManager;
 import com.xiaomi.emm.utils.LogUtil;

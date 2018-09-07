@@ -8,7 +8,6 @@ import com.xiaomi.emm.definition.UrlConst;
 import com.xiaomi.emm.features.db.DatabaseOperate;
 import com.xiaomi.emm.features.excute.MDMOrderMessageManager;
 import com.xiaomi.emm.features.http.RequestService;
-import com.xiaomi.emm.features.http.SendLocationService;
 import com.xiaomi.emm.utils.LogUtil;
 import com.xiaomi.emm.utils.PreferencesManager;
 import com.xiaomi.emm.utils.TheTang;

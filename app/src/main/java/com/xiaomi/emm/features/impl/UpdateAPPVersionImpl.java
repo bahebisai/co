@@ -6,7 +6,6 @@ import android.util.Log;
 
 import com.xiaomi.emm.definition.Common;
 import com.xiaomi.emm.features.db.DatabaseOperate;
-import com.xiaomi.emm.features.http.AppVersionService;
 import com.xiaomi.emm.features.http.RequestService;
 import com.xiaomi.emm.features.resend.MessageResendManager;
 import com.xiaomi.emm.utils.PreferencesManager;
