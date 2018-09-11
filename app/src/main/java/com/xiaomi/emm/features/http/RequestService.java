@@ -27,11 +27,11 @@ public interface RequestService {
 
     @Multipart
     @POST()
-    public Call<ResponseBody> uploadInfo(@Url String url, @Part("description") RequestBody description, @Part MultipartBody.Part file);
+    Call<ResponseBody> uploadInfo(@Url String url, @Part("description") RequestBody description, @Part MultipartBody.Part file);
 
     @Multipart
     @POST()
-    public Call<ResponseBody> uploadPhoto(@Url String url, @Part("alias") RequestBody description, @Part MultipartBody.Part file);//todo baii same as above, 跟后台协商修改
+    Call<ResponseBody> uploadPhoto(@Url String url, @Part("alias") RequestBody description, @Part MultipartBody.Part file);//todo baii same as above, 跟后台协商修改
 
 
     @GET()

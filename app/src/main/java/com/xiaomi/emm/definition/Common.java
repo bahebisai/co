@@ -379,14 +379,14 @@ public class Common {
 
     public static final int app_impl = 1;
     public static final int coming_number_impl = 2;
-    public static final int delay_code_impl = 3;
+    public static final int location_upload = 3;
 
     public static final int device_impl = 4;
     public static final int device_update = 5;
     public static final int download_impl = 6;
     public static final int iccid_impl = 7;
     public static final int log_upload_impl = 8;
-    public static final int lost_impl = 9;
+    public static final int login = 9;
     public static final int password_impl = 10;
     public static final int switch_log_impl = 11;
     public static final int sync_data_impl = 12;
@@ -399,6 +399,10 @@ public class Common {
     public static final int white_telephone_status = 19;
     public static final int SMS_BACKUP = 20;
     public static final int CALL_RECORDER_BACKUP = 21;
+    public static final int USER_TRACK = 22;
+    public static final int USER_AVATAR_UPLOAD = 23;
+    public static final int SETTING_DATA = 24;
+    public static final int APP_VERSION_UPDATE = 25;
 
     //security stratege data
     public static final String banSecurity = "safetyLimit";

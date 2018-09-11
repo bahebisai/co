@@ -11,8 +11,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.app.usage.NetworkStatsManager;
-//import android.app.usage.StorageStats;
-//import android.app.usage.StorageStatsManager;
 import android.app.usage.StorageStats;
 import android.app.usage.StorageStatsManager;
 import android.content.Context;
@@ -54,23 +52,24 @@ import com.xiaomi.emm.base.BaseApplication;
 import com.xiaomi.emm.definition.Common;
 import com.xiaomi.emm.definition.OrderConfig;
 import com.xiaomi.emm.features.complete.CompleteMessageManager;
+import com.xiaomi.emm.features.db.DatabaseOperate;
 import com.xiaomi.emm.features.event.MessageEvent;
-import com.xiaomi.emm.features.impl.AppImpl;
+import com.xiaomi.emm.features.event.StrategeEvent;
 import com.xiaomi.emm.features.impl.ExcuteCompleteImpl;
 import com.xiaomi.emm.features.impl.FeedBackImpl;
+import com.xiaomi.emm.features.impl.LoginImpl;
+import com.xiaomi.emm.features.impl.SendMessageManager;
 import com.xiaomi.emm.features.location.LocationService;
 import com.xiaomi.emm.features.lockscreen.Lock2Activity;
 import com.xiaomi.emm.features.policy.compliance.ExcuteCompliance;
 import com.xiaomi.emm.features.service.NetWorkChangeService;
 import com.xiaomi.emm.model.APPInfo;
-import com.xiaomi.emm.features.impl.LoginImpl;
-import com.xiaomi.emm.features.db.DatabaseOperate;
 import com.xiaomi.emm.model.AppBlackWhiteData;
 import com.xiaomi.emm.model.MessageInfo;
+import com.xiaomi.emm.model.MessageSendData;
 import com.xiaomi.emm.model.SecurityChromeData;
 import com.xiaomi.emm.model.SettingAboutData;
 import com.xiaomi.emm.model.StrategeInfo;
-import com.xiaomi.emm.features.event.StrategeEvent;
 import com.xiaomi.emm.view.activity.InitActivity;
 import com.xiaomi.emm.view.activity.MainActivity;
 import com.xiaomi.emm.view.activity.MessageActivity;
@@ -125,6 +124,9 @@ import retrofit2.Response;
 import static android.content.Context.ALARM_SERVICE;
 import static android.content.Context.NETWORK_STATS_SERVICE;
 import static android.content.Context.TELEPHONY_SERVICE;
+
+//import android.app.usage.StorageStats;
+//import android.app.usage.StorageStatsManager;
 
 /**
  * MDM功能类
@@ -990,6 +992,7 @@ public class TheTang {
         DatabaseOperate.getSingleInstance().addAppDenyList(deny_apps);
         List<String> list = DatabaseOperate.getSingleInstance().queryDenyAppByType("0");
         sendAppDeny(context, "0", list);
+        excuteAppCompliance();
     }
 
     /**
@@ -1029,8 +1032,10 @@ public class TheTang {
      * @param names
      */
     private void sendAppDeny(Context context, String type, List<String> names) {
-        AppImpl appImpl = new AppImpl( context );
-        appImpl.sendAppCompliance( type, names.toString() );
+/*        AppImpl appImpl = new AppImpl( context );
+        appImpl.sendAppCompliance( type, names.toString() );*/
+        //baii impl 000000000000000000000000000000000000
+        sendAppPolicyFeedback(context, type, names.toString());
     }
 
     /**
@@ -1039,8 +1044,27 @@ public class TheTang {
      * @param type
      */
     private void sendAppUnDeny(Context context, String type) {
-        AppImpl appImpl = new AppImpl( context );
-        appImpl.sendAppCompliance( type, "null" );
+/*        AppImpl appImpl = new AppImpl( context );
+        appImpl.sendAppCompliance( type, "null" );*/
+//baii impl 000000000000000000000000000000000000
+        sendAppPolicyFeedback(context, type, "null");
+    }
+
+    private void sendAppPolicyFeedback(Context context, String type, String names) {
+        SendMessageManager manager = new SendMessageManager(context);
+        String alias = PreferencesManager.getSingleInstance().getData( Common.alias );
+        String appComplianceId = PreferencesManager.getSingleInstance().getComplianceData( Common.app_compliance_id );
+        final JSONObject appObject = new JSONObject();
+        try {
+            appObject.put("alias", alias);
+            appObject.put("appComplianceId", appComplianceId);
+            appObject.put("type", type);
+            appObject.put("names", names);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        MessageSendData data = new MessageSendData(Common.app_impl, appObject.toString(), true, null, null);
+        manager.sendMessage(data);
     }
 
     /**

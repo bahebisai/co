@@ -5,6 +5,7 @@ import android.util.ArrayMap;
 import android.util.Log;
 
 import com.xiaomi.emm.definition.Common;
+import com.xiaomi.emm.definition.UrlConst;
 import com.xiaomi.emm.features.db.DatabaseOperate;
 import com.xiaomi.emm.features.http.RequestService;
 import com.xiaomi.emm.features.resend.MessageResendManager;
@@ -40,7 +41,7 @@ public class UpdateAPPVersionImpl extends BaseImpl<RequestService>{
         map.put("appVersion", newVersion);
         String url = "/app/updateAppVersion";
 //        mService.sendUpdateAppVersion( alias, newVersion ).enqueue( new Callback<ResponseBody>() {
-        mService.getInfo( url, map).enqueue( new Callback<ResponseBody>() {
+        mService.getInfo(UrlConst.APP_UPDATE_VERSION, map).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (TheTang.getSingleInstance().whetherSendSuccess( response )) {

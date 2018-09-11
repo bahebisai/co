@@ -68,7 +68,7 @@ public class MessageResendManager implements Runnable {
     /**
      * 重发回调
      */
-    class MessageResendListener implements ResendListener {
+    public class MessageResendListener implements ResendListener {
 
         @Override
         public void resendSuccess() {
