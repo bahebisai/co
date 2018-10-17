@@ -8,23 +8,29 @@ import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.ArrayMap;
 import android.util.Log;
 
+import com.google.gson.JsonObject;
 import com.xiaomi.emm.R;
 import com.xiaomi.emm.definition.Common;
 import com.xiaomi.emm.features.download.DownLoadManager;
-import com.xiaomi.emm.features.impl.ComingNumberLogImpl;
-import com.xiaomi.emm.features.impl.SwitchLogImpl;
-import com.xiaomi.emm.features.impl.UpdateAPPVersionImpl;
+import com.xiaomi.emm.features.impl.SendMessageManager;
 import com.xiaomi.emm.features.policy.device.ConfigurationPolicy;
 import com.xiaomi.emm.features.resend.MessageResendManager;
-import com.xiaomi.emm.utils.WifyManager;
+import com.xiaomi.emm.model.MessageSendData;
+import com.xiaomi.emm.utils.JsonGenerateUtil;
 import com.xiaomi.emm.utils.LogUtil;
 import com.xiaomi.emm.utils.MDM;
+import com.xiaomi.emm.utils.PhoneUtils;
 import com.xiaomi.emm.utils.PreferencesManager;
 import com.xiaomi.emm.utils.TheTang;
+import com.xiaomi.emm.utils.WifyManager;
+
+import org.json.JSONObject;
 
 import java.lang.reflect.Method;
+import java.util.Map;
 
 import cn.jpush.android.api.JPushInterface;
 
@@ -109,9 +115,23 @@ public class NetWorkChangeService extends IntentService {
         String oldVersion = PreferencesManager.getSingleInstance().getData( Common.appVersion );
         String newVersion = TheTang.getSingleInstance().getAppVersion( getPackageName() );
         if (TextUtils.isEmpty( oldVersion ) || !oldVersion.equals( newVersion )) {
-            UpdateAPPVersionImpl mUpdateAPPVersionImpl = new UpdateAPPVersionImpl( TheTang.getSingleInstance().getContext() );
-            mUpdateAPPVersionImpl.sendUpdateAppVersion();
+  /*          UpdateAPPVersionImpl mUpdateAPPVersionImpl = new UpdateAPPVersionImpl( TheTang.getSingleInstance().getContext() );
+            mUpdateAPPVersionImpl.sendUpdateAppVersion();*/
+            //todo baii impl ccccccccccccccccc
+            sendUpdateVersion();
         }
+    }
+
+    private void sendUpdateVersion() {
+        String alias = PreferencesManager.getSingleInstance().getData(Common.alias);
+        String newVersion = TheTang.getSingleInstance().getAppVersion(Common.packageName);
+        Map<String, String> map = new ArrayMap<>();
+        map.put("alias", alias);
+        map.put("appVersion", newVersion);
+        JSONObject jsonObject = new JSONObject(map);
+        MessageSendData data = new MessageSendData(Common.APP_VERSION_UPDATE, jsonObject.toString(), false);
+        SendMessageManager manager = new SendMessageManager();
+        manager.sendMessage(data);
     }
 
     /**
@@ -184,7 +204,7 @@ public class NetWorkChangeService extends IntentService {
 
         if ("1".equals( preferencesManager.getLogData( "isWifiUpload" ) )) {
 
-            int state = TheTang.getSingleInstance().getNetWorkState();
+            int state = PhoneUtils.getNetWorkState(this);
             if (state != 1) {
                 return;
             }
@@ -196,8 +216,29 @@ public class NetWorkChangeService extends IntentService {
     private void sendSwitchLog(Context context) {
         String switchLog = PreferencesManager.getSingleInstance().getLogData( "switchLog" );
         if (switchLog != null) {
-            SwitchLogImpl mSwitchLogImpl = new SwitchLogImpl( context );
-            mSwitchLogImpl.sendSwitchLog( switchLog );
+           /* SwitchLogImpl mSwitchLogImpl = new SwitchLogImpl( context );
+            mSwitchLogImpl.sendSwitchLog( switchLog );*/
+//todo baii impl aaaaaaaaaaaaaaaaaaaaaaa
+            String logJsonString =  JsonGenerateUtil.jsonSwitchLog(switchLog);
+            MessageSendData data = new MessageSendData(Common.switch_log_impl, logJsonString, false);
+            SendMessageManager manager = new SendMessageManager(context);
+            manager.setSendListener(new SendMessageManager.SendListener() {
+                @Override
+                public void onSuccess() {
+                    PreferencesManager.getSingleInstance().removeLogData("switchLog");//清除数据
+                }
+
+                @Override
+                public void onFailure() {
+
+                }
+
+                @Override
+                public void onError() {
+
+                }
+            });
+            manager.sendMessage(data);
         }
     }
 
@@ -210,8 +251,28 @@ public class NetWorkChangeService extends IntentService {
 
         if (!TextUtils.isEmpty( comingNumberLog )) {
             Log.w( TAG, "存入sp有网就自动发给服务器=====" + comingNumberLog );
-            ComingNumberLogImpl comingNumberLogImpl = new ComingNumberLogImpl( this );
-            comingNumberLogImpl.sendComingNumberLog( comingNumberLog );
+/*            ComingNumberLogImpl comingNumberLogImpl = new ComingNumberLogImpl( this );
+            comingNumberLogImpl.sendComingNumberLog( comingNumberLog );*/
+            //todo impl bai 33333333
+            MessageSendData data = new MessageSendData(Common.coming_number_impl, comingNumberLog, false);
+            SendMessageManager manager = new SendMessageManager(this);
+            manager.setSendListener(new SendMessageManager.SendListener() {
+                @Override
+                public void onSuccess() {
+                    PreferencesManager.getSingleInstance().clearComingNumberLog();//清除数据
+                }
+
+                @Override
+                public void onFailure() {
+
+                }
+
+                @Override
+                public void onError() {
+
+                }
+            });
+            manager.sendMessage(data);
         }
     }
 

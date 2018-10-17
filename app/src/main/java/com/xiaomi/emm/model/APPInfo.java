@@ -7,11 +7,15 @@ import java.io.Serializable;
  */
 
 public class APPInfo implements Serializable {
-    String app_id = null;
+    String app_id = "";//后台对接id
     String appName = null;
     String packageName = null;
     String version = null;
     String size = null;
+    int type;
+    public static final int TYPE_SYSTEM = 0;
+    public static final int TYPE_USER = 1;
+    public static final int TYPE_PUSH= 2;
     public void setAppId(String app_id) {
         this.app_id = app_id;
     }
@@ -51,6 +55,15 @@ public class APPInfo implements Serializable {
     public String getSize() {
         return size;
     }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
     @Override
     public String toString() {
         return "APPInfo{" +

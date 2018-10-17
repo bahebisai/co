@@ -17,6 +17,7 @@ import com.xiaomi.emm.features.event.APKEvent;
 import com.xiaomi.emm.features.event.CompleteEvent;
 import com.xiaomi.emm.model.APPInfo;
 import com.xiaomi.emm.model.DownLoadEntity;
+import com.xiaomi.emm.utils.AppUtils;
 import com.xiaomi.emm.utils.LogUtil;
 import com.xiaomi.emm.utils.MDM;
 import com.xiaomi.emm.utils.PreferencesManager;
@@ -39,7 +40,7 @@ public class AppTask {
     DownLoadEntity downLoadEntity = null;
 
     public AppTask() {
-        packageManager = TheTang.getSingleInstance().getPackageManager();
+        packageManager = AppUtils.getPackageManager(TheTang.getSingleInstance().getContext());
     }
 
     /**

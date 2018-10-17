@@ -34,7 +34,7 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
+//todo baii impl for reponse
 public class TelephoneWhiteListImpl extends BaseImpl<RequestService> {
     private static final String TAG = "TelephoneWhiteListImpl";
     Context mContext;
@@ -194,15 +194,15 @@ public class TelephoneWhiteListImpl extends BaseImpl<RequestService> {
                 String content = TheTang.getSingleInstance().getResponseBodyString(response);
 
                 if (!TheTang.getSingleInstance().whetherSendSuccess(content)) {
-                    listener.resendSuccess();
+                    listener.onSuccess();
                 } else {
-                    listener.resendError();
+                    listener.onError();
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                listener.resendFail();
+                listener.onFailure();
             }
         });
     }

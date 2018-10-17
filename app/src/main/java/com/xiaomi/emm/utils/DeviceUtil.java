@@ -526,7 +526,7 @@ public class DeviceUtil {
          *
          * @return
          */
-        public Builder getAllSystemApp() {
+        public Builder getAllSystemApp() {//todo baii util app
 
             //获取Launcher Apps
             List<LauncherActivityInfo> appList = TheTang.getSingleInstance().getLauncherApps();
@@ -536,7 +536,7 @@ public class DeviceUtil {
             newAppList = TheTang.getSingleInstance().removeDuplicateWithOrder( appList );
 
             JSONArray appArray = new JSONArray();
-            PackageManager mPackageManager = TheTang.getSingleInstance().getPackageManager();
+            PackageManager mPackageManager = AppUtils.getPackageManager(TheTang.getSingleInstance().getContext());
 
             for (LauncherActivityInfo launcherActivityInfo : newAppList) {
                 JSONObject appObject = new JSONObject();
@@ -562,9 +562,9 @@ public class DeviceUtil {
                     appObject.put( "package_name", packageName );
 
                     APPInfo appInfo = DatabaseOperate.getSingleInstance().queryAppInfo( packageName );
-
                     if (appInfo != null) {
                         appObject.put( "appId", appInfo.getAppId() );
+                        Log.d("baii", "app id " + appInfo.getAppId());
                     } else {
                         appObject.put( "appId", "" );
                     }
@@ -615,7 +615,7 @@ public class DeviceUtil {
          *
          * @return
          */
-        public Builder getOperaterAbout() {
+        public Builder getOperaterAbout() {//todo baii util phone
 
             String[] imsis = TheTang.getSingleInstance().getSubscriberId();
             String[] operaters = new String[2];
@@ -645,7 +645,7 @@ public class DeviceUtil {
          *
          * @return
          */
-        public Builder getLine1Number() {
+        public Builder getLine1Number() {//todo baii util phone
             String[] nums = TheTang.getSingleInstance().getLine1Number();
             this.main_phone_number = nums[0];
             this.vice_phone_number = nums[1];
@@ -660,7 +660,7 @@ public class DeviceUtil {
          * @return
          */
 //        String mobileData;
-        public Builder getMobileData() {
+        public Builder getMobileData() {//todo baii util phone
             new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
                 public void run() {

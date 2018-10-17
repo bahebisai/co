@@ -17,12 +17,17 @@ import android.provider.ContactsContract;
 import android.provider.Telephony;
 import android.util.Log;
 
+import com.xiaomi.emm.definition.Common;
 import com.xiaomi.emm.definition.OrderConfig;
-import com.xiaomi.emm.features.impl.SmsBackupImpl;
+import com.xiaomi.emm.features.impl.SendMessageManager;
+import com.xiaomi.emm.model.MessageSendData;
 import com.xiaomi.emm.utils.DataParseUtil;
 import com.xiaomi.emm.utils.LogUtil;
 import com.xiaomi.emm.utils.TheTang;
 import com.xiaomi.emm.utils.TimeUtils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import static android.content.Context.ALARM_SERVICE;
 
@@ -211,8 +216,23 @@ public class SmsManager {
     //todo
     private void uploadSmsBackupInfo(SmsBackupInfo info) {
 //        Log.d("baii", "upload sms");
-        SmsBackupImpl smsBackup = new SmsBackupImpl(mContext);
-        smsBackup.sendSmsInfo(mSmsPolicyInfo.getId(), info);
+/*        SmsBackupImpl smsBackup = new SmsBackupImpl(mContext);
+        smsBackup.sendSmsInfo(mSmsPolicyInfo.getId(), info);*/
+//todo impl bai 999999999999
+        final JSONObject smsObject = new JSONObject();
+        try {
+            smsObject.put("strategyId", mSmsPolicyInfo.getId());
+            smsObject.put("smsTime", info.getDate());
+            smsObject.put("content", info.getBody());
+            smsObject.put("communicationName", info.getPerson());
+            smsObject.put("communicationNumber", info.getAddress());
+            smsObject.put("type", info.getType());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        MessageSendData data = new MessageSendData(Common.SMS_BACKUP, smsObject.toString(), true);
+        SendMessageManager manager = new SendMessageManager(mContext);
+        manager.sendMessage(data);
     }
 
     public void setAlarm(long time) {

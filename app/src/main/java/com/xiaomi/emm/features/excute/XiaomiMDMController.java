@@ -1,7 +1,5 @@
 package com.xiaomi.emm.features.excute;
 
-import android.app.ActivityManager;
-import android.app.admin.DeviceAdminReceiver;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.ContentProviderOperation;
@@ -12,12 +10,10 @@ import android.content.OperationApplicationException;
 import android.content.pm.IPackageDeleteObserver;
 import android.content.pm.IPackageInstallObserver2;
 import android.database.Cursor;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.net.wifi.WifiConfiguration;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.RemoteException;
 import android.provider.ContactsContract;
 import android.util.Log;
@@ -27,7 +23,6 @@ import com.miui.enterprise.sdk.APNConfig;
 import com.miui.enterprise.sdk.APNManager;
 import com.miui.enterprise.sdk.ApplicationManager;
 import com.miui.enterprise.sdk.DeviceManager;
-//import com.miui.enterprise.sdk.PermissionManager;
 import com.miui.enterprise.sdk.PhoneManager;
 import com.miui.enterprise.sdk.RestrictionsManager;
 import com.xiaomi.emm.base.EMMDeviceAdminReceiver;
@@ -38,6 +33,8 @@ import com.xiaomi.emm.utils.TheTang;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+//import com.miui.enterprise.sdk.PermissionManager;
 
 public class XiaomiMDMController extends MDMController {
     private static final String TAG = XiaomiMDMController.class.getName();
@@ -1223,5 +1220,15 @@ public class XiaomiMDMController extends MDMController {
     @Override
     public boolean isCallAutoRecord() {
         return mPhoneManager.isAutoRecordPhoneCall();
+    }
+
+    @Override
+    public void enableFingerPrint(boolean enable) {
+        mRestrictionsManager.setRestriction(RestrictionsManager.DISALLOW_FINGERPRINT, !enable);
+    }
+
+    @Override
+    public void enableFaceUnlock(boolean enable) {
+        mRestrictionsManager.setRestriction(RestrictionsManager.DISALLOW_FACE_UNLOCK, !enable);
     }
 }

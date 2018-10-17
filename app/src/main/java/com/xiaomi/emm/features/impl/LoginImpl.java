@@ -23,7 +23,7 @@ import okhttp3.RequestBody;
  * 3、退出
  * Created by Administrator on 2017/5/26.
  */
-
+//todo baii impl remain for LoginCallBack
 public class LoginImpl extends BaseImpl<RequestService> {
 
     Context context;

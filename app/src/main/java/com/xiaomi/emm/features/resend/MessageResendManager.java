@@ -1,7 +1,9 @@
 package com.xiaomi.emm.features.resend;
 
 import com.xiaomi.emm.features.db.DatabaseOperate;
+import com.xiaomi.emm.features.impl.SendMessageManager;
 import com.xiaomi.emm.model.MessageResendData;
+import com.xiaomi.emm.model.MessageSendData;
 import com.xiaomi.emm.utils.LogUtil;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +26,7 @@ public class MessageResendManager implements Runnable {
 
     public static final String TAG = "MessageResendManager";
 
-    public MessageResendListener mMessageResendListener = null;
+    public ResendListener mMessageResendListener = null;
 
     public List<String> message_ids = new ArrayList<>();
 
@@ -40,9 +42,9 @@ public class MessageResendManager implements Runnable {
 
         LogUtil.writeToFile( TAG, "MessageResendManager excute!" );
 
-        mMessageResendListener = new MessageResendListener();
+        mMessageResendListener = new ResendListener();
 
-        List<MessageResendData> lists = new ArrayList<>();
+        List<MessageSendData> lists = new ArrayList<>();
 
         lists = DatabaseOperate.getSingleInstance().queryAll_backResult_sql(); //获取全部未发送成功的反馈
 
@@ -55,7 +57,7 @@ public class MessageResendManager implements Runnable {
         LogUtil.writeToFile( TAG, "resend lists content = " + lists.toString() );
 
         //可能有问题
-        for ( MessageResendData messageResendData : lists) {
+        for ( MessageSendData messageResendData : lists) {
             if (!resendMessage(messageResendData))  //如果发送失败则默认网络不通，关闭，等待下一次发送
             {
                 break;
@@ -68,20 +70,20 @@ public class MessageResendManager implements Runnable {
     /**
      * 重发回调
      */
-    public class MessageResendListener implements ResendListener {
+    public class ResendListener implements SendMessageManager.SendListener {
 
         @Override
-        public void resendSuccess() {
+        public void onSuccess() {
             type = 1; //成功
         }
 
         @Override
-        public void resendError() {
+        public void onError() {
             type = 2; //错误
         }
 
         @Override
-        public void resendFail() {
+        public void onFailure() {
             type = 3; //失败
         }
     }
@@ -91,7 +93,7 @@ public class MessageResendManager implements Runnable {
      * @param messageResendData
      * @return
      */
-    public boolean resendMessage(MessageResendData messageResendData) {
+    public boolean resendMessage(MessageSendData messageResendData) {
 
         boolean result = false;
 
@@ -102,8 +104,8 @@ public class MessageResendManager implements Runnable {
                 type = 4;
                 resend(messageResendData,mMessageResendListener); //发送
             } else if ( type == 1 ) {
-                message_ids.add( messageResendData.resend_id );
-                LogUtil.writeToFile( TAG, messageResendData.resend_id + " is success!");
+                message_ids.add( messageResendData.getId() );
+                LogUtil.writeToFile( TAG, messageResendData.getId() + " is success!");
                 result = true;
                 break;
             } else if ( type == 2 ){ //目前发送错误与发送失败一致
@@ -123,20 +125,16 @@ public class MessageResendManager implements Runnable {
      * @param messageResendData
      * @param mMessageResendListener
      */
-    private void resend(MessageResendData messageResendData, MessageResendListener mMessageResendListener) {
+    private void resend(MessageSendData messageResendData, ResendListener mMessageResendListener) {
 
-        LogUtil.writeToFile( TAG, "resend " + messageResendData.resend_type + "," + " content " + messageResendData.resend_content );
+        LogUtil.writeToFile( TAG, "resend " + messageResendData.getSendCode() + "," + " content " + messageResendData.getJsonContent() );
 
-        MessageResendTask mMessageResendTask = new MessageResendTask(messageResendData, mMessageResendListener);
-        mMessageResendTask.resendBack();
+/*        MessageResendTask mMessageResendTask = new MessageResendTask(messageResendData, mMessageResendListener);
+        mMessageResendTask.resendBack();*/
+
+        SendMessageManager manager = new SendMessageManager();
+        manager.setSendListener(mMessageResendListener);
+        manager.sendMessage(messageResendData);
     }
 
-    /**
-     * 重发监听
-     */
-    public interface ResendListener {
-        public void resendSuccess() ;
-        public void resendError();
-        public void resendFail();
-    }
 }

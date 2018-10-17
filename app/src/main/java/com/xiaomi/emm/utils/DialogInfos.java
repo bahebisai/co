@@ -15,7 +15,7 @@ import com.xiaomi.emm.R;
  * Created by admin on 2017/7/19.
  */
 
-public class DialogInfos extends Dialog {//todo baii belongs to view
+public class DialogInfos extends Dialog {//todo baii util view
 
     Context context;
     private DialogInfos.ConfirmListener confirmListener;

@@ -18,6 +18,7 @@ import com.xiaomi.emm.features.event.NotifySafedesk;
 import com.xiaomi.emm.model.APPInfo;
 import com.xiaomi.emm.model.ClearDeskData;
 import com.xiaomi.emm.model.ConfigureStrategyData;
+import com.xiaomi.emm.utils.AppUtils;
 import com.xiaomi.emm.utils.LogUtil;
 import com.xiaomi.emm.utils.MDM;
 import com.xiaomi.emm.utils.PreferencesManager;
@@ -168,7 +169,7 @@ public class SafeDeskActivity extends BaseActivity {
             appList.clear();
         }
 
-        packageInfoList = TheTang.getSingleInstance().getNoSystemApp();
+        packageInfoList = AppUtils.getNoSystemApp(this);
 
      //   appList = TheTang.getSingleInstance().getInstallAppInfo();
 
@@ -217,7 +218,7 @@ public class SafeDeskActivity extends BaseActivity {
             LogUtil.writeToFile(TAG, "appList = " + app.getPackageName());
         }
 
-        PackageManager packageManager = TheTang.getSingleInstance().getPackageManager();
+        PackageManager packageManager = AppUtils.getPackageManager(this);
 
         if (appList != null && appList.size() > 0) {
             for (APPInfo app : appList) {

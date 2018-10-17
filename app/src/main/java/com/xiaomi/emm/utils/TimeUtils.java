@@ -14,7 +14,7 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class TimeUtils {
+public class TimeUtils {//todo baii util time separate to time and timeData
     private static final String TAG = TimeUtils.class.getName();
     public static Date getStartDate(String startTime) {
 //            String dateStr = "2018-1-1";

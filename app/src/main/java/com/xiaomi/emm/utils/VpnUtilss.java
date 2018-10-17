@@ -12,7 +12,7 @@ import java.lang.reflect.Method;
  * Created by lenovo on 2017/12/25.
  */
 
-public class VpnUtilss {
+public class VpnUtilss {//todo baii util ???
     private static final String TAG = "VpnUtilss";
     public static Class vpnProfileClz;
     private static Class credentialsClz;

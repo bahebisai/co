@@ -16,13 +16,19 @@ import android.util.Log;
 
 import com.miui.enterprise.sdk.PhoneManager;
 import com.xiaomi.emm.base.BaseApplication;
+import com.xiaomi.emm.definition.Common;
 import com.xiaomi.emm.definition.OrderConfig;
 import com.xiaomi.emm.features.impl.CallRecorderUploadImpl;
+import com.xiaomi.emm.features.impl.SendMessageManager;
+import com.xiaomi.emm.model.MessageSendData;
 import com.xiaomi.emm.utils.DataParseUtil;
 import com.xiaomi.emm.utils.LogUtil;
 import com.xiaomi.emm.utils.MDM;
 import com.xiaomi.emm.utils.TheTang;
 import com.xiaomi.emm.utils.TimeUtils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 
@@ -148,8 +154,9 @@ public class CallRecorderManager {
             return;
         }
 
-        String fileName = new File(path).getName();
-        CallRecorderInfo callRecorderInfo = new CallRecorderInfo();
+        File file = new File(path);
+        String fileName = file.getName();
+/*        CallRecorderInfo callRecorderInfo = new CallRecorderInfo();
         callRecorderInfo.setAddress(fileName.substring(fileName.indexOf('(')+1,fileName.indexOf(')')));
         callRecorderInfo.setDate(TimeUtils.getDateString(fileName.substring(fileName.indexOf('_')+1,fileName.indexOf('.'))));
         callRecorderInfo.setPerson(fileName.substring(fileName.indexOf('@')+1, fileName.indexOf('(')));
@@ -157,61 +164,48 @@ public class CallRecorderManager {
         callRecorderInfo.setPath(path);
         callRecorderInfo.setType(type);
 //        Log.d("baii", "upload file " + callRecorderInfo.toString());
-        LogUtil.writeToFile(TAG, "upload file " + callRecorderInfo.toString());
         CallRecorderUploadImpl callRecorderUpload = new CallRecorderUploadImpl(mContext);
-        callRecorderUpload.uploadCallRecorder(mCallRecorderPolicyInfo.getId(), callRecorderInfo);
+        callRecorderUpload.uploadCallRecorder(mCallRecorderPolicyInfo.getId(), callRecorderInfo);*/
 
-/*        String selection = CallLog.Calls.DATE + ">? and " + CallLog.Calls.DURATION + ">?";
-        Cursor cursor = mContext.getContentResolver().query(CallLog.Calls.CONTENT_URI, //系统方式获取通讯录存储地址
-                new String[]{
-                        CallLog.Calls.CACHED_NAME,  //姓名
-                        CallLog.Calls.NUMBER,    //号码
-                        CallLog.Calls.TYPE,  //呼入/呼出(2)/未接
-                        CallLog.Calls.DATE,  //拨打时间
-                        CallLog.Calls.DURATION,   //通话时长
-                }, selection, new String[]{String.valueOf(System.currentTimeMillis() - 24*60*60*1000), String.valueOf(0)},
-                CallLog.Calls.DEFAULT_SORT_ORDER);
-        Log.d("baii", "cursor size " + cursor.getCount());
-        if (cursor != null && cursor.moveToFirst()) {
-            String name = cursor.getString(cursor.getColumnIndex(CallLog.Calls.CACHED_NAME));
-            String number = cursor.getString(cursor.getColumnIndex(CallLog.Calls.NUMBER));
-            long duration = cursor.getLong(cursor.getColumnIndex(CallLog.Calls.DURATION));
-            long date = cursor.getLong(cursor.getColumnIndex(CallLog.Calls.DATE));
-            CallRecorderInfo callRecorderInfo = new CallRecorderInfo();
-            callRecorderInfo.setAddress(number);
-            callRecorderInfo.setDate(date);
-            callRecorderInfo.setPerson(name);
-            callRecorderInfo.setDuration(duration);
-            callRecorderInfo.setPath(path);
-        }*/
+        //baii impl 11111111111111111111111111111
+        String communicationNumber = fileName.substring(fileName.indexOf('(')+1,fileName.indexOf(')'));
+        String communicationName = fileName.substring(fileName.indexOf('@')+1, fileName.indexOf('('));
+        String date = TimeUtils.getDateString(fileName.substring(fileName.indexOf('_')+1,fileName.indexOf('.')));
 
-/*        long time = System.currentTimeMillis();
-        if (TimeUtils.isInDateRange(time, mCallRecorderPolicyInfo.getTimeData())) {
-            if (TimeUtils.isInTimeUnitRange(time, mCallRecorderPolicyInfo.getTimeData())) {
-                Log.d("baii", "upload call recorder");
-                File directoryFile = new File(RECORDER_PATH);//todo baii upload only the current recorder
-                if (directoryFile.exists()) {
-                    File[] files = directoryFile.listFiles();
-                    if (files != null) {
-                        for (File file : files) {
-                            String fileName = file.getName();
-                            CallRecorderInfo callRecorderInfo = new CallRecorderInfo();
-                            callRecorderInfo.setAddress(fileName.substring(fileName.indexOf('(')+1,fileName.indexOf(')')));
-                            callRecorderInfo.setDate(TimeUtils.getDateString(fileName.substring(fileName.indexOf('_')+1,fileName.indexOf('.'))));
-                            callRecorderInfo.setPerson(fileName.substring(fileName.indexOf('@')+1, fileName.indexOf('(')));
-                            callRecorderInfo.setDuration(duration);
-                            callRecorderInfo.setPath(file.getPath());//todo baii
-                            callRecorderInfo.setType(type);
-                            Log.d("baii", "upload file " + callRecorderInfo.toString());
-                            CallRecorderUploadImpl callRecorderUpload = new CallRecorderUploadImpl(mContext);
-                            callRecorderUpload.uploadCallRecorder(mCallRecorderPolicyInfo.getId(), callRecorderInfo);
-                        }
-                    }
+        JSONObject json = new JSONObject();
+        try {
+            json.put("strategyId", mCallRecorderPolicyInfo.getId());
+            json.put("communicationName", communicationName);
+            json.put("communicationNumber", communicationNumber);
+            json.put("timeDuration", duration);
+            json.put("type", type);
+            json.put("soundTime", date);
+            json.put("filePath", path);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        LogUtil.writeToFile(TAG, "upload file " + json.toString());
+        MessageSendData data = new MessageSendData(Common.CALL_RECORDER_BACKUP, json.toString(), true);
+        SendMessageManager manager = new SendMessageManager(mContext);
+        manager.setSendListener(new SendMessageManager.SendListener() {
+            @Override
+            public void onSuccess() {
+                if (file != null && file.exists()) {
+                    file.delete();
                 }
             }
-        } else {
-            executeDeleteCallRecorderPolicy("", true);
-        }*/
+
+            @Override
+            public void onFailure() {
+
+            }
+
+            @Override
+            public void onError() {
+
+            }
+        });
+        manager.sendMessage(data);
     }
 
     public boolean isInUploadTimeRange() {

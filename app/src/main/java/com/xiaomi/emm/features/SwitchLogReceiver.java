@@ -3,8 +3,13 @@ package com.xiaomi.emm.features;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import com.xiaomi.emm.features.impl.SwitchLogImpl;
+
+import com.xiaomi.emm.definition.Common;
+import com.xiaomi.emm.features.impl.SendMessageManager;
+import com.xiaomi.emm.model.MessageSendData;
+import com.xiaomi.emm.utils.JsonGenerateUtil;
 import com.xiaomi.emm.utils.LogUtil;
+import com.xiaomi.emm.utils.PhoneUtils;
 import com.xiaomi.emm.utils.PreferencesManager;
 import com.xiaomi.emm.utils.TheTang;
 import java.text.SimpleDateFormat;
@@ -83,7 +88,7 @@ public class SwitchLogReceiver extends BroadcastReceiver {
     }
 
     private void upLoadSwitchLog( Context context) {
-        int state = TheTang.getSingleInstance().getNetWorkState( );
+        int state = PhoneUtils.getNetWorkState(context);
         if ( state == 0 || state == 1) {
             sendSwitchLog(context);
         }
@@ -96,8 +101,30 @@ public class SwitchLogReceiver extends BroadcastReceiver {
     private void sendSwitchLog(Context context) {
         String switchLog = PreferencesManager.getSingleInstance().getLogData("switchLog");
         if (switchLog != null) {
-            SwitchLogImpl mSwitchLogImpl = new SwitchLogImpl(context);
-            mSwitchLogImpl.sendSwitchLog(switchLog);
+/*            SwitchLogImpl mSwitchLogImpl = new SwitchLogImpl(context);
+            mSwitchLogImpl.sendSwitchLog(switchLog);*/
+
+            //todo baii impl aaaaaaaaaaaaaaaaaaaaaaa
+            String logJsonString =  JsonGenerateUtil.jsonSwitchLog(switchLog);
+            MessageSendData data = new MessageSendData(Common.switch_log_impl, logJsonString, false);
+            SendMessageManager manager = new SendMessageManager(context);
+            manager.setSendListener(new SendMessageManager.SendListener() {
+                @Override
+                public void onSuccess() {
+                    PreferencesManager.getSingleInstance().removeLogData("switchLog");//清除数据
+                }
+
+                @Override
+                public void onFailure() {
+
+                }
+
+                @Override
+                public void onError() {
+
+                }
+            });
+            manager.sendMessage(data);
         }
     }
 }

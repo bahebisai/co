@@ -13,12 +13,16 @@ import com.amap.api.location.AMapLocationListener;
 import com.xiaomi.emm.R;
 import com.xiaomi.emm.definition.Common;
 import com.xiaomi.emm.definition.OrderConfig;
-import com.xiaomi.emm.features.impl.LocationImpl;
+import com.xiaomi.emm.features.impl.SendMessageManager;
+import com.xiaomi.emm.model.MessageSendData;
 import com.xiaomi.emm.utils.DataParseUtil;
 import com.xiaomi.emm.utils.LogUtil;
 import com.xiaomi.emm.utils.MDM;
 import com.xiaomi.emm.utils.PreferencesManager;
 import com.xiaomi.emm.utils.TheTang;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by Administrator on 2017/7/26.
@@ -140,8 +144,20 @@ public class LocationService extends Service {
         }
 
         //定位返回
-        LocationImpl locationImpl = new LocationImpl( this );
-        locationImpl.sendLocation( String.valueOf( OrderConfig.GetLocationData ), locationData);
+/*        LocationImpl locationImpl = new LocationImpl( this );
+        locationImpl.sendLocation( String.valueOf( OrderConfig.GetLocationData ), locationData);*/
+//todo impl bai 66666666666666
+        JSONObject json = new JSONObject();
+        try {
+            json.put("feedback_code", String.valueOf(OrderConfig.GetLocationData));
+            json.put( "alias", PreferencesManager.getSingleInstance().getData( Common.alias ));
+            json.put( "result", locationData );
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        MessageSendData data = new MessageSendData(Common.location_upload, json.toString(), false);
+        SendMessageManager manager = new SendMessageManager(this);
+        manager.sendMessage(data);
 
         Log.w( TAG, "PreferencesManager.getSingleInstance().getFenceData( Common.geographical_fence ) ==" + PreferencesManager.getSingleInstance().getFenceData( Common.geographical_fence ) );
 

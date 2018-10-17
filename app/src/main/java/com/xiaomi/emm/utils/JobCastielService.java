@@ -21,7 +21,7 @@ import static android.app.Service.START_NOT_STICKY;
  * Created by Administrator on 2017/10/20.
  */
 
-public class JobCastielService extends JobService {//todo bai belongs to service, 启动MDMOrderService
+public class JobCastielService extends JobService {//todo bai util belongs to service, 启动MDMOrderService
     private int kJobId = 0;
 
     @Override

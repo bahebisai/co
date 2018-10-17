@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.xiaomi.emm.R;
 import com.xiaomi.emm.features.event.NotifyEvent;
+import com.xiaomi.emm.utils.AppUtils;
 import com.xiaomi.emm.view.activity.AppUpdateActivity;
 import com.xiaomi.emm.view.adapter.AppStoreAdapter;
 import com.xiaomi.emm.features.db.DatabaseOperate;
@@ -75,7 +76,7 @@ public class AppStoreFragment extends BaseFragment {
                 Collections.reverse(list_info);
 
                 for (APPInfo appInfo : list_info) {
-                    PackageManager packageManager = TheTang.getSingleInstance().getPackageManager();
+                    PackageManager packageManager = AppUtils.getPackageManager(getContext());
                     String version = null;
                     try {
                         PackageInfo info = packageManager.getPackageInfo( appInfo.getPackageName(), 0 );

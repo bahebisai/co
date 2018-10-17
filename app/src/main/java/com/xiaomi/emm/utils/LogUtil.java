@@ -47,7 +47,7 @@ public class LogUtil {
      * @param tag
      * @param msg
      */
-    public static void writeToFile(String tag, String msg) {
+    public static void writeToFile(String tag, String msg) {//todo baii util fileio
 
         if (null == logPath) {
             LogUtil.writeToFile(TAG, "logPath == null ，未初始化LogToFile");

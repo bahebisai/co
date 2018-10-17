@@ -9,7 +9,7 @@ import static android.content.Context.MODE_PRIVATE;
  * Created by Administrator on 2017/7/17.
  */
 
-public class PreferencesManager {
+public class PreferencesManager {//todo baii util to data/db
     public final static String TAG = "PreferencesManager";
     public final static String MDM_NAME = "MDM";
     public final static String COMPALIANCE_NAME = "Compliance";

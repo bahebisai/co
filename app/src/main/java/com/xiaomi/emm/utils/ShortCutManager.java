@@ -17,7 +17,7 @@ public class ShortCutManager {
     private static final String TAG = "ShortCutManager";
 
     //webClipImgPath 下载图片的路径 webClipName 图片的名字 webClipUrl 网站的url
-    public static void doDeskShortCut(final String webClipImgPath, final String webClipName, final String webClipUrl) {
+    public static void doDeskShortCut(final String webClipImgPath, final String webClipName, final String webClipUrl) {//todo baii util ???
 
         if (TextUtils.isEmpty(webClipImgPath)|| TextUtils.isEmpty(webClipName) || TextUtils.isEmpty(webClipUrl)){
             Log.w(TAG,"webClipImgPath 或者 webClipName 或者 webClipUrl 下载图片路径为空返回");

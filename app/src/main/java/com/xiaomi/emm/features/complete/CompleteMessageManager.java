@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import com.xiaomi.emm.definition.OrderConfig;
 import com.xiaomi.emm.features.db.DatabaseOperate;
+import com.xiaomi.emm.features.excute.OrderFeedbackManager;
 import com.xiaomi.emm.model.CompleteMessageData;
 import com.xiaomi.emm.utils.LogUtil;
 import com.xiaomi.emm.utils.TheTang;
@@ -102,7 +103,9 @@ public class CompleteMessageManager {
      * @param result
      */
     private void sendMessage(String type, String result, String id) {
-        TheTang.getSingleInstance().sendExcuteComplete( new MessagesendListener(), type, result, id );
+//        TheTang.getSingleInstance().sendExcuteComplete( new MessagesendListener(), type, result, id );
+        OrderFeedbackManager manager = new OrderFeedbackManager();
+        manager.sendExcuteComplete(new MessagesendListener(), type, result, id);
     }
 
     /**

@@ -26,7 +26,7 @@ import retrofit2.Response;
 /**
  * Created by lenovo on 2017/9/5.
  */
-
+//todo baii impl for response
 public class WebclipImageImpl extends BaseImpl<RequestService> {
     Context mContext;
 

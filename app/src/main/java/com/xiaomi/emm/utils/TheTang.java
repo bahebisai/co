@@ -55,16 +55,17 @@ import com.xiaomi.emm.features.complete.CompleteMessageManager;
 import com.xiaomi.emm.features.db.DatabaseOperate;
 import com.xiaomi.emm.features.event.MessageEvent;
 import com.xiaomi.emm.features.event.StrategeEvent;
-import com.xiaomi.emm.features.impl.ExcuteCompleteImpl;
-import com.xiaomi.emm.features.impl.FeedBackImpl;
 import com.xiaomi.emm.features.impl.LoginImpl;
 import com.xiaomi.emm.features.impl.SendMessageManager;
 import com.xiaomi.emm.features.location.LocationService;
 import com.xiaomi.emm.features.lockscreen.Lock2Activity;
 import com.xiaomi.emm.features.policy.compliance.ExcuteCompliance;
+import com.xiaomi.emm.features.policy.container.ContainerStratege;
+import com.xiaomi.emm.features.policy.device.ConfigurationPolicy;
 import com.xiaomi.emm.features.service.NetWorkChangeService;
 import com.xiaomi.emm.model.APPInfo;
 import com.xiaomi.emm.model.AppBlackWhiteData;
+import com.xiaomi.emm.model.DownLoadEntity;
 import com.xiaomi.emm.model.MessageInfo;
 import com.xiaomi.emm.model.MessageSendData;
 import com.xiaomi.emm.model.SecurityChromeData;
@@ -138,8 +139,8 @@ public class TheTang {
     public static final String TAG = "TheTang";
 
     protected static LoginImpl mLoginImpl;
-    protected static FeedBackImpl mFeedBackImpl;
-    public ExcuteCompleteImpl mExcuteCompleteImpl;
+/*    protected static FeedBackImpl mFeedBackImpl;
+    public ExcuteCompleteImpl mExcuteCompleteImpl;*/
     static PreferencesManager preferencesManager = PreferencesManager.getSingleInstance();
     //单例
     private volatile static TheTang mTheTang;
@@ -192,7 +193,7 @@ public class TheTang {
     }
 
     public void initImplTwo() {
-        mFeedBackImpl = new FeedBackImpl(mContext);
+//        mFeedBackImpl = new FeedBackImpl(mContext);
     }
 
     /***********************************设置别名***************************************************/
@@ -202,7 +203,7 @@ public class TheTang {
      * @param delayTime
      * @param alias
      */
-    public void setAlias(final int delayTime, final String alias) {
+    public void setAlias(final int delayTime, final String alias) {//todo baii util ???
         JPushInterface.setAliasAndTags(mContext, alias, null, mAliasCallback);
     }
 
@@ -239,27 +240,19 @@ public class TheTang {
      * @param userName
      * @param passWord
      */
-    public void login(String userName, String passWord) {
+    public void login(String userName, String passWord) {//todo baii util http
         mLoginImpl = new LoginImpl(mContext);
         mLoginImpl.login(userName, passWord);
     }
 
-    /***********************************
-     * 执行反馈
-     ***************************************************/
-    public void sendExcuteComplete(CompleteMessageManager.SendListener listener, String code, String result, String id) {
-        if (mExcuteCompleteImpl == null)
-            mExcuteCompleteImpl = new ExcuteCompleteImpl(mContext);
 
-        mExcuteCompleteImpl.sendExcuteComplete(listener, code, result, id);
-    }
 
     /**
      * 获得剩余存储
      *
      * @return
      */
-    public float getRemainStorage() {
+    public float getRemainStorage() {//todo baii util device or phone
         //外部存储大小
         return getAvailSpace(Environment.getExternalStorageDirectory().getAbsolutePath());
     }
@@ -269,7 +262,7 @@ public class TheTang {
      *
      * @return
      */
-    public float getTotalStorage() {
+    public float getTotalStorage() {//todo baii util device or phone
         //外部存储大小
         return getTotalSpace(Environment.getExternalStorageDirectory().getAbsolutePath());
     }
@@ -280,7 +273,7 @@ public class TheTang {
      * @param path 根路径
      * @return
      */
-    public long getAvailSpace(String path) {
+    public long getAvailSpace(String path) {//todo baii util device or phone
         StatFs statfs = null;
         try {
             statfs = new StatFs(path);
@@ -298,7 +291,7 @@ public class TheTang {
      * @param path 根路径
      * @return
      */
-    public long getTotalSpace(String path) {
+    public long getTotalSpace(String path) {//todo baii util device or phone
         StatFs statfs = null;
         try {
             statfs = new StatFs(path);
@@ -320,14 +313,14 @@ public class TheTang {
      */
     static String appSize = null;
 
-    public String queryPackageSize(String pkgName) throws Exception {
+    public String queryPackageSize(String pkgName) throws Exception {//todo baii util app
 
         appSize = null;
 
         if (pkgName != null) {
 
             if (Build.VERSION.SDK_INT < 26) {
-                PackageManager mPackageManager = TheTang.getSingleInstance().getPackageManager();  //得到pm对象
+                PackageManager mPackageManager = AppUtils.getPackageManager(mContext);  //得到pm对象
                 try {
                     Method getPackageSizeInfo = mPackageManager.getClass().getMethod("getPackageSizeInfo", String.class, IPackageStatsObserver.class);
                     getPackageSizeInfo.invoke(mPackageManager, pkgName, new IPackageStatsObserver.Stub() {
@@ -367,7 +360,7 @@ public class TheTang {
      * @return
      */
     /*modify by duanxin on 2017/08/31*/
-    public String formatTime(long time) {
+    public String formatTime(long time) {//todo baii util time
         Date date = new Date(time);
         SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         return mSimpleDateFormat.format(date);
@@ -379,7 +372,7 @@ public class TheTang {
      * @param time
      * @return
      */
-    public String formatTimeLength(long time) {
+    public String formatTimeLength(long time) {//todo baii util time
         String date = null;
         String hour = null;
         String minute = null;
@@ -434,7 +427,7 @@ public class TheTang {
      * @param fileS 文件大小  单位为byte
      * @return
      */
-    public String formatFileSize(long fileS) {
+    public String formatFileSize(long fileS) {//todo baii util file
         DecimalFormat df = new DecimalFormat("#.00");
         String fileSizeString = "";
         String wrongSize = "0B";
@@ -459,7 +452,7 @@ public class TheTang {
      * @param fileS 文件大小  单位为byte
      * @return
      */
-    public String formatFile(long fileS) {
+    public String formatFile(long fileS) {//todo baii util file
         DecimalFormat df = new DecimalFormat("#.00");
         String fileSizeString = "";
         String wrongSize = "";
@@ -484,7 +477,7 @@ public class TheTang {
      * @param size 文件大小  单位为byte
      * @return
      */
-    public String getUnit(float size) {
+    public String getUnit(float size) {//todo baii util file
         String unit = "";
         if (size < 1024) {
             unit = "B";
@@ -502,13 +495,13 @@ public class TheTang {
     /**
      * 获取定位
      */
-    public void getLocation() {
+    public void getLocation() {//todo baii util ???
         Intent service_intent = new Intent(mContext, LocationService.class);
         startService(service_intent);
     }
 
     //获得当前设置的电话号码
-    public String getTelePhonyNumber() {
+    public String getTelePhonyNumber() {//todo baii util phone
         TelephonyManager telephonyManager = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
         return telephonyManager.getLine1Number();
     }
@@ -520,7 +513,7 @@ public class TheTang {
      * @return
      * @throws Exception
      */
-    public static long getFileSizes(File file) throws Exception {
+    public static long getFileSizes(File file) throws Exception {//todo baii util file
         return file.length();
     }
 
@@ -531,7 +524,7 @@ public class TheTang {
      * @param node
      * @return
      */
-    public String getFileEnds(String fileName, String node) {
+    public String getFileEnds(String fileName, String node) {//todo baii util file
         if (fileName != null) {
             int position = fileName.indexOf(node);
             return fileName.substring(position + 1, fileName.length());
@@ -544,7 +537,7 @@ public class TheTang {
      *
      * @return
      */
-    public List<APPInfo> getInstallAppInfo() {
+    public List<APPInfo> getInstallAppInfo() {//todo baii util app
         return DatabaseOperate.getSingleInstance().queryInstallAppInfo();
     }
 
@@ -554,9 +547,9 @@ public class TheTang {
      * @param info
      * @return
      */
-    public Drawable getAppIcon(ApplicationInfo info) {
+    public Drawable getAppIcon(ApplicationInfo info) {//todo baii util app
         Drawable drawable = null;
-        PackageManager packageManager = getPackageManager();
+        PackageManager packageManager = AppUtils.getPackageManager(mContext);
 
         drawable = info.loadIcon(packageManager);
         return drawable;
@@ -568,8 +561,8 @@ public class TheTang {
      * @param packageName
      * @return
      */
-    public Drawable getAppIcon(String packageName) {
-        PackageManager packageManager = getPackageManager();
+    public Drawable getAppIcon(String packageName) {//todo baii util app
+        PackageManager packageManager = AppUtils.getPackageManager(mContext);
         ApplicationInfo info = null;
         try {
             info = packageManager.getApplicationInfo(packageName, 0);
@@ -590,9 +583,9 @@ public class TheTang {
      * @param packageName
      * @return
      */
-    public String getAppLabel(String packageName) {
+    public String getAppLabel(String packageName) {//todo baii util app
         String label = null;
-        PackageManager packageManager = getPackageManager();
+        PackageManager packageManager = AppUtils.getPackageManager(mContext);
 
         try {
             PackageInfo packageInfo = packageManager.getPackageInfo(packageName, 0);
@@ -603,27 +596,13 @@ public class TheTang {
         return label;
     }
 
-    /**
-     * 获得包管理器
-     *
-     * @returnAppTask
-     */
-    public PackageManager getPackageManager() {
-        PackageManager packageManager = null;
-        try {
-            packageManager = mContext.getPackageManager();
-        } catch (Exception e) {
-            LogUtil.writeToFile(TAG, e.getCause().toString());
-        }
-        return packageManager;
-    }
 
     /**
      * 获得线程池对象
      *
      * @return
      */
-    public ExecutorService getThreadPoolObject() {
+    public ExecutorService getThreadPoolObject() {//todo baii util thread
         return mExecutorService;
     }
 
@@ -632,7 +611,7 @@ public class TheTang {
      *
      * @return
      */
-    public ExecutorService getThreadPoolObjectForDownload() {
+    public ExecutorService getThreadPoolObjectForDownload() {//todo baii util thread
         return mExecutorServiceForDownload;
     }
     /**
@@ -640,7 +619,7 @@ public class TheTang {
      *
      * @param orderCode
      */
-    public void addMessageInfo(String orderCode) {
+    public void addMessageInfo(String orderCode) {//todo baii util ???
         switch (Integer.parseInt(orderCode)) {
             case OrderConfig.SilentInstallAppication:
                 break;
@@ -746,7 +725,7 @@ public class TheTang {
      * @param orderCode
      * @param about
      */
-    public void addMessage(String orderCode, String about) {
+    public void addMessage(String orderCode, String about) {//todo baii util ???
         MessageInfo messageInfo = new MessageInfo();
         messageInfo.setMessage_icon("true");
         messageInfo.setMessage_id(orderCode);
@@ -763,12 +742,12 @@ public class TheTang {
      *
      * @param messageInfo
      */
-    private void showMessage(MessageInfo messageInfo) {
+    private void showMessage(MessageInfo messageInfo) {//todo baii util ???
         showNotification(getMeaasgeInfo(messageInfo.getMessage_id()) + messageInfo.getMessage_about(),
                 mContext.getResources().getString(R.string.message1), 1001);
     }
 
-    public void showNotification(String content, String title, int id) {
+    public void showNotification(String content, String title, int id) {//todo baii util ???
         Intent intent = new Intent(mContext, MessageActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         //int id = 1001;
@@ -808,7 +787,7 @@ public class TheTang {
 
     }
 
-    public void cancelNotification(int id) {
+    public void cancelNotification(int id) {//todo baii util ???
 
         ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).cancel(id);
     }
@@ -819,7 +798,7 @@ public class TheTang {
      * @param message_id
      * @return
      */
-    public String getMeaasgeInfo(String message_id) {
+    public String getMeaasgeInfo(String message_id) {//todo baii util ???
         String message = null;
         if (message_id != null) {
             for (int i = 0; i < Common.message_info.length; i++) {
@@ -838,7 +817,7 @@ public class TheTang {
      * @param net_id
      * @return
      */
-    public String getNetworkInfo(String net_id) {
+    public String getNetworkInfo(String net_id) {//todo baii util device or phone
         if ("0".equals(net_id)) {
             return mContext.getResources().getString((int) Common.net_info[0]);
         }
@@ -851,7 +830,7 @@ public class TheTang {
      * @param un_id
      * @return
      */
-    public String getUninstallInfo(String un_id) {
+    public String getUninstallInfo(String un_id) {//todo baii util app
         if ("0".equals(un_id)) {
             return mContext.getResources().getString((int) Common.uninstall_info[0]);
         }
@@ -865,7 +844,7 @@ public class TheTang {
      * @param name
      * @param time
      */
-    public void addStratege(String orderCode, String name, String time) {
+    public void addStratege(String orderCode, String name, String time) {//todo baii util ???
         StrategeInfo strategeInfo = new StrategeInfo();
         strategeInfo.strategeId = orderCode;
         strategeInfo.strategeName = name;
@@ -880,7 +859,7 @@ public class TheTang {
      *
      * @param code
      */
-    public void deleteStrategeInfo(String code) {
+    public void deleteStrategeInfo(String code) {//todo baii util ???
         DatabaseOperate.getSingleInstance().deleteSimpleStrategeInfo(code);
         EventBus.getDefault().post(new StrategeEvent());
     }
@@ -891,7 +870,7 @@ public class TheTang {
      * @param code
      *
      */
-    public void deleteStrategeInfo(String code, String strategyName) {
+    public void deleteStrategeInfo(String code, String strategyName) {//todo baii util ???
         DatabaseOperate.getSingleInstance()
                 .deleteSimpleStrategeInfoByName(code, strategyName);
         EventBus.getDefault()
@@ -917,55 +896,6 @@ public class TheTang {
         return mContext;
     }
 
-    final int CURRENT_NETWORK_STATES_NO = -1; //没有网络
-    final int CURRENT_NETWORK_STATES_MOBILE = 0; //Mobile
-    final int CURRENT_NETWORK_STATES_WIFI = 1; //WIFI
-
-    //获得网络状态
-    public int getNetWorkState() {
-        int type = CURRENT_NETWORK_STATES_NO;
-        ConnectivityManager connectivityManager = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-
-        if (networkInfo != null && networkInfo.isConnected()) {
-
-            if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
-                type = CURRENT_NETWORK_STATES_WIFI;
-            } else if (networkInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
-                type = CURRENT_NETWORK_STATES_MOBILE;
-            }
-        }
-        return type;
-    }
-
-    /**
-     * 获得已安装的非系统APP个数
-     *
-     * @return
-     */
-    public List<PackageInfo> getNoSystemApp() {
-        List<PackageInfo> packageList = getPackageManager().getInstalledPackages(0);
-//        Log.d("baii", "before size " + packageList.size());
-        if (packageList != null && packageList.size() > 0) {
-            //note bai: for 循环不能边删除边遍历
-            //modify:1.remove之后i不能增加;2.遍历时记录所有需要删除的，遍历完成之后统一删除
-            for (int i = 0; i < packageList.size(); i++) {
-                PackageInfo packageInfo = packageList.get(i);
-                if ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) {
-                    packageList.remove(i);
-                    i--;//bai for note
-                    continue;
-                }
-               // if (packageInfo.packageName.contains("emm")) {//todo bai to delete
-                if (packageInfo.packageName.equals(Common.packageName)) {
-                    packageList.remove(i);
-                    i--;
-                    continue;
-                }
-            }
-        }
-        return packageList;
-    }
 
     /**
      * 应用违规处理
@@ -973,7 +903,7 @@ public class TheTang {
      * @param context
      * @param names
      */
-    public void appViolationExcute(Context context, List<String> names) {
+    public void appViolationExcute(Context context, List<String> names) {//todo baii util ???
         Map<String, String> deny_apps = new HashMap<>();
 
         /**
@@ -981,8 +911,8 @@ public class TheTang {
          */
         for (String name : names) {
             try {
-                ApplicationInfo applicationInfo = getPackageManager().getApplicationInfo(name, 0);
-                deny_apps.put((String) getPackageManager().getApplicationLabel(applicationInfo), name);
+                ApplicationInfo applicationInfo = AppUtils.getPackageManager(mContext).getApplicationInfo(name, 0);
+                deny_apps.put((String) AppUtils.getPackageManager(mContext).getApplicationLabel(applicationInfo), name);
             } catch (PackageManager.NameNotFoundException e) {
                 e.printStackTrace();
             }
@@ -998,7 +928,7 @@ public class TheTang {
     /**
      * 执行应用违规
      */
-    public void excuteAppCompliance() {
+    public void excuteAppCompliance() {//todo baii util ???
         String pwd = preferencesManager.getComplianceData(Common.app_compliance_pwd);
         if (TextUtils.isEmpty(pwd)) {
             MDM.setFactoryReset();
@@ -1013,7 +943,7 @@ public class TheTang {
      * @param context
      * @param packageName
      */
-    public void appComplianceExcute(Context context, String packageName) {
+    public void appComplianceExcute(Context context, String packageName) {//todo baii util ???
         DatabaseOperate.getSingleInstance().updateDenyApp(packageName, "1");
 
         List<String> list = DatabaseOperate.getSingleInstance().queryDenyAppByType("0");
@@ -1031,9 +961,7 @@ public class TheTang {
      * @param type
      * @param names
      */
-    private void sendAppDeny(Context context, String type, List<String> names) {
-/*        AppImpl appImpl = new AppImpl( context );
-        appImpl.sendAppCompliance( type, names.toString() );*/
+    private void sendAppDeny(Context context, String type, List<String> names) {//todo baii util ???
         //baii impl 000000000000000000000000000000000000
         sendAppPolicyFeedback(context, type, names.toString());
     }
@@ -1044,13 +972,11 @@ public class TheTang {
      * @param type
      */
     private void sendAppUnDeny(Context context, String type) {
-/*        AppImpl appImpl = new AppImpl( context );
-        appImpl.sendAppCompliance( type, "null" );*/
 //baii impl 000000000000000000000000000000000000
         sendAppPolicyFeedback(context, type, "null");
     }
 
-    private void sendAppPolicyFeedback(Context context, String type, String names) {
+    private void sendAppPolicyFeedback(Context context, String type, String names) {//todo baii util ???
         SendMessageManager manager = new SendMessageManager(context);
         String alias = PreferencesManager.getSingleInstance().getData( Common.alias );
         String appComplianceId = PreferencesManager.getSingleInstance().getComplianceData( Common.app_compliance_id );
@@ -1063,7 +989,7 @@ public class TheTang {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        MessageSendData data = new MessageSendData(Common.app_impl, appObject.toString(), true, null, null);
+        MessageSendData data = new MessageSendData(Common.app_impl, appObject.toString(), true);
         manager.sendMessage(data);
     }
 
@@ -1072,7 +998,7 @@ public class TheTang {
      *
      * @param appBlackWhiteData
      */
-    public void storageBlackWhiteList(AppBlackWhiteData appBlackWhiteData) {
+    public void storageBlackWhiteList(AppBlackWhiteData appBlackWhiteData) {//todo baii util ???
 
         if (preferencesManager.getOtherData(Common.appManagerType) != null) {
             ExcuteCompliance.deleteAppCompliance();
@@ -1101,7 +1027,7 @@ public class TheTang {
      *
      * @return
      */
-    public String getSdcardCid() {
+    public String getSdcardCid() {//todo baii util device
         Object localOb = null; // SD Card ID
         String sd_cid = null;
         try {
@@ -1121,7 +1047,7 @@ public class TheTang {
      * @param list
      * @return
      */
-    public List<LauncherActivityInfo> removeDuplicateWithOrder(List<LauncherActivityInfo> list) {
+    public List<LauncherActivityInfo> removeDuplicateWithOrder(List<LauncherActivityInfo> list) {//todo baii util ???
         Set set = new HashSet();
         List<LauncherActivityInfo> newList = new ArrayList();
         for (Iterator iter = list.iterator(); iter.hasNext(); ) {
@@ -1139,7 +1065,7 @@ public class TheTang {
      * @param list
      * @return
      */
-    public List<ApplicationInfo> removeApplicate(Collection<ApplicationInfo> list) {
+    public List<ApplicationInfo> removeApplicate(Collection<ApplicationInfo> list) {//todo baii util ???
         Set set = new HashSet();
         List<ApplicationInfo> newList = new ArrayList();
         for (Iterator iter = list.iterator(); iter.hasNext(); ) {
@@ -1157,7 +1083,7 @@ public class TheTang {
      *
      * @return
      */
-    public List getLauncherApps() {
+    public List getLauncherApps() {//todo baii util app
         LauncherApps apps = (LauncherApps) TheTang.getSingleInstance().getContext().getSystemService(Context.LAUNCHER_APPS_SERVICE);
 
         UserManager mUserManager = (UserManager) TheTang.getSingleInstance().getContext().getSystemService(Context.USER_SERVICE);
@@ -1175,7 +1101,7 @@ public class TheTang {
      *
      * @return
      */
-    public List getLauncherNoSystemApp() {
+    public List getLauncherNoSystemApp() {//todo baii util app
         List<LauncherActivityInfo> appList = getLauncherApps();
 
         if (appList == null) {
@@ -1201,7 +1127,7 @@ public class TheTang {
      * @param appBlackWhiteDataList
      * @param launcherNoSystemApps
      */
-    public void appBlackListCompliance(List<String> appBlackWhiteDataList, List<String> launcherNoSystemApps) {
+    public void appBlackListCompliance(List<String> appBlackWhiteDataList, List<String> launcherNoSystemApps) {//todo baii util ???
 
         List<APPInfo> appInfos = DatabaseOperate.getSingleInstance().queryInstallAppInfo();
 
@@ -1237,7 +1163,7 @@ public class TheTang {
      * @param appBlackWhiteDataList
      * @param launcherNoSystemApps
      */
-    public void appWhiteListCompliance(List<String> appBlackWhiteDataList, List<String> launcherNoSystemApps) {
+    public void appWhiteListCompliance(List<String> appBlackWhiteDataList, List<String> launcherNoSystemApps) {//todo baii util ???
 
         List<APPInfo> appInfos = DatabaseOperate.getSingleInstance().queryInstallAppInfo();
 
@@ -1272,7 +1198,7 @@ public class TheTang {
      * @param lat
      * @param lon
      */
-    public double[] gcj02_To_Bd09(double lat, double lon) {
+    public double[] gcj02_To_Bd09(double lat, double lon) {//todo baii util coor
         double x = lon, y = lat;
         //DecimalFormat df = new DecimalFormat("######.000000");
         double z = Math.sqrt(x * x + y * y) + 0.00002 * Math.sin(y * x_pi);
@@ -1287,7 +1213,7 @@ public class TheTang {
      * * 火星坐标系 (GCJ-02) 与百度坐标系 (BD-09) 的转换算法 * * 将 BD-09 坐标转换成GCJ-02 坐标 * * @param
      * bd_lat * @param bd_lon * @return
      */
-    public double[] bd09_To_Gcj02(double lat, double lon) {
+    public double[] bd09_To_Gcj02(double lat, double lon) {//todo baii util coor
         //DecimalFormat df = new DecimalFormat("######.000000");
         double x = lon - 0.0065, y = lat - 0.006;
         double z = Math.sqrt(x * x + y * y) - 0.00002 * Math.sin(y * x_pi);
@@ -1304,7 +1230,7 @@ public class TheTang {
      * @param response
      * @return
      */
-    public String getResponseBodyString(Response<ResponseBody> response) {
+    public String getResponseBodyString(Response<ResponseBody> response) {//todo baii util http ???
         ResponseBody body = (ResponseBody) response.body();
         Log.w(TAG, "response body is null!----" + response.code());
 
@@ -1330,7 +1256,7 @@ public class TheTang {
      *
      * @return
      */
-    public boolean whetherSendSuccess(String content) {
+    public boolean whetherSendSuccess(String content) {//todo baii util http ???
 
         LogUtil.writeToFile(TAG, "content = " + content);
 
@@ -1366,9 +1292,11 @@ public class TheTang {
      *
      * @return
      */
-    public boolean whetherSendSuccess(Response<ResponseBody> response) {
+    public boolean whetherSendSuccess(Response<ResponseBody> response) {//todo baii util http ???
 
         ResponseBody body = (ResponseBody) response.body();
+        //todo baii response.isSuccessful() to replace this method
+        Log.d("baii", "response body is " + body.toString());
         Log.w(TAG, "response body is null!----" + response.code());
         LogUtil.writeToFile(TAG, "response body is null!----" + response.code());
         if (body == null) {
@@ -1407,8 +1335,8 @@ public class TheTang {
      * @param packageName
      * @return
      */
-    public int getAppUid(String packageName) {
-        PackageManager packageManager = TheTang.getSingleInstance().getPackageManager();
+    public int getAppUid(String packageName) {//todo baii util app
+        PackageManager packageManager = AppUtils.getPackageManager(mContext);
         PackageInfo packageInfo = null;
         try {
             packageInfo = packageManager.getPackageInfo(packageName, 0);
@@ -1424,7 +1352,7 @@ public class TheTang {
      *
      * @return
      */
-    public boolean getUsageStats() {
+    public boolean getUsageStats() {//todo baii util permission
 
         AppOpsManager appOps = (AppOpsManager) getContext().getSystemService(Context.APP_OPS_SERVICE);
         int mode = appOps.checkOpNoThrow("android:get_usage_stats", android.os.Process.myUid(), getContext().getPackageName());
@@ -1435,7 +1363,7 @@ public class TheTang {
     /**
      * 删除安全浏览器数据
      */
-    public void deleteSecurityChrome() {
+    public void deleteSecurityChrome() {//todo baii util ???
         preferencesManager.removeComplianceData(Common.securityChrome);
         preferencesManager.removeComplianceData(Common.securityChrome_name);
         preferencesManager.removeComplianceData(Common.securityChrome_id);
@@ -1447,7 +1375,7 @@ public class TheTang {
      *
      * @param securityChromeData
      */
-    public void storageSecurityChrome(SecurityChromeData securityChromeData) {
+    public void storageSecurityChrome(SecurityChromeData securityChromeData) {//todo baii util ???
         preferencesManager.setComplianceData(Common.securityChrome, "true");
         preferencesManager.setComplianceData(Common.securityChrome_name, securityChromeData.sec_name);
         preferencesManager.setComplianceData(Common.securityChrome_id, securityChromeData.sec_id);
@@ -1460,7 +1388,7 @@ public class TheTang {
      * @param url
      * @return
      */
-    public String getHost(String url) {
+    public String getHost(String url) {//todo baii util http
         Pattern p = Pattern.compile("(http://|https://)?([^/]*)", Pattern.CASE_INSENSITIVE);
         Matcher m = p.matcher(url);
         return m.find() ? m.group(2) : url;
@@ -1472,7 +1400,7 @@ public class TheTang {
      * @param url
      * @return
      */
-    public String getUrlForWebClip(String url) {
+    public String getUrlForWebClip(String url) {//todo baii util http
         Document doc = null;
         String web_url = null;
 
@@ -1522,7 +1450,7 @@ public class TheTang {
      *
      * @param data
      */
-    public String formatStringFromMap(Map<String, String> data) {
+    public String formatStringFromMap(Map<String, String> data) {//todo baii util convert
 
         if (data == null)
             return null;
@@ -1550,7 +1478,7 @@ public class TheTang {
      * @param result
      * @return
      */
-    public Map<String, String> formatMapFromString(String result) {
+    public Map<String, String> formatMapFromString(String result) {//todo baii util convert
 
         if (result == null)
             return null;
@@ -1577,7 +1505,7 @@ public class TheTang {
     }
 
     // 流量转化
-    public String convertTraffic(long traffic) {
+    public String convertTraffic(long traffic) {//todo baii util convert or phone
         BigDecimal trafficKB;
         BigDecimal trafficMB;
         BigDecimal trafficGB;
@@ -1599,7 +1527,7 @@ public class TheTang {
     }
 
 
-    public void noticDilag(Activity activity) {
+    public void noticDilag(Activity activity) {//todo baii util ???
         if (getNetworkType() == 0 || getNetworkType() == 1) {
             return;
         }
@@ -1659,7 +1587,7 @@ public class TheTang {
      *
      * @param settingAboutData
      */
-    public void storageSettingAboutData(SettingAboutData settingAboutData) {
+    public void storageSettingAboutData(SettingAboutData settingAboutData) {//todo baii util ???
         preferencesManager.setSettingData(Common.setting_help, settingAboutData.messageForHelp);
         preferencesManager.setSettingData(Common.setting_agreement, settingAboutData.agreementLicense);
         preferencesManager.setSettingData(Common.setting_stand_by, settingAboutData.supportContent);
@@ -1671,7 +1599,7 @@ public class TheTang {
      * @param packageName 应用的包名
      * @return true 表示正在运行，false表示没有运行
      */
-    public boolean isAppRunning(String packageName) {
+    public boolean isAppRunning(String packageName) {//todo baii util app
         ActivityManager am = (ActivityManager) getContext().getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningTaskInfo> list = am.getRunningTasks(100);
         if (list.size() <= 0) {
@@ -1691,7 +1619,7 @@ public class TheTang {
      * @param serviceName Service的全路径： 包名 + service的类名
      * @return true 表示正在运行，false 表示没有运行
      */
-    public boolean isServiceRunning(String serviceName) {
+    public boolean isServiceRunning(String serviceName) {//todo baii util ??? or app
         ActivityManager am = (ActivityManager) getContext().getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningServiceInfo> runningServiceInfos = am.getRunningServices(200);
         if (runningServiceInfos.size() <= 0) {
@@ -1710,7 +1638,7 @@ public class TheTang {
      *
      * @return
      */
-    public String[] getSubscriberId() {
+    public String[] getSubscriberId() {//todo baii util device or phone
         String[] imsis = new String[2];
         TelephonyManager telephonyManager = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
         try {
@@ -1730,7 +1658,7 @@ public class TheTang {
      *
      * @return
      */
-    public String[] getLine1Number() {
+    public String[] getLine1Number() {//todo baii util phone
         String[] nums = new String[2];
         TelephonyManager telephonyManager = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
         try {
@@ -1746,21 +1674,12 @@ public class TheTang {
     }
 
     /**
-     * 将JSON字符串转为RequestBody
-     *
-     * @param data
-     */
-    public RequestBody jsonToRequestBody(String data) {
-        return RequestBody.create(okhttp3.MediaType.parse("application/json;charset=UTF-8"), data);
-    }
-
-    /**
      * 获取异常的详细信息
      *
      * @param e
      * @return
      */
-    public static String getExceptionInfo(Exception e) {
+    public static String getExceptionInfo(Exception e) {//todo baii util log
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw, true);
         e.printStackTrace(pw);
@@ -1774,7 +1693,7 @@ public class TheTang {
      *
      * @param bitmap
      */
-    public static void gcBitmap(Bitmap bitmap) {
+    public static void gcBitmap(Bitmap bitmap) {//todo baii util ???
         if (bitmap != null && !bitmap.isRecycled()) {
             bitmap.recycle();
         }
@@ -1787,7 +1706,7 @@ public class TheTang {
      * @param text
      * @param duration
      */
-    public void showToastByRunnable(final Context context, final CharSequence text, final int duration) {
+    public void showToastByRunnable(final Context context, final CharSequence text, final int duration) {//todo baii util ???
         Handler handler = new Handler(Looper.getMainLooper());
         handler.post(new Runnable() {
             @Override
@@ -1805,7 +1724,7 @@ public class TheTang {
      * @param newPath String 复制后路径 如：f:/fqf.txt
      * @return boolean
      */
-    public static boolean copyFile(String oldPath, String newPath) {
+    public static boolean copyFile(String oldPath, String newPath) {//todo baii util file
         if (TextUtils.isEmpty(oldPath) && TextUtils.isEmpty(newPath)) {
             return false;
         }
@@ -1843,7 +1762,7 @@ public class TheTang {
      * @param oldName
      * @param newName
      */
-    public void renameFile(String basePath, String oldName, String newName) {
+    public void renameFile(String basePath, String oldName, String newName) {//todo baii util file
         File mFile = new File(basePath + File.separator + oldName);
         mFile.renameTo(new File(basePath + File.separator + newName));
     }
@@ -1851,7 +1770,7 @@ public class TheTang {
     /**
      * 启动NetWorkChangeService
      */
-    public void startNetWorkService() {
+    public void startNetWorkService() {//todo baii util ???
         Intent intentService = new Intent(mContext, NetWorkChangeService.class);
         startService(intentService);
     }
@@ -1859,7 +1778,7 @@ public class TheTang {
     /**
      * 网络是否已经连接
      */
-    public boolean isNetworkConnected() {
+    public boolean isNetworkConnected() {//todo baii util phone
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo ni = cm.getActiveNetworkInfo();
         return ni != null && ni.isConnected();
@@ -1871,7 +1790,7 @@ public class TheTang {
      * @param context
      * @return
      */
-    public boolean isNetworkConnected(Context context) {
+    public boolean isNetworkConnected(Context context) {//todo baii util phone
         if (context != null) {
             ConnectivityManager mConnectivityManager = (ConnectivityManager) context.getSystemService(
                     Context.CONNECTIVITY_SERVICE);
@@ -1894,7 +1813,7 @@ public class TheTang {
     /**
      * 是否有可用网络
      */
-    public boolean isNetworkAvaliable() {
+    public boolean isNetworkAvaliable() {//todo baii util phone
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo ni = cm.getActiveNetworkInfo();
         return ni != null && ni.isConnectedOrConnecting();
@@ -1905,7 +1824,7 @@ public class TheTang {
      *
      * @return
      */
-    public int getNetworkType() {
+    public int getNetworkType() {//todo baii util phone
         int netType = 0;
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
@@ -1935,7 +1854,7 @@ public class TheTang {
      * @param context
      * @return
      */
-    public int getStatusBarHeight(Context context) {
+    public int getStatusBarHeight(Context context) {//todo baii util view
         // 反射运行的类：android.R.dimen.status_bar_height.
         int mStatusHeight = -1;
         try {
@@ -1957,7 +1876,7 @@ public class TheTang {
      * @param packageName
      * @return
      */
-    public String getAppVersion(String packageName) {
+    public String getAppVersion(String packageName) {//todo baii util app
         String version = null;
 
         try {
@@ -1968,14 +1887,14 @@ public class TheTang {
         return version;
     }
 
-    public String getImei() {
+    public String getImei() {//todo baii util device
         TelephonyManager telephonyManager = (TelephonyManager) mContext.getSystemService(mContext.TELEPHONY_SERVICE);
         String imei = telephonyManager.getImei(0);
         LogUtil.writeToFile(TAG, "getImei1 = " + imei);
         return imei;
     }
 
-    public String getImei1() {
+    public String getImei1() {//todo baii util device
         TelephonyManager telephonyManager = (TelephonyManager) mContext.getSystemService(mContext.TELEPHONY_SERVICE);
         String imei = telephonyManager.getImei(1);
         LogUtil.writeToFile(TAG, "getImei2 = " + imei);
@@ -1983,7 +1902,7 @@ public class TheTang {
     }
 
     //获得Ram
-    public String getTotalRam() {//GB
+    public String getTotalRam() {//GB//todo baii util device
         String path = "/proc/meminfo";
         String firstLine = null;
         int totalRam = 0;
@@ -2003,34 +1922,34 @@ public class TheTang {
     }
 
     //获得手机分辨率
-    public String getResolution() {
+    public String getResolution() {//todo baii util device or view
         DisplayMetrics mDisplayMetrics = mContext.getResources().getDisplayMetrics();
         String resolution = mDisplayMetrics.widthPixels + "*" + mDisplayMetrics.heightPixels;
         return resolution;
     }
 
     //获得厂商
-    public String getManufacturers() {
+    public String getManufacturers() {//todo baii util device
         return Build.BRAND;
     }
 
     //获得设备型号
-    public String getModel() {
+    public String getModel() {//todo baii util device
         return Build.MODEL;
     }
 
     //获得手机版本号
-    public String getAndroidVersion() {
+    public String getAndroidVersion() {//todo baii util device
         return Build.VERSION.RELEASE;
     }
 
     //获得系统版本
-    public String getSystemVersion() {
+    public String getSystemVersion() {//todo baii util device
         //  return Build.DISPLAY;
         return Build.VERSION.RELEASE;
     }
 
-    public String getIccid() {
+    public String getIccid() {//todo baii util device
         String iccid = null;
         TelephonyManager telephonyManager = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
         try {
@@ -2044,7 +1963,7 @@ public class TheTang {
         return iccid;
     }
 
-    public String getIccid1() {
+    public String getIccid1() {//todo baii util device
         String iccid = null;
         TelephonyManager telephonyManager = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
         try {
@@ -2059,7 +1978,7 @@ public class TheTang {
     }
 
 
-    public String getIccid2() {
+    public String getIccid2() {//todo baii util device
         String iccid = null;
         //   List<SubscriptionInfo> list = SubscriptionManager.from(mContext).getActiveSubscriptionInfoList();
         try {
@@ -2096,7 +2015,7 @@ public class TheTang {
      * @return
      */
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP_MR1)
-    public String getSubscriberId1() {
+    public String getSubscriberId1() {//todo baii util device
         String imsi = null;
         TelephonyManager telephonyManager = (TelephonyManager) mContext.getSystemService(TELEPHONY_SERVICE);
         try {
@@ -2126,7 +2045,7 @@ public class TheTang {
      * @return
      */
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP_MR1)
-    public String getSubscriberId2() {
+    public String getSubscriberId2() {//todo baii util device
         String imsi = null;
         TelephonyManager telephonyManager = (TelephonyManager) mContext.getSystemService(
                 TELEPHONY_SERVICE);
@@ -2157,7 +2076,7 @@ public class TheTang {
      * @param filePath
      * @return
      */
-    public String getFileData(String filePath) {
+    public String getFileData(String filePath) {//todo baii util file or fileio
         StringBuilder stringBuilder = new StringBuilder();
         try {
             BufferedReader bf = new BufferedReader(new InputStreamReader(new FileInputStream(new File(filePath))));
@@ -2176,7 +2095,7 @@ public class TheTang {
      *
      * @param intent
      */
-    public void startService(Intent intent) {
+    public void startService(Intent intent) {//todo baii util ???
 
         if (Build.VERSION.SDK_INT >= 26) {
             mContext.startForegroundService(intent);
@@ -2185,7 +2104,7 @@ public class TheTang {
         }
     }
 
-    public void startForeground(Service service, String content, String title, int id) {
+    public void startForeground(Service service, String content, String title, int id) {//todo baii util ???
         try {
 
             Intent intent1 = new Intent(mContext, MainActivity.class);
@@ -2230,7 +2149,7 @@ public class TheTang {
      *
      * @param lockType
      */
-    public static void whetherCancelLock(int lockType) {
+    public static void whetherCancelLock(int lockType) {//todo baii util ???
 
         int hadLockTypes = 0;
         String lockTypeState = preferencesManager.getData(Common.lockTypes[lockType]);
@@ -2253,7 +2172,7 @@ public class TheTang {
     /**
      * 在下发解锁命令时，需清除所有锁屏状态
      */
-    public static void clearLockState() {
+    public static void clearLockState() {//todo baii util ???
         for (String type : Common.lockTypes) {
             preferencesManager.removeData(type);
         }
@@ -2266,7 +2185,7 @@ public class TheTang {
      *
      * @param lockType
      */
-    public static void storyLockType(String lockType) {
+    public static void storyLockType(String lockType) {//todo baii util ???
         preferencesManager.setData(lockType, "true");
     }
 
@@ -2274,7 +2193,7 @@ public class TheTang {
      * 用于判断离线与在线时是否失联
      * @param isLink
      */
-    public synchronized void isLostCompliance(boolean isLink) {
+    public synchronized void isLostCompliance(boolean isLink) {//todo baii util ???
         //获取调取函数所在类名称
         String classNames = Thread.currentThread().getStackTrace()[3].getClassName();
         String methodNames = Thread.currentThread().getStackTrace()[3].getMethodName();
@@ -2334,7 +2253,7 @@ public class TheTang {
     /**
      * 失联违规执行
      */
-    public static void excuteLostCompliance() {
+    public static void excuteLostCompliance() {//todo baii util ???
         String pwd = PreferencesManager.getSingleInstance().getComplianceData(Common.lost_password);
         if (TextUtils.isEmpty( pwd )) {
             MDM.setFactoryReset();
@@ -2346,7 +2265,7 @@ public class TheTang {
     /**
      * 取消失联闹钟
      */
-    private void cancelLostAlarm() {
+    private void cancelLostAlarm() {//todo baii util ???
         Intent intent_cancleReceiver = new Intent( );
         intent_cancleReceiver.setAction( "lost_compliance" );
         PendingIntent pendingIntent = PendingIntent.getBroadcast( mContext, 11, intent_cancleReceiver, PendingIntent.FLAG_UPDATE_CURRENT );
@@ -2357,7 +2276,7 @@ public class TheTang {
     /**
      * 启动失联闹钟
      */
-    private void startLostAlarm() {
+    private void startLostAlarm() {//todo baii util ???
         AlarmManager alarmManager = (AlarmManager) mContext.getSystemService( ALARM_SERVICE );
         Intent intent = new Intent(  );
         intent.setAction( "lost_compliance" );
@@ -2365,7 +2284,7 @@ public class TheTang {
         alarmManager.setExact( AlarmManager.RTC_WAKEUP, /*24 * 3600 **/System.currentTimeMillis() + 60 * 1000, pi ); //执行一次
     }
 
-    public String getSDCardId() {
+    public String getSDCardId() {//todo baii util device
 
         String sdCardId = null;
 

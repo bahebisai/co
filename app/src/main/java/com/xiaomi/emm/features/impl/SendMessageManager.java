@@ -1,7 +1,7 @@
 package com.xiaomi.emm.features.impl;
 
 import android.content.Context;
-import android.util.ArrayMap;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.xiaomi.emm.definition.Common;
@@ -10,7 +10,6 @@ import com.xiaomi.emm.features.db.DatabaseOperate;
 import com.xiaomi.emm.features.http.RequestService;
 import com.xiaomi.emm.features.resend.MessageResendManager;
 import com.xiaomi.emm.model.MessageSendData;
-import com.xiaomi.emm.utils.PreferencesManager;
 import com.xiaomi.emm.utils.TheTang;
 
 import org.json.JSONException;
@@ -33,15 +32,19 @@ import retrofit2.Response;
 
 public class SendMessageManager extends BaseImpl<RequestService> {
     private static final String TAG = SendMessageManager.class.getName();
-    Context mContext;
+    private Context mContext;
+    private SendListener mSendListener;
 
+    public SendMessageManager() {
+        this(TheTang.getSingleInstance().getContext());
+    }
     public SendMessageManager(Context context) {
         super();
         this.mContext = context;
     }
 
     public void sendMessage(MessageSendData data) {
-        int sendCode = data.getOrderCode();
+        int sendCode = data.getSendCode();
         String json = data.getJsonContent();
         String url = getUrl(sendCode);
         Call<ResponseBody> responseBodyCall = null;
@@ -106,29 +109,29 @@ public class SendMessageManager extends BaseImpl<RequestService> {
                 break;
         }
 
-        MessageSendListener sendListener = data.getSendListener();
-        MessageResendManager.MessageResendListener resendListener = data.getResendListener();
+//        SendListener sendListener = data.getSendListener();
+//        MessageResendManager.ResendListener resendListener = data.getResendListener();
         if (responseBodyCall != null) {
             responseBodyCall.enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
                     if (!TheTang.getSingleInstance().whetherSendSuccess(response)) {
                         if (data.needResend()) {
                             DatabaseOperate.getSingleInstance().add_backResult_sql(sendCode + "", json);
                         }
-                        if (sendListener != null) {
-                            sendListener.onError();
-                        }
-                        if (resendListener != null) {
-                            resendListener.resendError();
+                        if (mSendListener != null) {
+                            mSendListener.onError();
                         }
                     } else {
-                        if (sendListener != null) {
-                            sendListener.onSuccess();
+                        if (mSendListener != null) {
+                            mSendListener.onSuccess();
                         }
-                        if (resendListener != null) {
-                            resendListener.resendSuccess();
-                        }
+/*                        if (sendCode == Common.CALL_RECORDER_BACKUP) {
+                            if (file != null && file.exists()) {//todo impl bai 1111111111111111111111
+                                file.delete();
+                            }
+                        }*/
                     }
 
                 }
@@ -138,11 +141,8 @@ public class SendMessageManager extends BaseImpl<RequestService> {
                     if (data.needResend()) {
                         DatabaseOperate.getSingleInstance().add_backResult_sql(sendCode + "", json);
                     }
-                    if (sendListener != null) {
-                        sendListener.onFailure();
-                    }
-                    if (resendListener != null) {
-                        resendListener.resendFail();
+                    if (mSendListener != null) {
+                        mSendListener.onFailure();
                     }
                 }
             });
@@ -222,9 +222,13 @@ public class SendMessageManager extends BaseImpl<RequestService> {
         return url;
     }
 
-    public interface MessageSendListener{
+    public interface SendListener{
         void onSuccess();
         void onFailure();
         void onError();
+    }
+
+    public void setSendListener(SendListener sendListener) {
+        mSendListener = sendListener;
     }
 }

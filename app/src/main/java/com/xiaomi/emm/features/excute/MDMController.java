@@ -484,4 +484,7 @@ public abstract class MDMController {
     public abstract void setCallAutoRecordDir(String path);
 
     public abstract boolean isCallAutoRecord();
+
+    public abstract void enableFingerPrint(boolean enable);
+    public abstract void enableFaceUnlock(boolean enable);
 }

@@ -17,7 +17,7 @@ public class SystemUtils {
      * 判断本应用是否存活
      * 如果需要判断本应用是否在后台还是前台用getRunningTask
      * */
-    public static boolean isAPPALive(Context mContext,String packageName){
+    public static boolean isAPPALive(Context mContext,String packageName){//todo baii util activity or app
         boolean isAPPRunning = false;
         // 获取activity管理对象
         ActivityManager activityManager = (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);

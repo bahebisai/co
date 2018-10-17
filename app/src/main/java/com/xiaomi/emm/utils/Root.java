@@ -13,7 +13,7 @@ import java.util.ArrayList;
  * Created by Administrator on 2017/8/16.
  */
 
-public class Root {
+public class Root {//todo baii util shell or device
 
     private final static String TAG = "Root";
 

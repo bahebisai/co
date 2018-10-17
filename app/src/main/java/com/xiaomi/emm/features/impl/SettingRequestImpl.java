@@ -14,7 +14,7 @@ import retrofit2.Response;
 /**
  * Created by Administrator on 2018/3/21.
  */
-
+//todo baii impl for reponse info
 public class SettingRequestImpl extends BaseImpl<RequestService> {
     private static final String TAG = "AppImpl";
     Context mContext;

@@ -24,7 +24,7 @@ import static android.content.Context.NETWORK_STATS_SERVICE;
  * Created by lenovo on 2017/10/9.
  */
 @TargetApi(Build.VERSION_CODES.M)
-public class NetworkStatsHelper {
+public class NetworkStatsHelper {//todo baii util ???
     private static final String TAG = "MainActivity";
 
     private static NetworkStatsManager networkStatsManager = (NetworkStatsManager) TheTang.getSingleInstance().getContext().getSystemService( NETWORK_STATS_SERVICE );
@@ -158,7 +158,7 @@ public class NetworkStatsHelper {
      *
      * @return
      */
-    public static long getTimesmorning() {
+    public static long getTimesmorning() {//todo baii util time
         Calendar cal = Calendar.getInstance();
         cal.set( Calendar.HOUR_OF_DAY, 0 );
         cal.set( Calendar.SECOND, 0 );
@@ -172,7 +172,7 @@ public class NetworkStatsHelper {
     }
 
     //获得本月第一天0点时间
-    public static long getTimesMonthmorning() {
+    public static long getTimesMonthmorning() {//todo baii util time
         Calendar cal = Calendar.getInstance();
         cal.set( cal.get( Calendar.YEAR ), cal.get( Calendar.MONTH ), cal.get( Calendar.DAY_OF_MONTH ), 0, 0, 0 );
         cal.set( Calendar.DAY_OF_MONTH, cal.getActualMinimum( Calendar.DAY_OF_MONTH ) );
@@ -198,7 +198,7 @@ public class NetworkStatsHelper {
      *
      * @return
      */
-    public static int getTimesWeeknight() {
+    public static int getTimesWeeknight() {//todo baii util time
 
         Calendar cal = Calendar.getInstance();
         cal.set( cal.get( Calendar.YEAR ), cal.get( Calendar.MONTH ), cal.get( Calendar.DAY_OF_MONTH ), 0, 0, 0 );
@@ -212,7 +212,7 @@ public class NetworkStatsHelper {
      *
      * @return
      */
-    public static int getTimesnight() {
+    public static int getTimesnight() {//todo baii util time
         Calendar cal = Calendar.getInstance();
         cal.set( Calendar.HOUR_OF_DAY, 24 );
         cal.set( Calendar.SECOND, 0 );
@@ -231,7 +231,7 @@ public class NetworkStatsHelper {
      *
      * @return
      */
-    public static long getWorkFirstDay() {
+    public static long getWorkFirstDay() {//todo baii util time
 
         Calendar cal = Calendar.getInstance();
         cal.set( cal.get( Calendar.YEAR ), cal.get( Calendar.MONTH ), cal.get( Calendar.DAY_OF_MONTH ), 0, 0, 0 );

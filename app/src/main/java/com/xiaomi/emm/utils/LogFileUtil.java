@@ -1,20 +1,6 @@
-package com.xiaomi.emm.features.impl;
-
-import android.content.Context;
-import android.os.Build;
-import android.util.Log;
+package com.xiaomi.emm.utils;
 
 import com.xiaomi.emm.base.BaseApplication;
-import com.xiaomi.emm.definition.Common;
-import com.xiaomi.emm.definition.OrderConfig;
-import com.xiaomi.emm.definition.UrlConst;
-import com.xiaomi.emm.features.http.RequestService;
-import com.xiaomi.emm.utils.LogUtil;
-import com.xiaomi.emm.utils.PreferencesManager;
-import com.xiaomi.emm.utils.TheTang;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -22,7 +8,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.RandomAccessFile;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -32,77 +17,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.zip.GZIPOutputStream;
 
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-import static com.xiaomi.emm.R.string.file;
-
-
-/**
- * Created by Administrator on 2017/9/20.
- */
-
-public class LogUploadImpl extends BaseImpl<RequestService> {
-
-    public final static String TAG = "LogUploadImpl";
-    Context mContext;
-
-    public LogUploadImpl(Context context) {
-        mContext = context;
-    }
-
-    public void logUpload(String id, String date) {
-
-        String version = android.os.Build.VERSION.RELEASE; //系统版本号
-        String model = android.os.Build.MODEL; //系统型号
-        String alias = PreferencesManager.getSingleInstance().getData( Common.alias ); //alias
-
-        JSONObject json = new JSONObject();
-        try {
-            json.put( "version", version );
-            json.put( "model", model );
-            json.put( "alias", alias );
-            json.put( "id", Integer.parseInt( id ) );
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        RequestBody description = RequestBody.create( MediaType.parse( "multipart/form-data" ), json.toString() );
-
-
-        File file = excuteFile( date );
-
-        RequestBody requestFile = RequestBody.create( MediaType.parse( "multipart/form-data" ), file );
-
-        MultipartBody.Part body = MultipartBody.Part.createFormData( "file", file.getName(), requestFile );
-
-//        mService.logUpload( description, body ).enqueue( new Callback<ResponseBody>() {
-        mService.uploadInfo(UrlConst.LOG_UPLOAD, description, body).enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                //如果log未上传成功将在网络变化时继续上传
-                if (TheTang.getSingleInstance().whetherSendSuccess(response)) {
-                    PreferencesManager preferencesManager = PreferencesManager.getSingleInstance();
-                    preferencesManager.removeLogData( "logId" );
-                    preferencesManager.removeLogData( "isWifiUpload" );
-                    preferencesManager.removeLogData( "date" );
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                //执行成功
-               // TheTang.getSingleInstance().sendExcuteComplete( String.valueOf( OrderConfig.upload_debug_log ), "false" );
-            }
-        } );
-    }
-
-    private File excuteFile(String date) {
+public class LogFileUtil {//todo baii util file
+    public static File excuteFile(String date) {
 
         List<String> list_info = new ArrayList<>();
         list_info = getOldDate( date, 7 );//七天内的Log
@@ -129,7 +45,7 @@ public class LogUploadImpl extends BaseImpl<RequestService> {
      * @param srcFile
      * @param desFile
      */
-    public static File zip(File srcFile, File desFile) {
+    public static File zip(File srcFile, File desFile) {//todo baii util fileio
         GZIPOutputStream gZIPOutputStream = null;
         FileInputStream fileInputStream = null;
         //创建压缩输出流,将目标文件传入
@@ -157,7 +73,7 @@ public class LogUploadImpl extends BaseImpl<RequestService> {
      * @param distanceDay
      * @return
      */
-    public static List<String> getOldDate(String mDate, int distanceDay) {
+    public static List<String> getOldDate(String mDate, int distanceDay) {//todo baii util time
 
         List<String> dateList = new ArrayList<>();
 
@@ -190,7 +106,7 @@ public class LogUploadImpl extends BaseImpl<RequestService> {
      *
      * @throws IOException
      */
-    private static File mergeFile(List<String> file_list) {
+    private static File mergeFile(List<String> file_list) {//todo baii util fileio
 
         //创建临时文件，用于合并文件
         File tempFile = null;
@@ -246,5 +162,4 @@ public class LogUploadImpl extends BaseImpl<RequestService> {
         }
         return tempFile;
     }
-
 }

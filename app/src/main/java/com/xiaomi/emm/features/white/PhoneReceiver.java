@@ -15,13 +15,14 @@ import com.android.internal.telephony.ITelephony;
 import com.google.gson.Gson;
 import com.xiaomi.emm.definition.Common;
 import com.xiaomi.emm.features.db.DatabaseOperate;
-import com.xiaomi.emm.features.impl.ComingNumberLogImpl;
-import com.xiaomi.emm.utils.WifyManager;
+import com.xiaomi.emm.features.impl.SendMessageManager;
+import com.xiaomi.emm.model.MessageSendData;
 import com.xiaomi.emm.model.PhoneLog;
 import com.xiaomi.emm.model.TelephoyWhiteUser;
 import com.xiaomi.emm.utils.LogUtil;
 import com.xiaomi.emm.utils.PreferencesManager;
 import com.xiaomi.emm.utils.TheTang;
+import com.xiaomi.emm.utils.WifyManager;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -159,8 +160,29 @@ public class PhoneReceiver extends BroadcastReceiver {
         Log.w( TAG, new Gson().toJson( phoneLogs ) );
         String ssid = WifyManager.getSSID();
         if (!TextUtils.isEmpty( ssid )) {
-            ComingNumberLogImpl comingNumberLogImpl = new ComingNumberLogImpl( TheTang.getSingleInstance().getContext() );
-            comingNumberLogImpl.sendComingNumberLog( new Gson().toJson( phoneLogs ) );
+/*            ComingNumberLogImpl comingNumberLogImpl = new ComingNumberLogImpl( TheTang.getSingleInstance().getContext() );
+            comingNumberLogImpl.sendComingNumberLog( new Gson().toJson( phoneLogs ) );*/
+
+            //todo impl bai 33333333
+            MessageSendData data = new MessageSendData(Common.coming_number_impl, new Gson().toJson(phoneLogs), false);
+            SendMessageManager manager = new SendMessageManager();
+            manager.setSendListener(new SendMessageManager.SendListener() {
+                @Override
+                public void onSuccess() {
+                    PreferencesManager.getSingleInstance().clearComingNumberLog();//清除数据
+                }
+
+                @Override
+                public void onFailure() {
+
+                }
+
+                @Override
+                public void onError() {
+
+                }
+            });
+            manager.sendMessage(data);
         } else {
             //存入sp有网就自动发给服务器
             PreferencesManager.getSingleInstance().setComingNumberLog( Common.ComingNumberLog, new Gson().toJson( phoneLogs ) );

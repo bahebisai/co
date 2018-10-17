@@ -31,6 +31,7 @@ import com.xiaomi.emm.features.progress.CircleProgress;
 import com.xiaomi.emm.model.APPInfo;
 import com.xiaomi.emm.model.FileInfo;
 import com.xiaomi.emm.model.MessageInfo;
+import com.xiaomi.emm.utils.AppUtils;
 import com.xiaomi.emm.utils.LogUtil;
 import com.xiaomi.emm.utils.MDM;
 import com.xiaomi.emm.utils.NetworkStatsHelper;
@@ -251,7 +252,7 @@ public class WorkBenchFragment extends BaseFragment {
 
         appList = TheTang.getSingleInstance().getInstallAppInfo();
 
-        PackageManager packageManager = TheTang.getSingleInstance().getPackageManager();
+        PackageManager packageManager = AppUtils.getPackageManager(getContext());
         //加入安全界面的图标
         PreferencesManager preferencesManager = PreferencesManager.getSingleInstance();
 

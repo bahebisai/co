@@ -19,6 +19,7 @@ import com.xiaomi.emm.socket.bean.UserMgr;
 import com.xiaomi.emm.socket.service.ConnTask;
 import com.xiaomi.emm.socket.service.TVBoxService;
 import com.xiaomi.emm.utils.LogUtil;
+import com.xiaomi.emm.utils.PhoneUtils;
 import com.xiaomi.emm.utils.PreferencesManager;
 import com.xiaomi.emm.utils.TheTang;
 import com.xiaomi.emm.utils.WifyManager;
@@ -45,7 +46,7 @@ public class NetWorkReceiver extends BroadcastReceiver {
             LogUtil.writeToFile( TAG, intent.getAction());
             LogUtil.writeToFile( TAG,"onReceive" );
 
-            int networkState = TheTang.getSingleInstance().getNetWorkState();
+            int networkState = PhoneUtils.getNetWorkState(context);
             if (networkState == NetWorkChangeService.NETWORK_WIFI) {
                 //连接长连接
                 connectTcp();

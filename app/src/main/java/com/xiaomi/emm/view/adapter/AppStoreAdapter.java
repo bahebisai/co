@@ -20,6 +20,7 @@ import com.xiaomi.emm.R;
 import com.xiaomi.emm.features.event.NotifyEvent;
 import com.xiaomi.emm.features.lockscreen.NewsLifecycleHandler;
 import com.xiaomi.emm.model.APPInfo;
+import com.xiaomi.emm.utils.AppUtils;
 import com.xiaomi.emm.utils.TheTang;
 
 import org.greenrobot.eventbus.EventBus;
@@ -105,7 +106,7 @@ public class AppStoreAdapter extends BaseAdapter {
                     @Override
                     public void onClick(View v) {
                         NewsLifecycleHandler.LockFlag = true;
-                        Intent intent = TheTang.getSingleInstance().getPackageManager().getLaunchIntentForPackage(packageName);
+                        Intent intent = AppUtils.getPackageManager(mContext).getLaunchIntentForPackage(packageName);
                         mContext.startActivity(intent);
             }
         });

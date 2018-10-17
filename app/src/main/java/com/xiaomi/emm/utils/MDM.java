@@ -39,13 +39,10 @@ import com.xiaomi.emm.features.event.NotifyEvent;
 import com.xiaomi.emm.features.event.SettingEvent;
 import com.xiaomi.emm.features.event.WhiteListEvent;
 import com.xiaomi.emm.features.excute.XiaomiMDMController;
-import com.xiaomi.emm.features.impl.DeviceImpl;
-import com.xiaomi.emm.features.impl.LogUploadImpl;
-import com.xiaomi.emm.features.impl.PasswordImpl;
-import com.xiaomi.emm.features.impl.SystemImpl;
+
+import com.xiaomi.emm.features.impl.SendMessageManager;
 import com.xiaomi.emm.features.impl.TelephoneWhiteListImpl;
 import com.xiaomi.emm.features.impl.WebclipImageImpl;
-import com.xiaomi.emm.features.impl.WhiteTelephoneImpl;
 import com.xiaomi.emm.features.policy.compliance.ExcuteCompliance;
 import com.xiaomi.emm.features.policy.compliance.machinecard.MachineCardBindingService;
 import com.xiaomi.emm.features.policy.device.ExcuteLimitPolicy;
@@ -56,12 +53,15 @@ import com.xiaomi.emm.model.AppBlackWhiteData;
 import com.xiaomi.emm.model.DeleteAppData;
 import com.xiaomi.emm.model.DownLoadEntity;
 import com.xiaomi.emm.model.ExceptionLogData;
+import com.xiaomi.emm.model.MessageSendData;
 import com.xiaomi.emm.model.SafetyLimitData;
 import com.xiaomi.emm.model.SecurityChromeData;
 import com.xiaomi.emm.model.SettingAboutData;
 import com.xiaomi.emm.model.TelephoyWhiteUser;
 
 import org.greenrobot.eventbus.EventBus;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.lang.reflect.Method;
@@ -591,8 +591,23 @@ public class MDM {
 
         setScreenLock(pwd);
 
-        PasswordImpl passwordImpl = new PasswordImpl(mContext);
-        passwordImpl.feedbackPassword(pwd);
+/*        PasswordImpl passwordImpl = new PasswordImpl(mContext);
+        passwordImpl.feedbackPassword(pwd);*/
+        //todo impl bai 88888888888888888888888
+        feedbackPassword(pwd);
+    }
+
+    private static void feedbackPassword(String password) {
+        JSONObject json = new JSONObject();
+        try {
+            json.put( "alias", PreferencesManager.getSingleInstance().getData( "alias"));
+            json.put( "password", password );
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        MessageSendData data = new MessageSendData(Common.password_impl, json.toString(), true);
+        SendMessageManager manager = new SendMessageManager(mContext);
+        manager.sendMessage(data);
     }
 
     //解锁，清除密码
@@ -943,7 +958,7 @@ public class MDM {
      * @return
      */
     public static String judgmentAppHadInstall(String packageName) {
-        PackageManager packageManager = mTheTang.getPackageManager();
+        PackageManager packageManager = AppUtils.getPackageManager(mContext);
         String version = null;
         try {
             PackageInfo info = packageManager.getPackageInfo(packageName, 0);
@@ -1002,8 +1017,10 @@ public class MDM {
         boolean result = mMDMController.setPasswordNone();
 
         //解锁
-        PasswordImpl passwordImpl = new PasswordImpl(mContext);
-        passwordImpl.feedbackPassword("");
+/*        PasswordImpl passwordImpl = new PasswordImpl(mContext);
+        passwordImpl.feedbackPassword("");*/
+        //todo impl bai 88888888888888888888888
+        feedbackPassword("");
         LogUtil.writeToFile(TAG, " set Password None " + result);
     }
     /***********************************应用静默安装／卸载***************************************/
@@ -1179,7 +1196,7 @@ public class MDM {
             }
         }
 
-        List<PackageInfo> packageInfos = mTheTang.getNoSystemApp();
+        List<PackageInfo> packageInfos = AppUtils.getNoSystemApp(mContext);
         for (PackageInfo packageInfo : packageInfos) {
             if (app_list.contains(packageInfo.packageName)) {
                 mMDMController.uninstallApplication(packageInfo.packageName);
@@ -1208,7 +1225,7 @@ public class MDM {
                     }
                 }
 
-                List<PackageInfo> packageInfos = mTheTang.getNoSystemApp();
+                List<PackageInfo> packageInfos = AppUtils.getNoSystemApp(mContext);
 
                 for (PackageInfo packageInfo : packageInfos) {
 //                    Log.d("baii", "package " + packageInfo.packageName);
@@ -1392,16 +1409,40 @@ public class MDM {
      * 机卡绑定违规
      */
     private static void sendMachineCardCompliance() {
-        SystemImpl systemImpl_ready = new SystemImpl(mContext);
-        systemImpl_ready.sendSystemCompliance(Common.machine_card, "0", "1");
+/*        SystemImpl systemImpl_ready = new SystemImpl(mContext);
+        systemImpl_ready.sendSystemCompliance(Common.machine_card, "0", "1");*/
+//todo baii impl bbbbbbbbbbbbbbbbb
+        LogUtil.writeToFile( TAG, "systemCompliance!" );
+        MDM.excuteSystemCompliance();
+        sendMachineCardComplianceInfo("0", "1");
     }
 
     /**
      * 机卡绑定合规
      */
     private static void sendMachinCardUnCompliance() {
-        SystemImpl systemImpl_ready = new SystemImpl(mContext);
-        systemImpl_ready.sendSystemCompliance(Common.machine_card, "1", "1");
+/*        SystemImpl systemImpl_ready = new SystemImpl(mContext);
+        systemImpl_ready.sendSystemCompliance(Common.machine_card, "1", "1");*/
+        //todo baii impl bbbbbbbbbbbbbbbbb
+        sendMachineCardComplianceInfo("1", "1");
+
+    }
+
+    private static void sendMachineCardComplianceInfo(String type, String state) {
+        String alias = PreferencesManager.getSingleInstance().getData( Common.alias);
+        String systemComplianceId = PreferencesManager.getSingleInstance().getComplianceData(Common.system_compliance_id);
+        final JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("alias", alias);
+            jsonObject.put("systemComplianceId", systemComplianceId);
+            jsonObject.put("state", state);
+            jsonObject.put("type", type);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        MessageSendData data = new MessageSendData(Common.machine_card, jsonObject.toString(), true);
+        SendMessageManager manager = new SendMessageManager(mContext);
+        manager.sendMessage(data);
     }
 
     /**
@@ -1640,11 +1681,16 @@ public class MDM {
                 .getLine1Number()
                 .getMobileData()
                 .build();
-        DeviceImpl deviceImpl = new DeviceImpl(mContext);
-        deviceImpl.sendDeviceInfo(deviceUtil.getDeviceInfo());
+/*        DeviceImpl deviceImpl = new DeviceImpl(mContext);
+        deviceImpl.sendDeviceInfo(deviceUtil.getDeviceInfo());*/
+//todo impl bai 444444444444
+        MessageSendData data = new MessageSendData(Common.device_impl, deviceUtil.getDeviceInfo(), false);
+        SendMessageManager manager = new SendMessageManager(mContext);
+        manager.sendMessage(data);
         return deviceUtil.getDeviceInfo();
     }
 
+    
     public boolean enableBluetoothOpp(boolean enable) {
         return false;
     }
@@ -1722,7 +1768,8 @@ public class MDM {
         //判断是否在wifi环境下上传
         if ("1".equals(exceptionLogData.isWifiUpload)) {
 
-            int state = mTheTang.getNetWorkState();
+            int state = PhoneUtils.getNetWorkState(mContext);
+
             if (state != 1) {
                 preferencesManager.setLogData("logId", exceptionLogData.logId);
                 preferencesManager.setLogData("isWifiUpload", exceptionLogData.isWifiUpload);
@@ -1738,8 +1785,46 @@ public class MDM {
      * 上传Log
      */
     public static void uploadLog(String id, String date) {
-        LogUploadImpl mLogUploadImpl = new LogUploadImpl(mContext);
-        mLogUploadImpl.logUpload(id, date);
+/*        LogUploadImpl mLogUploadImpl = new LogUploadImpl(mContext);
+        mLogUploadImpl.logUpload(id, date);*/
+//todo impl bai 7777777777777777
+        String version = android.os.Build.VERSION.RELEASE; //系统版本号
+        String model = android.os.Build.MODEL; //系统型号
+        String alias = PreferencesManager.getSingleInstance().getData(Common.alias); //alias
+
+        File logFile = LogFileUtil.excuteFile(date);
+        JSONObject json = new JSONObject();
+        try {
+            json.put("version", version);
+            json.put("model", model);
+            json.put("alias", alias);
+            json.put("id", Integer.parseInt(id));
+            json.put("filePath", logFile.getPath());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        MessageSendData data = new MessageSendData(Common.log_upload_impl, json.toString(), false);
+        SendMessageManager manager = new SendMessageManager(mContext);
+        manager.setSendListener(new SendMessageManager.SendListener() {
+            @Override
+            public void onSuccess() {
+                PreferencesManager preferencesManager = PreferencesManager.getSingleInstance();
+                preferencesManager.removeLogData( "logId" );
+                preferencesManager.removeLogData( "isWifiUpload" );
+                preferencesManager.removeLogData( "date" );
+            }
+
+            @Override
+            public void onFailure() {
+
+            }
+
+            @Override
+            public void onError() {
+
+            }
+        });
+        manager.sendMessage(data);
     }
 
     /**
@@ -1763,8 +1848,10 @@ public class MDM {
         mTheTang.deleteStrategeInfo(OrderConfig.stop_phone_white + "");
         mTheTang.addStratege(OrderConfig.start_phone_white + "", null, System.currentTimeMillis() + "");
 
-        WhiteTelephoneImpl mWhiteTelephoneImpl = new WhiteTelephoneImpl(mContext);
-        mWhiteTelephoneImpl.sendWhiteTelephoneStatus("1");
+/*        WhiteTelephoneImpl mWhiteTelephoneImpl = new WhiteTelephoneImpl(mContext);
+        mWhiteTelephoneImpl.sendWhiteTelephoneStatus("1");*/
+        //todo baii impl dddddddddddddddddd
+        sendPhoneWhiteListStatus("1");
     }
 
     /**
@@ -1778,8 +1865,22 @@ public class MDM {
         mTheTang.deleteStrategeInfo(OrderConfig.start_phone_white + "");
         mTheTang.addStratege(OrderConfig.stop_phone_white + "", null, System.currentTimeMillis() + "");
 
-        WhiteTelephoneImpl mWhiteTelephoneImpl = new WhiteTelephoneImpl(mContext);
-        mWhiteTelephoneImpl.sendWhiteTelephoneStatus("0");
+/*        WhiteTelephoneImpl mWhiteTelephoneImpl = new WhiteTelephoneImpl(mContext);
+        mWhiteTelephoneImpl.sendWhiteTelephoneStatus("0");*/
+        //todo baii impl dddddddddddddddddd
+        sendPhoneWhiteListStatus("0");
+    }
+
+    private static void  sendPhoneWhiteListStatus(String status) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("status", status);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        MessageSendData data = new MessageSendData(Common.white_telephone_status, jsonObject.toString(), true);
+        SendMessageManager manager = new SendMessageManager(mContext);
+        manager.sendMessage(data);
     }
 
     /**
@@ -2164,15 +2265,21 @@ public class MDM {
             //未违规的情况下做违规处理，多次违规不做重复操作
             //if (!"true".equals( mPreferencesManager.getComplianceData( Common.hadSystemCompliance ) )) {
             //mPreferencesManager.setComplianceData(Common.hadSystemCompliance, "true");
-            SystemImpl systemImpl_ready = new SystemImpl(TheTang.getSingleInstance().getContext());
-            systemImpl_ready.sendSystemCompliance(Common.sd_card, "0", "0");
+/*            SystemImpl systemImpl_ready = new SystemImpl(TheTang.getSingleInstance().getContext());
+            systemImpl_ready.sendSystemCompliance(Common.sd_card, "0", "0");*/
+            //todo baii impl bbbbbbbbbbbbbbbbb
+            LogUtil.writeToFile( TAG, "systemCompliance!" );
+            MDM.excuteSystemCompliance();
+            sendMachineCardComplianceInfo("0", "0");
             //}
         } else {
             //已违规的情况下做合规处理
             //if ("true".equals( mPreferencesManager.getComplianceData( Common.hadSystemCompliance ) )) {
             //mPreferencesManager.setComplianceData( Common.hadSystemCompliance, "false" );
-            SystemImpl systemImpl_ready = new SystemImpl(TheTang.getSingleInstance().getContext());
-            systemImpl_ready.sendSystemCompliance(Common.sd_card, "1", "0");
+/*            SystemImpl systemImpl_ready = new SystemImpl(TheTang.getSingleInstance().getContext());
+            systemImpl_ready.sendSystemCompliance(Common.sd_card, "1", "0");*/
+            //todo baii impl bbbbbbbbbbbbbbbbb
+            sendMachineCardComplianceInfo("1", "0");
             //}
         }
     }
@@ -2184,8 +2291,12 @@ public class MDM {
         //未违规的情况下做违规处理，多次违规不做重复操作
         //if (!"true".equals( mPreferencesManager.getComplianceData( Common.hadSystemCompliance ) )) {
         // mPreferencesManager.setComplianceData( Common.hadSystemCompliance, "true" );
-        SystemImpl systemImpl_ready = new SystemImpl(mContext);
-        systemImpl_ready.sendSystemCompliance(Common.sd_card, "0", "0");
+/*        SystemImpl systemImpl_ready = new SystemImpl(mContext);
+        systemImpl_ready.sendSystemCompliance(Common.sd_card, "0", "0");*/
+        //todo baii impl bbbbbbbbbbbbbbbbb
+        LogUtil.writeToFile( TAG, "systemCompliance!" );
+        MDM.excuteSystemCompliance();
+        sendMachineCardComplianceInfo("0", "0");
         //}
     }
 }

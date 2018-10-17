@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
  * Created by Administrator on 2017/6/16.
  */
 
-public class ToolUtils {
+public class ToolUtils {//todo baii util encrypt
 
     //MD5加密
     public static String MD5(String passWord) {
@@ -56,7 +56,7 @@ public class ToolUtils {
      *
      * @return
      */
-    public static int getNumCores() {
+    public static int getNumCores() {//todo baii util device
 
         class CpuFilter implements FileFilter {
             @Override

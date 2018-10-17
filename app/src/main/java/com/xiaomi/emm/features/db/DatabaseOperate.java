@@ -13,6 +13,7 @@ import com.xiaomi.emm.model.CompleteMessageData;
 import com.xiaomi.emm.model.DownLoadEntity;
 import com.xiaomi.emm.model.MessageInfo;
 import com.xiaomi.emm.model.MessageResendData;
+import com.xiaomi.emm.model.MessageSendData;
 import com.xiaomi.emm.model.SensitiveStrategyInfo;
 import com.xiaomi.emm.model.StrategeInfo;
 import com.xiaomi.emm.model.TelephoyWhiteUser;
@@ -521,7 +522,7 @@ public class DatabaseOperate {
      */
     public synchronized APPInfo queryAppInfo(String app_id) {
         Cursor cursor = null;
-        APPInfo appInfo = null;
+        APPInfo appInfo = new APPInfo();
         openSQLiteDataBase();
 
         mSQLiteDatabase.beginTransaction();
@@ -529,7 +530,6 @@ public class DatabaseOperate {
             cursor = mSQLiteDatabase.rawQuery( query_app_sql, new String[]{"%" + app_id + "%", "%" + app_id + "%", "%" + app_id + "%"} );
             if (cursor != null && cursor.getCount() > 0) {
                 for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                    appInfo = new APPInfo();
                     appInfo.setAppId( cursor.getString( cursor.getColumnIndex( DataBaseHelper.app_id ) ) );
                     appInfo.setPackageName( cursor.getString( cursor.getColumnIndex( DataBaseHelper.package_name ) ) );
                     appInfo.setAppName( cursor.getString( cursor.getColumnIndex( DataBaseHelper.app_name ) ) );
@@ -1623,20 +1623,22 @@ public class DatabaseOperate {
      *
      * @return
      */
-    public synchronized List<MessageResendData> queryAll_backResult_sql() {
+    public synchronized List<MessageSendData> queryAll_backResult_sql() {
         Cursor cursor = null;
-        List<MessageResendData> lists = new ArrayList<>();
+        List<MessageSendData> lists = new ArrayList<>();
         openSQLiteDataBase();
         try {
             mSQLiteDatabase.beginTransaction();
             cursor = mSQLiteDatabase.rawQuery( queryAll_backResult_sql, null );
             if (cursor != null && cursor.getCount() > 0) {
                 for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                    MessageResendData data = new MessageResendData();
 
-                    data.resend_type = cursor.getString( cursor.getColumnIndex( DataBaseHelper.backResult_type ) );
-                    data.resend_id = cursor.getString( cursor.getColumnIndex( "_id" ) );
-                    data.resend_content = cursor.getString( cursor.getColumnIndex( DataBaseHelper.backResult_data ) );
+                    String resendCode = cursor.getString( cursor.getColumnIndex( DataBaseHelper.backResult_type ) );
+                    String resendId = cursor.getString( cursor.getColumnIndex( "_id" ) );
+                    String resendContent = cursor.getString( cursor.getColumnIndex( DataBaseHelper.backResult_data ) );
+
+                    MessageSendData data = new MessageSendData(Integer.parseInt(resendCode), resendContent, true);
+                    data.setId(resendId);
                     lists.add( data );
                 }
             }

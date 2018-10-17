@@ -14,11 +14,14 @@ import com.amap.api.location.AMapLocationListener;
 import com.amap.api.location.CoordinateConverter;
 import com.amap.api.location.DPoint;
 import com.xiaomi.emm.definition.Common;
-import com.xiaomi.emm.features.impl.TrajectoryImpl;
+import com.xiaomi.emm.features.impl.SendMessageManager;
+import com.xiaomi.emm.model.MessageSendData;
 import com.xiaomi.emm.utils.DataParseUtil;
 import com.xiaomi.emm.utils.LogUtil;
 import com.xiaomi.emm.utils.PreferencesManager;
 import com.xiaomi.emm.utils.TheTang;
+
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -208,10 +211,13 @@ public class TrajectoryFenceService extends Service {
       //  map.put("feedback_code",String.valueOf(OrderConfig.GetLocationData));
       //  map.put( "alias", PreferencesManager.getSingleInstance().getData( Common.alias ) );
         //定位返回
-        TrajectoryImpl trajectoryImpl = new TrajectoryImpl(this);
-        trajectoryImpl.sendTrajectoryData( map);
+/*        TrajectoryImpl trajectoryImpl = new TrajectoryImpl(this);
+        trajectoryImpl.sendTrajectoryData( map);*/
 
-
-
+        //todo baii impl bbbbbbbbbbbbbbbbb
+        JSONObject json = new JSONObject(map);
+        MessageSendData data = new MessageSendData(Common.USER_TRACK, json.toString(), false);
+        SendMessageManager manager = new SendMessageManager(this);
+        manager.sendMessage(data);
     }
 }

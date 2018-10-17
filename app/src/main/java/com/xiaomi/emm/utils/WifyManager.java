@@ -15,7 +15,7 @@ import java.util.List;
  * Created by lenovo on 2017/9/19.
  */
 
-public class WifyManager {
+public class WifyManager {//todo baii util network
     private static final  String  TAG="WifyManager";
     private static WifiManager wifiManager = (WifiManager) TheTang.getSingleInstance().getContext().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
     // 扫描出的网络连接列表

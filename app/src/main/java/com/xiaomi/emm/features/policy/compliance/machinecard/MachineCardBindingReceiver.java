@@ -8,7 +8,6 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
 import com.xiaomi.emm.definition.Common;
-import com.xiaomi.emm.features.impl.IccidImpl;
 import com.xiaomi.emm.utils.PreferencesManager;
 import com.xiaomi.emm.utils.TheTang;
 

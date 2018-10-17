@@ -12,6 +12,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.xiaomi.emm.R;
+import com.xiaomi.emm.utils.AppUtils;
 import com.xiaomi.emm.utils.LogUtil;
 import com.xiaomi.emm.view.adapter.AppStoreAdapter;
 import com.xiaomi.emm.features.db.DatabaseOperate;
@@ -85,7 +86,7 @@ public class AppUpdateActivity extends BaseActivity {
                 Collections.reverse(newList);
 
                 for (APPInfo appInfo : newList) {
-                    PackageManager packageManager = TheTang.getSingleInstance().getPackageManager();
+                    PackageManager packageManager = AppUtils.getPackageManager(AppUpdateActivity.this);
                     String version = null;
                     try {
                         PackageInfo info = packageManager.getPackageInfo( appInfo.getPackageName(), 0 );

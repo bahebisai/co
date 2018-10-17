@@ -106,7 +106,7 @@ public class ActivityCollector {
     /**
      * 移除所有的Lock2Activity
      */
-    public static void removeAllLock2Activity() {
+    public static void removeAllLock2Activity() {//todo baii
         if (activities != null && activities.size() > 0) {
             Set<Entry<Class<?>, Activity>> sets = activities.entrySet();
             Iterator<Entry<Class<?>, Activity>> iterator = sets.iterator();

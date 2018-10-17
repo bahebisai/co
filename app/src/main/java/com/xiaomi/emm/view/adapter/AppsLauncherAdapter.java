@@ -21,6 +21,7 @@ import com.xiaomi.emm.features.event.NotifyEvent;
 import com.xiaomi.emm.features.lockscreen.NewsLifecycleHandler;
 import com.xiaomi.emm.features.policy.device.ShortcutActivity;
 import com.xiaomi.emm.model.ConfigureStrategyData;
+import com.xiaomi.emm.utils.AppUtils;
 import com.xiaomi.emm.utils.PreferencesManager;
 import com.xiaomi.emm.utils.TheTang;
 import com.xiaomi.emm.view.activity.MainActivity;
@@ -155,7 +156,7 @@ public class AppsLauncherAdapter extends RecyclerView.Adapter<AppsLauncherAdapte
                     mContext.startActivity( intents );
 
                 } else {
-                    Intent intent = TheTang.getSingleInstance().getPackageManager().getLaunchIntentForPackage( info.packageName );
+                    Intent intent = AppUtils.getPackageManager(mContext).getLaunchIntentForPackage( info.packageName );
                     if (intent != null) {
                         NewsLifecycleHandler.LockFlag = true;
                         mContext.startActivity( intent );

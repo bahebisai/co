@@ -126,18 +126,18 @@ public class CallRecorderUploadImpl extends BaseImpl<RequestService> {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (TheTang.getSingleInstance().whetherSendSuccess(response)) {
-                    listener.resendSuccess();
-                    if (file != null && file.exists()) {
+                    listener.onSuccess();
+                    if (file != null && file.exists()) {//todo impl bai 1111111111111111111111
                         file.delete();
                     }
                 } else {
-                    listener.resendError();
+                    listener.onError();
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                listener.resendFail();
+                listener.onFailure();
             }
         });
     }
