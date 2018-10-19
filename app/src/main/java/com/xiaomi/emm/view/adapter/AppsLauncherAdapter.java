@@ -123,10 +123,9 @@ public class AppsLauncherAdapter extends RecyclerView.Adapter<AppsLauncherAdapte
                 holder.title.setText( webClipName );//PreferencesManager.getSingleInstance().getConfiguration("webClipName")
             }
         } else {
-            if (TheTang.getSingleInstance().getAppIcon( mApps.get( position ) ) != null) {
-
-                holder.img.setImageDrawable( TheTang.getSingleInstance().getAppIcon( mApps.get( position ) ) );
-                holder.title.setText( TheTang.getSingleInstance().getAppLabel( mApps.get( position ).packageName ) );
+            if (AppUtils.getAppIcon(mContext, mApps.get(position)) != null) {
+                holder.img.setImageDrawable(AppUtils.getAppIcon(mContext, mApps.get(position)));
+                holder.title.setText(AppUtils.getAppLabel(mContext, mApps.get(position).packageName));
             }
         }
 
@@ -156,7 +155,7 @@ public class AppsLauncherAdapter extends RecyclerView.Adapter<AppsLauncherAdapte
                     mContext.startActivity( intents );
 
                 } else {
-                    Intent intent = AppUtils.getPackageManager(mContext).getLaunchIntentForPackage( info.packageName );
+                    Intent intent = mContext.getPackageManager().getLaunchIntentForPackage( info.packageName );
                     if (intent != null) {
                         NewsLifecycleHandler.LockFlag = true;
                         mContext.startActivity( intent );

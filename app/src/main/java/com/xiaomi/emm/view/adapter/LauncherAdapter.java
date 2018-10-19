@@ -20,7 +20,6 @@ import com.xiaomi.emm.features.event.NotifyEvent;
 import com.xiaomi.emm.features.lockscreen.NewsLifecycleHandler;
 import com.xiaomi.emm.utils.AppUtils;
 import com.xiaomi.emm.utils.PreferencesManager;
-import com.xiaomi.emm.utils.TheTang;
 import com.xiaomi.emm.view.activity.AppUpdateActivity;
 import com.xiaomi.emm.view.activity.SafeDeskActivity;
 
@@ -71,14 +70,14 @@ public class LauncherAdapter extends RecyclerView.Adapter<LauncherAdapter.Launch
                 holder.imageView.setImageResource( R.mipmap.mi8sesplit8split1);
                 holder.textView.setText( mContext.getResources().getString(R.string.security_desk ) );
             } else {
-                String label = TheTang.getSingleInstance().getAppLabel( mList.get( position ).packageName );
+                String label = AppUtils.getAppLabel(mContext, mList.get(position).packageName);
 
                 if (TextUtils.isEmpty( label )) {
                     EventBus.getDefault().post( new NotifyEvent() );
                 }
-                if (TheTang.getSingleInstance().getAppIcon( mList.get( position ) ) != null) {
+                if (AppUtils.getAppIcon(mContext, mList.get(position)) != null) {
 
-                    holder.imageView.setImageDrawable( TheTang.getSingleInstance().getAppIcon( mList.get( position ) ) );
+                    holder.imageView.setImageDrawable(AppUtils.getAppIcon(mContext, mList.get(position)));
                     holder.textView.setText( label );
                 }
             }
@@ -100,7 +99,7 @@ public class LauncherAdapter extends RecyclerView.Adapter<LauncherAdapter.Launch
                     mContext.startActivity( intents );
 
                 } else {
-                    Intent intent = AppUtils.getPackageManager(mContext).getLaunchIntentForPackage( info.packageName );
+                    Intent intent = mContext.getPackageManager().getLaunchIntentForPackage( info.packageName );
                     if (intent != null) {
                         mContext.startActivity( intent );
 

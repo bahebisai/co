@@ -60,7 +60,7 @@ public class AppIntentService extends IntentService {
     public void onCreate() {
         super.onCreate();
         //获得包管理器
-        packageManager = AppUtils.getPackageManager(this);
+        packageManager = getPackageManager();
     }
 
     @Override
@@ -272,9 +272,7 @@ public class AppIntentService extends IntentService {
      */
 
     private void installApp(DownLoadEntity mDownLoadEntity/*String saveName, String appId, String network, String uninstall*/) {
-
-        PackageManager packageManager = AppUtils.getPackageManager(this); //获得包管理器
-
+        PackageManager packageManager = getPackageManager(); //获得包管理器
         String appName = null;
 
         try {

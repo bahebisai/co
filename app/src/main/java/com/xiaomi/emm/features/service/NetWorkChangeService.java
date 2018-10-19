@@ -11,7 +11,6 @@ import android.text.TextUtils;
 import android.util.ArrayMap;
 import android.util.Log;
 
-import com.google.gson.JsonObject;
 import com.xiaomi.emm.R;
 import com.xiaomi.emm.definition.Common;
 import com.xiaomi.emm.features.download.DownLoadManager;
@@ -19,6 +18,7 @@ import com.xiaomi.emm.features.impl.SendMessageManager;
 import com.xiaomi.emm.features.policy.device.ConfigurationPolicy;
 import com.xiaomi.emm.features.resend.MessageResendManager;
 import com.xiaomi.emm.model.MessageSendData;
+import com.xiaomi.emm.utils.AppUtils;
 import com.xiaomi.emm.utils.JsonGenerateUtil;
 import com.xiaomi.emm.utils.LogUtil;
 import com.xiaomi.emm.utils.MDM;
@@ -113,7 +113,7 @@ public class NetWorkChangeService extends IntentService {
      */
     private void sendAppVersion() {
         String oldVersion = PreferencesManager.getSingleInstance().getData( Common.appVersion );
-        String newVersion = TheTang.getSingleInstance().getAppVersion( getPackageName() );
+        String newVersion = AppUtils.getAppVersion(this, getPackageName());
         if (TextUtils.isEmpty( oldVersion ) || !oldVersion.equals( newVersion )) {
   /*          UpdateAPPVersionImpl mUpdateAPPVersionImpl = new UpdateAPPVersionImpl( TheTang.getSingleInstance().getContext() );
             mUpdateAPPVersionImpl.sendUpdateAppVersion();*/
@@ -124,7 +124,7 @@ public class NetWorkChangeService extends IntentService {
 
     private void sendUpdateVersion() {
         String alias = PreferencesManager.getSingleInstance().getData(Common.alias);
-        String newVersion = TheTang.getSingleInstance().getAppVersion(Common.packageName);
+        String newVersion = AppUtils.getAppVersion(this, Common.packageName);
         Map<String, String> map = new ArrayMap<>();
         map.put("alias", alias);
         map.put("appVersion", newVersion);

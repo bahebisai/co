@@ -375,7 +375,7 @@ public class NetworkStatsHelper {//todo baii util ???
     }
 
     public static String getFlowData() {
-        String[] imsis = TheTang.getSingleInstance().getSubscriberId();
+        String[] imsis = PhoneUtils.getSubscriberId(TheTang.getSingleInstance().getContext());
         StringBuffer buffer = new StringBuffer();
         if (imsis != null && imsis.length > 0) {
             for (int i = 0; i < imsis.length; i++) {
@@ -383,20 +383,20 @@ public class NetworkStatsHelper {//todo baii util ???
                 if (!TextUtils.isEmpty( imsis[i] )) {
 
                     if (i == 0){
-                        buffer.append( TheTang.getSingleInstance().convertTraffic( getAllTodayMobile( TheTang.getSingleInstance().getContext(), imsis[i] ) ) + "," );
-                        buffer.append( TheTang.getSingleInstance().convertTraffic( getWorkMobile( TheTang.getSingleInstance().getContext(), imsis[i] ) ) + "," );
-                        buffer.append( TheTang.getSingleInstance().convertTraffic( getAllMonthMobile( TheTang.getSingleInstance().getContext(), imsis[i] ) ) + "," );
+                        buffer.append( ConvertUtils.convertTraffic( getAllTodayMobile( TheTang.getSingleInstance().getContext(), imsis[i] ) ) + "," );
+                        buffer.append( ConvertUtils.convertTraffic( getWorkMobile( TheTang.getSingleInstance().getContext(), imsis[i] ) ) + "," );
+                        buffer.append( ConvertUtils.convertTraffic( getAllMonthMobile( TheTang.getSingleInstance().getContext(), imsis[i] ) ) + "," );
 
                     }else if (i == 1) {
                         if (imsis[i].equals(imsis[i -1 ])){
 
-                            buffer.append( TheTang.getSingleInstance().convertTraffic( 0) + "," );
-                            buffer.append( TheTang.getSingleInstance().convertTraffic( 0 ) + "," );
-                            buffer.append( TheTang.getSingleInstance().convertTraffic( 0) + "," );
+                            buffer.append( ConvertUtils.convertTraffic( 0) + "," );
+                            buffer.append( ConvertUtils.convertTraffic( 0 ) + "," );
+                            buffer.append( ConvertUtils.convertTraffic( 0) + "," );
                         }else {
-                            buffer.append( TheTang.getSingleInstance().convertTraffic( getAllTodayMobile( TheTang.getSingleInstance().getContext(), imsis[i] ) ) + "," );
-                            buffer.append( TheTang.getSingleInstance().convertTraffic( getWorkMobile( TheTang.getSingleInstance().getContext(), imsis[i] ) ) + "," );
-                            buffer.append( TheTang.getSingleInstance().convertTraffic( getAllMonthMobile( TheTang.getSingleInstance().getContext(), imsis[i] ) ) + "," );
+                            buffer.append( ConvertUtils.convertTraffic( getAllTodayMobile( TheTang.getSingleInstance().getContext(), imsis[i] ) ) + "," );
+                            buffer.append( ConvertUtils.convertTraffic( getWorkMobile( TheTang.getSingleInstance().getContext(), imsis[i] ) ) + "," );
+                            buffer.append( ConvertUtils.convertTraffic( getAllMonthMobile( TheTang.getSingleInstance().getContext(), imsis[i] ) ) + "," );
                         }
 
                     }

@@ -1,17 +1,23 @@
 package com.xiaomi.emm.utils;
 
+import android.app.ActivityManager;
 import android.app.usage.StorageStats;
 import android.app.usage.StorageStatsManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.IPackageStatsObserver;
+import android.content.pm.LauncherActivityInfo;
+import android.content.pm.LauncherApps;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageStats;
 import android.content.pm.ResolveInfo;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.RemoteException;
+import android.os.UserHandle;
+import android.os.UserManager;
 import android.os.storage.StorageManager;
 import android.util.ArraySet;
 import android.util.Log;
@@ -64,7 +70,6 @@ public class AppUtils {
                     appInfo.setType(APPInfo.TYPE_USER);
                 }
                 appInfo.setAppId(getPushAppInfo(info.packageName).getAppId());
-
                 appInfos.add(appInfo);
             }
         }
@@ -89,6 +94,7 @@ public class AppUtils {
 
     /**
      * 获取服务器下发应用的信息
+     *
      * @param pkgName
      * @return
      */
@@ -101,8 +107,9 @@ public class AppUtils {
      */
     static String appSize;
 
-    public static String getAppSize(Context context, String pkgName) {//todo baii util app
+    public static String getAppSize(Context context, String pkgName) {
         if (pkgName != null) {
+            appSize = "";
             if (Build.VERSION.SDK_INT < 26) {
                 PackageManager mPackageManager = context.getPackageManager();  //得到pm对象
                 try {
@@ -111,7 +118,7 @@ public class AppUtils {
                         @Override
                         public void onGetStatsCompleted(PackageStats pStats, boolean succeeded) throws RemoteException { //异步执行
                             if (succeeded && pStats != null) {
-                                appSize = TheTang.getSingleInstance().formatFileSize(pStats.codeSize
+                                appSize = ConvertUtils.formatFileSize(pStats.codeSize
                                         + pStats.dataSize + pStats.cacheSize);
                             }
                         }
@@ -128,7 +135,7 @@ public class AppUtils {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                appSize = TheTang.getSingleInstance().formatFileSize(
+                appSize = ConvertUtils.formatFileSize(
                         mStorageStats.getAppBytes() + mStorageStats.getCacheBytes() + mStorageStats.getDataBytes());
             }
         }
@@ -145,7 +152,7 @@ public class AppUtils {
      * @return
      */
     public static int getAppUid(Context context, String packageName) {
-        PackageManager packageManager = getPackageManager(context);
+        PackageManager packageManager = context.getPackageManager();
         PackageInfo packageInfo = null;
         try {
             packageInfo = packageManager.getPackageInfo(packageName, 0);
@@ -161,8 +168,8 @@ public class AppUtils {
      *
      * @return
      */
-    public static List<PackageInfo> getNoSystemApp(Context context) {//todo baii util app
-        List<PackageInfo> packageList = getPackageManager(context).getInstalledPackages(0);
+    public static List<PackageInfo> getNoSystemApp(Context context) {
+        List<PackageInfo> packageList = context.getPackageManager().getInstalledPackages(0);
 //        Log.d("baii", "before size " + packageList.size());
         if (packageList != null && packageList.size() > 0) {
             //note bai: for 循环不能边删除边遍历
@@ -181,24 +188,147 @@ public class AppUtils {
                 }
             }
         }
-        for (PackageInfo info:packageList) {
-            Log.d("baii", info.packageName);
-        }
         return packageList;
     }
 
     /**
-     * 获得包管理器
+     * 获得已安装的应用的图标
      *
-     * @returnAppTask
+     * @param info
+     * @return
      */
-    public static PackageManager getPackageManager(Context context) {//todo baii util app
-        PackageManager packageManager = null;
+    public static Drawable getAppIcon(Context context, ApplicationInfo info) {
+        PackageManager packageManager = context.getPackageManager();
+        Drawable drawable = info.loadIcon(packageManager);
+        return drawable;
+    }
+
+    /**
+     * 通过包名获得应用的图标
+     *
+     * @param packageName
+     * @return
+     */
+    public static Drawable getAppIcon(Context context, String packageName) {
+        PackageManager packageManager = context.getPackageManager();
+        ApplicationInfo info = null;
         try {
-            packageManager = context.getPackageManager();
-        } catch (Exception e) {
-            LogUtil.writeToFile(TAG, e.getCause().toString());
+            info = packageManager.getApplicationInfo(packageName, 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
         }
-        return packageManager;
+        if (info == null) {
+            return null;
+        }
+        return info.loadIcon(packageManager);
+    }
+
+    /**
+     * 获得已安装的应用的名称
+     *
+     * @param packageName
+     * @return
+     */
+    public static String getAppLabel(Context context, String packageName) {//todo baii util app
+        String label = null;
+        PackageManager packageManager = context.getPackageManager();
+        try {
+            PackageInfo packageInfo = packageManager.getPackageInfo(packageName, 0);
+            label = (String) packageManager.getApplicationLabel(packageInfo.applicationInfo);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return label;
+    }
+
+    /**
+     * 获取Launcher Apps
+     *
+     * @return
+     */
+    public static List getLauncherApps() {//todo baii util app
+        LauncherApps apps = (LauncherApps) TheTang.getSingleInstance().getContext().getSystemService(Context.LAUNCHER_APPS_SERVICE);
+        UserManager mUserManager = (UserManager) TheTang.getSingleInstance().getContext().getSystemService(Context.USER_SERVICE);
+        final List<UserHandle> profiles = mUserManager.getUserProfiles();
+        //单用户情况下
+        UserHandle user = profiles.get(0);
+        return apps.getActivityList(null, user);
+    }
+
+    /**
+     * 获得Launcher非系统app
+     *
+     * @return
+     */
+    public static List getLauncherNoSystemApp() {//todo baii util app
+        List<LauncherActivityInfo> appList = getLauncherApps();
+        if (appList == null) {
+            return null;
+        }
+        List<LauncherActivityInfo> apps = new ArrayList<>();
+        for (LauncherActivityInfo launcherActivityInfo : appList) {
+            if ((launcherActivityInfo.getApplicationInfo().flags & ApplicationInfo.FLAG_SYSTEM) != 0) {
+                apps.add(launcherActivityInfo);
+            }
+        }
+        appList.removeAll(apps);
+        return appList;
+    }
+
+    /**
+     * 方法描述：判断某一应用是否正在运行
+     *
+     * @param packageName 应用的包名
+     * @return true 表示正在运行，false表示没有运行
+     */
+    public boolean isAppRunning(Context context, String packageName) {//todo baii util app
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> list = am.getRunningTasks(100);
+        if (list.size() <= 0) {
+            return false;
+        }
+        for (ActivityManager.RunningTaskInfo info : list) {
+            if (info.baseActivity.getPackageName().equals(packageName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 方法描述：判断某一Service是否正在运行
+     *
+     * @param serviceName Service的全路径： 包名 + service的类名
+     * @return true 表示正在运行，false 表示没有运行
+     */
+    public boolean isServiceRunning(Context context, String serviceName) {//todo baii util ??? or app
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningServiceInfo> runningServiceInfos = am.getRunningServices(200);
+        if (runningServiceInfos.size() <= 0) {
+            return false;
+        }
+        for (ActivityManager.RunningServiceInfo serviceInfo : runningServiceInfos) {
+            if (serviceInfo.service.getClassName().equals(serviceName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 获取应用版本号
+     *
+     * @param packageName
+     * @return
+     */
+    public static String getAppVersion(Context context, String packageName) {//todo baii util app
+        String version = null;
+
+        try {
+            version = context.getPackageManager().getPackageInfo(packageName, 0).versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return version;
     }
 }

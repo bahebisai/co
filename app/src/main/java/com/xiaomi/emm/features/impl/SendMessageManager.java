@@ -10,6 +10,7 @@ import com.xiaomi.emm.features.db.DatabaseOperate;
 import com.xiaomi.emm.features.http.RequestService;
 import com.xiaomi.emm.features.resend.MessageResendManager;
 import com.xiaomi.emm.model.MessageSendData;
+import com.xiaomi.emm.utils.HttpHelper;
 import com.xiaomi.emm.utils.TheTang;
 
 import org.json.JSONException;
@@ -115,8 +116,7 @@ public class SendMessageManager extends BaseImpl<RequestService> {
             responseBodyCall.enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-
-                    if (!TheTang.getSingleInstance().whetherSendSuccess(response)) {
+                    if (!HttpHelper.whetherSendSuccess(response)) {
                         if (data.needResend()) {
                             DatabaseOperate.getSingleInstance().add_backResult_sql(sendCode + "", json);
                         }

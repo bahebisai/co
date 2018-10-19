@@ -19,6 +19,7 @@ import com.xiaomi.emm.features.http.RequestService;
 import com.xiaomi.emm.features.resend.MessageResendManager;
 import com.xiaomi.emm.model.TelephoyWhiteUser;
 import com.xiaomi.emm.utils.DataParseUtil;
+import com.xiaomi.emm.utils.HttpHelper;
 import com.xiaomi.emm.utils.MDM;
 import com.xiaomi.emm.utils.PreferencesManager;
 import com.xiaomi.emm.utils.TheTang;
@@ -63,9 +64,9 @@ public class TelephoneWhiteListImpl extends BaseImpl<RequestService> {
         mService.uploadInfo(UrlConst.PHONE_CONTACTS, body).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                final String content = TheTang.getSingleInstance().getResponseBodyString(response);
+                final String content = HttpHelper.getResponseBodyString(response);
 
-                if (!TheTang.getSingleInstance().whetherSendSuccess(content)) {
+                if (!HttpHelper.whetherSendSuccess(content)) {
                     DatabaseOperate.getSingleInstance().add_backResult_sql(Common.get_telephone_white + "", telephoneObject.toString());
                 } else {
                     new Thread(new Runnable() {
@@ -191,9 +192,9 @@ public class TelephoneWhiteListImpl extends BaseImpl<RequestService> {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
-                String content = TheTang.getSingleInstance().getResponseBodyString(response);
+                String content = HttpHelper.getResponseBodyString(response);
 
-                if (!TheTang.getSingleInstance().whetherSendSuccess(content)) {
+                if (!HttpHelper.whetherSendSuccess(content)) {
                     listener.onSuccess();
                 } else {
                     listener.onError();

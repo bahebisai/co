@@ -3,18 +3,14 @@ package com.xiaomi.emm.view.activity;
 import android.app.Service;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.util.Log;
-import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,7 +18,6 @@ import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,13 +27,14 @@ import com.xiaomi.emm.features.QR.utils.CommonUtil;
 import com.xiaomi.emm.features.QR.zxing.activity.CaptureActivity;
 import com.xiaomi.emm.features.event.LoginEvent;
 import com.xiaomi.emm.features.excute.XiaomiMDMController;
-import com.xiaomi.emm.utils.KeyboardUtils;
-import com.xiaomi.emm.utils.MDM;
-import com.xiaomi.emm.utils.TheTang;
-import com.xiaomi.emm.view.listener.LoginListener;
 import com.xiaomi.emm.model.LoginBackData;
+import com.xiaomi.emm.utils.AppUtils;
+import com.xiaomi.emm.utils.KeyboardUtils;
 import com.xiaomi.emm.utils.LogUtil;
+import com.xiaomi.emm.utils.MDM;
+import com.xiaomi.emm.utils.PhoneUtils;
 import com.xiaomi.emm.utils.PreferencesManager;
+import com.xiaomi.emm.utils.TheTang;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -183,7 +179,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
      */
     public void login(final String userName, final String passWord) {
 
-        if (!TheTang.getSingleInstance().isNetworkConnected()) {
+        if (!PhoneUtils.isNetworkConnected(this)) {
             toastDialogs( this, getResources().getString(R.string.net_not_allow) );
             return;
         }
@@ -271,7 +267,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                 preferencesManager.setData( Common.alias, ((LoginBackData) event.getBean()).getToken().getUser_alias() );
 
                 //保存应用版本号
-                preferencesManager.setData( Common.appVersion, TheTang.getSingleInstance().getAppVersion( Common.packageName ) );
+                preferencesManager.setData(Common.appVersion, AppUtils.getAppVersion(this, Common.packageName));
 
                 preferencesManager.setData( Common.keepAliveHost, ((LoginBackData) event.getBean()).getToken().getKeepAliveHost() );
                 preferencesManager.setData( Common.keepAlivePort, ((LoginBackData) event.getBean()).getToken().getKeepAlivePort() );//preferencesManager.setData( Common.userName, userName );

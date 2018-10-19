@@ -32,8 +32,9 @@ import com.xiaomi.emm.model.APPInfo;
 import com.xiaomi.emm.model.FileInfo;
 import com.xiaomi.emm.model.MessageInfo;
 import com.xiaomi.emm.utils.AppUtils;
+import com.xiaomi.emm.utils.ConvertUtils;
+import com.xiaomi.emm.utils.DeviceUtils;
 import com.xiaomi.emm.utils.LogUtil;
-import com.xiaomi.emm.utils.MDM;
 import com.xiaomi.emm.utils.NetworkStatsHelper;
 import com.xiaomi.emm.utils.PreferencesManager;
 import com.xiaomi.emm.utils.TheTang;
@@ -248,11 +249,11 @@ public class WorkBenchFragment extends BaseFragment {
             appList.clear();
         }
 
-        launcherInfoList = TheTang.getSingleInstance().getLauncherApps();
+        launcherInfoList = AppUtils.getLauncherApps();
 
         appList = TheTang.getSingleInstance().getInstallAppInfo();
 
-        PackageManager packageManager = AppUtils.getPackageManager(getContext());
+        PackageManager packageManager = getContext().getPackageManager();
         //加入安全界面的图标
         PreferencesManager preferencesManager = PreferencesManager.getSingleInstance();
 
@@ -329,8 +330,8 @@ public class WorkBenchFragment extends BaseFragment {
         data_total = data_total + preferencesManager.getTraffictotal( "trafficTotal" );
 
         long wifi_traffics = data_total - mobile_traffics;
-        final String wifi_traffi = theTang.convertTraffic( wifi_traffics );
-        final String data_traffi = theTang.convertTraffic( mobile_traffics );
+        final String wifi_traffi = ConvertUtils.convertTraffic( wifi_traffics );
+        final String data_traffi = ConvertUtils.convertTraffic( mobile_traffics );
 
         if (theTang.getUsageStats()) {
 
@@ -341,8 +342,8 @@ public class WorkBenchFragment extends BaseFragment {
                 getActivity().runOnUiThread( new Runnable() {
                     @Override
                     public void run() {
-                        wifi_count.setText( theTang.convertTraffic( NetworkStatsHelper.getAllMonthWifi()/*networkStatsHelper.getAllRxBytesWifi()+networkStatsHelper.getAllTxBytesWifi()*/ ) );
-                        data_count.setText( theTang.convertTraffic( NetworkStatsHelper.getAllMonthMobile( TheTang.getSingleInstance().getContext(), null ) ) );
+                        wifi_count.setText( ConvertUtils.convertTraffic( NetworkStatsHelper.getAllMonthWifi()/*networkStatsHelper.getAllRxBytesWifi()+networkStatsHelper.getAllTxBytesWifi()*/ ) );
+                        data_count.setText( ConvertUtils.convertTraffic( NetworkStatsHelper.getAllMonthMobile( TheTang.getSingleInstance().getContext(), null ) ) );
                     }
                 } );
             }
@@ -434,12 +435,13 @@ public class WorkBenchFragment extends BaseFragment {
     }
 
     private void setStorageProgress() {
-        total_size = TheTang.getSingleInstance().getTotalStorage();
-        remain_size = TheTang.getSingleInstance().getRemainStorage();
-        unit = TheTang.getSingleInstance().getUnit( remain_size );
-        storage_progress.setMaxValue( Float.parseFloat( TheTang.getSingleInstance().formatFile( (long) total_size ) ) );
-        storage_progress.setValue( Float.parseFloat( TheTang.getSingleInstance().formatFile( (long) (total_size - remain_size) ) ) );
-        storage_progress.setUnit( unit );
+        total_size = DeviceUtils.getTotalStorage();
+//        remain_size = TheTang.getSingleInstance().getRemainStorage();
+        remain_size = DeviceUtils.getRemainStorage();
+        unit = ConvertUtils.getUnit(remain_size);
+        storage_progress.setMaxValue(Float.parseFloat(ConvertUtils.formatFile((long) total_size)));
+        storage_progress.setValue(Float.parseFloat(ConvertUtils.formatFile((long) (total_size - remain_size))));
+        storage_progress.setUnit(unit);
     }
 
     private void setAppProgress() {

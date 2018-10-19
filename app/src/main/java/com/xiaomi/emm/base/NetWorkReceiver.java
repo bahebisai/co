@@ -40,16 +40,14 @@ public class NetWorkReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(final Context context, Intent intent) {
         Log.w( TAG, intent.getAction() );
+        LogUtil.writeToFile( TAG, "onReceive, action " + intent.getAction());
 
-        if (TheTang.getSingleInstance().isNetworkConnected(context)) {
+        if (PhoneUtils.isNetworkAvailable(context)) {
             // LogUtil.writeToFile( TAG, "android.net.conn.CONNECTIVITY_CHANGE" );
-            LogUtil.writeToFile( TAG, intent.getAction());
-            LogUtil.writeToFile( TAG,"onReceive" );
-
             int networkState = PhoneUtils.getNetWorkState(context);
             if (networkState == NetWorkChangeService.NETWORK_WIFI) {
                 //连接长连接
-                connectTcp();
+                connectTcp(context);
                 PreferencesManager preferencesManager = PreferencesManager.getSingleInstance();
                 //如果是wifi的打开动作则是执行围栏内的wifi 连接
                 connectWifi_insideFence(intent.getIntExtra("wifi_state",1));
@@ -62,7 +60,7 @@ public class NetWorkReceiver extends BroadcastReceiver {
                 //刷新流量弹出框
                 EventBus.getDefault().post(new NotifyEvent("flow_flag"));
                 //连接长连接
-                connectTcp();
+                connectTcp(context);
             }
 
             //如果收到在这个"android.net.wifi.WIFI_STATE_CHANGED" 动作 说明 是wifi  的  动作  打开wifi
@@ -254,7 +252,7 @@ public class NetWorkReceiver extends BroadcastReceiver {
         }
     }
 
-    private void connectTcp() {
+    private void connectTcp(Context context) {
         //有网络的情况下判断长连接有没有连接上，没有连接则去连接
         // Log.w( TAG, "网络波动获取当前的网络状态:0：没有网络 1：WIFI网络 2：WAP网络 3：NET网络==tcp=" + TheTang.getSingleInstance().getNetworkType() );
 
@@ -265,18 +263,17 @@ public class NetWorkReceiver extends BroadcastReceiver {
             Log.w( TAG, "网络波动的情况下 ,用户还没登录 ");
             LogUtil.writeToFile( TAG, "网络波动的情况下 ,用户还没登录 ");
             return;
-
         }
 
-        boolean isNetworkConnect = TheTang.getSingleInstance().isNetworkConnected(TheTang.getSingleInstance().getContext());
+        boolean isNetworkConnect = PhoneUtils.isNetworkAvailable(context);
 
-        if (! isNetworkConnect){
+        if (!isNetworkConnect){
             Log.w( TAG, "网络波动的情况下,网络不通 = ");
             LogUtil.writeToFile( TAG, "网络波动的情况下,网络不通 = ");
             return;
         }
-        boolean networkAvaliable = TheTang.getSingleInstance().isNetworkAvaliable();
-        boolean isNetworkConnected = TheTang.getSingleInstance().isNetworkConnected();
+        boolean networkAvaliable = PhoneUtils.isNetworkAvailable(context);
+        boolean isNetworkConnected = PhoneUtils.isNetworkConnected(context);
 
         Log.w( TAG, "networkAvaliable = " + networkAvaliable+" ,isNetworkConnected= "+isNetworkConnected +" ,isNetworkConnect="+isNetworkConnect );
         LogUtil.writeToFile( TAG, "networkAvaliable = "+networkAvaliable+" ,isNetworkConnected= "+isNetworkConnected +" ,isNetworkConnect="+isNetworkConnect );

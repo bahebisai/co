@@ -24,6 +24,7 @@ import com.google.gson.reflect.TypeToken;
 import com.xiaomi.emm.R;
 import com.xiaomi.emm.definition.Common;
 import com.xiaomi.emm.model.TimeFenceData;
+import com.xiaomi.emm.utils.CoordinateUtils;
 import com.xiaomi.emm.utils.LogUtil;
 import com.xiaomi.emm.utils.MDM;
 import com.xiaomi.emm.utils.PreferencesManager;
@@ -167,7 +168,7 @@ public class AppFenceService extends Service {
         double lng = Double.valueOf( coordinate[0] );
         double lat = Double.valueOf( coordinate[1] );
         float radius = Float.valueOf( mPreferencesManager.getAppFenceData( Common.appFenceRadius ) );
-        double[] gps = TheTang.getSingleInstance().bd09_To_Gcj02( lat, lng );
+        double[] gps = CoordinateUtils.bd09_To_Gcj02( lat, lng );
         //设置中心点纬度
         centerPoint.setLatitude( gps[0] );
         //设置中心点经度

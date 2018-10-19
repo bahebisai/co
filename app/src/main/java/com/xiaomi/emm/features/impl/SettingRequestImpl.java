@@ -5,6 +5,7 @@ import android.content.Context;
 import com.xiaomi.emm.definition.UrlConst;
 import com.xiaomi.emm.features.http.RequestService;
 import com.xiaomi.emm.utils.DataParseUtil;
+import com.xiaomi.emm.utils.HttpHelper;
 import com.xiaomi.emm.utils.TheTang;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -30,9 +31,9 @@ public class SettingRequestImpl extends BaseImpl<RequestService> {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
-                final String content = TheTang.getSingleInstance().getResponseBodyString( response );
+                final String content = HttpHelper.getResponseBodyString(response);
 
-                if (TheTang.getSingleInstance().whetherSendSuccess( content )) {
+                if (HttpHelper.whetherSendSuccess(content)) {
                     TheTang.getSingleInstance().getThreadPoolObject().submit( new Runnable() {
                         @Override
                         public void run() {

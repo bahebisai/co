@@ -17,6 +17,7 @@ import com.xiaomi.emm.features.lockscreen.NewsLifecycleHandler;
 import com.xiaomi.emm.features.policy.app.ExcuteSafeDesktop;
 import com.xiaomi.emm.features.service.NetWorkChangeService;
 import com.xiaomi.emm.utils.ActivityCollector;
+import com.xiaomi.emm.utils.ConvertUtils;
 import com.xiaomi.emm.utils.LogUtil;
 import com.xiaomi.emm.utils.MDM;
 import com.xiaomi.emm.utils.PreferencesManager;
@@ -769,7 +770,7 @@ public class FenceExcute {
             }
 
             Map<String, String> sec_white_list = new HashMap<>();
-            sec_white_list = TheTang.getSingleInstance().formatMapFromString( list );
+            sec_white_list = ConvertUtils.formatMapFromString( list );
             MDM.excuteChrome( sec_white_list );
             MDM.showToDesk( sec_white_list );
         } else {

@@ -1,6 +1,5 @@
 package com.xiaomi.emm.utils;
 
-import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.LauncherActivityInfo;
@@ -14,30 +13,21 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
-import android.os.storage.StorageManager;
-import android.os.storage.StorageVolume;
-import android.provider.Settings;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 
 import com.xiaomi.emm.definition.Common;
 import com.xiaomi.emm.features.db.DatabaseOperate;
 import com.xiaomi.emm.model.APPInfo;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+
 import java.net.NetworkInterface;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 import static android.content.Context.BATTERY_SERVICE;
 import static android.content.Context.TELEPHONY_SERVICE;
 
@@ -59,7 +49,7 @@ public class DeviceUtil {
         TelephonyManager mTelephonyManager = null;
 
         public Builder() {
-            mTelephonyManager = (TelephonyManager) TheTang.getSingleInstance().getContext().getSystemService( TELEPHONY_SERVICE );
+            mTelephonyManager = (TelephonyManager) TheTang.getSingleInstance().getContext().getSystemService(TELEPHONY_SERVICE);
         }
 
         //private String main_imei = null; //主 imei
@@ -134,12 +124,12 @@ public class DeviceUtil {
             ]*/
 
         public Builder getDeviceType() {
-            addToObject( "device_type", 0 );
+            addToObject("device_type", 0);
             return this;
         }
 
         public Builder getAlias() {
-            addToObject( Common.alias, PreferencesManager.getSingleInstance().getData( Common.alias ) );
+            addToObject(Common.alias, PreferencesManager.getSingleInstance().getData(Common.alias));
             return this;
         }
 
@@ -150,7 +140,7 @@ public class DeviceUtil {
          */
         public Builder getDeviceName() {
             this.device_name = Build.DEVICE;
-            addToObject( "device_name", device_name );
+            addToObject("device_name", device_name);
             return this;
         }
 
@@ -160,8 +150,8 @@ public class DeviceUtil {
          * @return
          */
         public Builder getClientLastUpdateTime() {
-            this.client_last_update_time = PreferencesManager.getSingleInstance().getOtherData( "client_last_update_time" );
-            addToObject( "client_last_update_time", client_last_update_time );
+            this.client_last_update_time = PreferencesManager.getSingleInstance().getOtherData("client_last_update_time");
+            addToObject("client_last_update_time", client_last_update_time);
             return this;
         }
 
@@ -171,8 +161,8 @@ public class DeviceUtil {
          * @return
          */
         public Builder getAppSecurityPassword() {
-            this.app_security_password = PreferencesManager.getSingleInstance().getLockPassword( "password" );
-            addToObject( "app_security_password", app_security_password );
+            this.app_security_password = PreferencesManager.getSingleInstance().getLockPassword("password");
+            addToObject("app_security_password", app_security_password);
             return this;
         }
 
@@ -183,7 +173,7 @@ public class DeviceUtil {
          */
         public Builder getCpu() {
             this.cpu = android.os.Build.CPU_ABI;
-            addToObject( "cpu", cpu );
+            addToObject("cpu", cpu);
             return this;
         }
 
@@ -216,7 +206,7 @@ public class DeviceUtil {
 
             sd_card_serial_number = TheTang.getSingleInstance().getSDCardId();
 
-            addToObject( "sd_card_serial_number", sd_card_serial_number );
+            addToObject("sd_card_serial_number", sd_card_serial_number);
             return this;
         }
 
@@ -226,12 +216,12 @@ public class DeviceUtil {
          * @return
          */
         public Builder getUDID() {
-            if (PreferencesManager.getSingleInstance().getData( "udid" ) == null) {
+            if (PreferencesManager.getSingleInstance().getData("udid") == null) {
                 this.udid = UUIDGenerator.getUUID();
             } else {
-                this.udid = PreferencesManager.getSingleInstance().getData( "udid" );
+                this.udid = PreferencesManager.getSingleInstance().getData("udid");
             }
-            addToObject( "udid", udid );
+            addToObject("udid", udid);
             return this;
         }
 
@@ -242,26 +232,26 @@ public class DeviceUtil {
          */
         public Builder getWifiMac() {
             this.wifi_mac = getMacAddr();
-            addToObject( "wifi_mac", wifi_mac );
+            addToObject("wifi_mac", wifi_mac);
             return this;
         }
 
         private static String byte2hex(byte[] b, int length) {
-            StringBuffer hs = new StringBuffer( length );
+            StringBuffer hs = new StringBuffer(length);
             String stmp = "";
             int len = length;
             for (int n = 0; n < len; n++) {
-                stmp = Integer.toHexString( b[n] & 0xFF );
+                stmp = Integer.toHexString(b[n] & 0xFF);
                 if (stmp.length() == 1) {
-                    hs = hs.append( "0" ).append( stmp );
+                    hs = hs.append("0").append(stmp);
                 } else {
-                    hs = hs.append( stmp );
+                    hs = hs.append(stmp);
                 }
                 if (n != len - 1) {
-                    hs.append( ":" );
+                    hs.append(":");
                 }
             }
-            return String.valueOf( hs );
+            return String.valueOf(hs);
         }
 
         /**
@@ -270,9 +260,9 @@ public class DeviceUtil {
          * @return
          */
         public Builder getPowerStatus() {
-            BatteryManager batteryManager = (BatteryManager) TheTang.getSingleInstance().getContext().getSystemService( BATTERY_SERVICE );
-            this.power_status = String.valueOf( batteryManager.getIntProperty( BatteryManager.BATTERY_PROPERTY_CAPACITY ) );
-            addToObject( "power_status", power_status + "%" );
+            BatteryManager batteryManager = (BatteryManager) TheTang.getSingleInstance().getContext().getSystemService(BATTERY_SERVICE);
+            this.power_status = String.valueOf(batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY));
+            addToObject("power_status", power_status + "%");
             return this;
         }
 
@@ -286,7 +276,7 @@ public class DeviceUtil {
                 this.is_root = 1;
             }
 
-            addToObject( "is_root", is_root );
+            addToObject("is_root", is_root);
             return this;
         }
 
@@ -297,19 +287,19 @@ public class DeviceUtil {
          */
         public Builder getSdCardTotalCapacity() {
 
-            boolean sdCardExist = Environment.getExternalStorageState().equals( android.os.Environment.MEDIA_MOUNTED ); //判断sd卡是否挂载
+            boolean sdCardExist = Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED); //判断sd卡是否挂载
             if (!sdCardExist) {
                 this.sd_card_total_capacity = "";
                 return this;
             }
 
-            long storage = TheTang.getSingleInstance().getTotalSpace( "/mnt/ext_sdcard" );
+            long storage = DeviceUtils.getTotalSpace("/mnt/ext_sdcard");
             if (storage == 0) {
                 this.sd_card_total_capacity = "";
             } else {
-                this.sd_card_total_capacity = TheTang.getSingleInstance().formatFileSize( storage );
+                this.sd_card_total_capacity = ConvertUtils.formatFileSize(storage);
             }
-            addToObject( "sd_card_total_capacity", sd_card_total_capacity );
+            addToObject("sd_card_total_capacity", sd_card_total_capacity);
             return this;
         }
 
@@ -320,19 +310,20 @@ public class DeviceUtil {
          */
         public Builder getSdCardAvailableCapacity() {
 
-            boolean sdCardExist = Environment.getExternalStorageState().equals( android.os.Environment.MEDIA_MOUNTED ); //判断sd卡是否挂载
+            boolean sdCardExist = Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED); //判断sd卡是否挂载
             if (!sdCardExist) {
                 this.sd_card_available_capacity = "";
                 return this;
             }
 
-            long storage = TheTang.getSingleInstance().getAvailSpace( "/mnt/ext_sdcard" );
+//            long storage = TheTang.getSingleInstance().getAvailSpace( "/mnt/ext_sdcard" );
+            long storage = DeviceUtils.getAvailSpace("/mnt/ext_sdcard");
             if (storage == 0) {
                 this.sd_card_available_capacity = "";
             } else {
-                this.sd_card_available_capacity = TheTang.getSingleInstance().formatFileSize( storage );
+                this.sd_card_available_capacity = ConvertUtils.formatFileSize(storage);
             }
-            addToObject( "sd_card_available_capacity", sd_card_available_capacity );
+            addToObject("sd_card_available_capacity", sd_card_available_capacity);
             return this;
         }
 
@@ -342,9 +333,9 @@ public class DeviceUtil {
          * @return
          */
         public Builder getRomTotal() {
-            long storage = (long) TheTang.getSingleInstance().getTotalStorage();
-            this.rom_total_capacity = TheTang.getSingleInstance().formatFileSize( storage );
-            addToObject( "rom_total_capacity", rom_total_capacity );
+            long storage = (long) DeviceUtils.getTotalStorage();
+            this.rom_total_capacity = ConvertUtils.formatFileSize(storage);
+            addToObject("rom_total_capacity", rom_total_capacity);
             return this;
         }
 
@@ -354,9 +345,10 @@ public class DeviceUtil {
          * @return
          */
         public Builder getRomAvailable() {
-            long storage = (long) TheTang.getSingleInstance().getRemainStorage();
-            this.rom_available_capacity = TheTang.getSingleInstance().formatFileSize( storage );
-            addToObject( "rom_available_capacity", rom_available_capacity );
+//            long storage = (long) TheTang.getSingleInstance().getRemainStorage();
+            long storage = (long) DeviceUtils.getRemainStorage();
+            this.rom_available_capacity = ConvertUtils.formatFileSize(storage);
+            addToObject("rom_available_capacity", rom_available_capacity);
             return this;
         }
 
@@ -366,8 +358,8 @@ public class DeviceUtil {
          * @return
          */
         public Builder getCamera() {
-            this.camera = getCameraPixels( 0 );//根据不同的摄像头
-            addToObject( "camera", camera );
+            this.camera = getCameraPixels(0);//根据不同的摄像头
+            addToObject("camera", camera);
             return this;
         }
 
@@ -380,34 +372,34 @@ public class DeviceUtil {
         public static String getCameraPixels(int paramInt) {
             Camera localCamera = null;
 
-            String camera = PreferencesManager.getSingleInstance().getData( "camera" );
+            String camera = PreferencesManager.getSingleInstance().getData("camera");
             if (camera != null) {
                 return camera;
             }
 
             try {
-                localCamera = Camera.open( paramInt ); //在相机disable的情况下 会抛出异常
+                localCamera = Camera.open(paramInt); //在相机disable的情况下 会抛出异常
             } catch (Exception e) {
                 return null;
             }
 
             Camera.Parameters localParameters = localCamera.getParameters();
-            localParameters.set( "camera-id", 1 );
+            localParameters.set("camera-id", 1);
             List<Size> localList = localParameters.getSupportedPictureSizes();
             if (localList != null) {
                 int heights[] = new int[localList.size()];
                 int widths[] = new int[localList.size()];
                 for (int i = 0; i < localList.size(); i++) {
-                    Camera.Size size = (Size) localList.get( i );
+                    Camera.Size size = (Size) localList.get(i);
                     int sizehieght = size.height;
                     int sizewidth = size.width;
                     heights[i] = sizehieght;
                     widths[i] = sizewidth;
                 }
-                int pixels = getMaxNumber( heights ) * getMaxNumber( widths );
+                int pixels = getMaxNumber(heights) * getMaxNumber(widths);
                 localCamera.release();
-                PreferencesManager.getSingleInstance().setOtherData( "camera", String.valueOf( pixels / 10000 ) + " 万" );
-                return String.valueOf( pixels / 10000 ) + " 万";
+                PreferencesManager.getSingleInstance().setOtherData("camera", String.valueOf(pixels / 10000) + " 万");
+                return String.valueOf(pixels / 10000) + " 万";
             }
             return null;
         }
@@ -429,7 +421,7 @@ public class DeviceUtil {
          */
         public Builder getDeviceModel() {
             this.device_model = Build.MODEL;
-            addToObject( "device_model", device_model );
+            addToObject("device_model", device_model);
             return this;
         }
 
@@ -439,8 +431,8 @@ public class DeviceUtil {
          * @return
          */
         public Builder getBootTime() {
-            this.boot_time = TheTang.getSingleInstance().formatTimeLength( SystemClock.elapsedRealtime() );
-            addToObject( "boot_time", boot_time );
+            this.boot_time = ConvertUtils.formatTimeLength(SystemClock.elapsedRealtime());
+            addToObject("boot_time", boot_time);
             return this;
         }
 
@@ -468,7 +460,7 @@ public class DeviceUtil {
                 e.printStackTrace();
             }*/
 
-            addToObject( "bluetooth_mac_address", bluetooth_mac_address );
+            addToObject("bluetooth_mac_address", bluetooth_mac_address);
             return this;
         }
 
@@ -479,9 +471,9 @@ public class DeviceUtil {
          */
         public static String getMacAddr() {
             try {
-                List<NetworkInterface> all = Collections.list( NetworkInterface.getNetworkInterfaces() );
+                List<NetworkInterface> all = Collections.list(NetworkInterface.getNetworkInterfaces());
                 for (NetworkInterface nif : all) {
-                    if (!"wlan0".equalsIgnoreCase( nif.getName() )) {
+                    if (!"wlan0".equalsIgnoreCase(nif.getName())) {
                         continue;
                     }
 
@@ -492,11 +484,11 @@ public class DeviceUtil {
 
                     StringBuilder res1 = new StringBuilder();
                     for (byte b : macBytes) {
-                        res1.append( String.format( "%02X:", b ) );
+                        res1.append(String.format("%02X:", b));
                     }
 
                     if (res1.length() > 0) {
-                        res1.deleteCharAt( res1.length() - 1 );
+                        res1.deleteCharAt(res1.length() - 1);
                     }
                     return res1.toString();
                 }
@@ -515,7 +507,7 @@ public class DeviceUtil {
 
             if (deviceInfo != null && deviceInfo.size() > 0) {
                 for (int i = 0; i < (deviceInfo.size() >= Common.deviceInfo1.length ? Common.deviceInfo1.length : deviceInfo.size()); i++) {
-                    addToObject( Common.deviceInfo1[i], deviceInfo.get( i ) );
+                    addToObject(Common.deviceInfo1[i], deviceInfo.get(i));
                 }
             }
             return this;
@@ -526,17 +518,17 @@ public class DeviceUtil {
          *
          * @return
          */
-        public Builder getAllSystemApp() {//todo baii util app
+        public Builder getAllSystemApp(Context context) {//todo baii util app
 
             //获取Launcher Apps
-            List<LauncherActivityInfo> appList = TheTang.getSingleInstance().getLauncherApps();
+            List<LauncherActivityInfo> appList = AppUtils.getLauncherApps();
 
             List<LauncherActivityInfo> newAppList = new ArrayList<>();
             //去掉重复item
-            newAppList = TheTang.getSingleInstance().removeDuplicateWithOrder( appList );
+            newAppList = TheTang.getSingleInstance().removeDuplicateWithOrder(appList);
 
             JSONArray appArray = new JSONArray();
-            PackageManager mPackageManager = AppUtils.getPackageManager(TheTang.getSingleInstance().getContext());
+            PackageManager mPackageManager = context.getPackageManager();
 
             for (LauncherActivityInfo launcherActivityInfo : newAppList) {
                 JSONObject appObject = new JSONObject();
@@ -545,38 +537,37 @@ public class DeviceUtil {
 
                     PackageInfo packageInfo = null;
                     try {
-                        packageInfo = mPackageManager.getPackageInfo( packageName, 0 );
+                        packageInfo = mPackageManager.getPackageInfo(packageName, 0);
                     } catch (PackageManager.NameNotFoundException e) {
                         e.printStackTrace();
                     }
 
-                    appObject.put( "version", packageInfo.versionName );
+                    appObject.put("version", packageInfo.versionName);
 
                     try {
-                        appObject.put( "size", TheTang.getSingleInstance().queryPackageSize( packageName ) );
+                        appObject.put("size", AppUtils.getAppSize(context, packageName));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
 
-                    appObject.put( "name", packageInfo.applicationInfo.loadLabel( mPackageManager ) );
-                    appObject.put( "package_name", packageName );
+                    appObject.put("name", packageInfo.applicationInfo.loadLabel(mPackageManager));
+                    appObject.put("package_name", packageName);
 
-                    APPInfo appInfo = DatabaseOperate.getSingleInstance().queryAppInfo( packageName );
+                    APPInfo appInfo = DatabaseOperate.getSingleInstance().queryAppInfo(packageName);
                     if (appInfo != null) {
-                        appObject.put( "appId", appInfo.getAppId() );
-                        Log.d("baii", "app id " + appInfo.getAppId());
+                        appObject.put("appId", appInfo.getAppId());
                     } else {
-                        appObject.put( "appId", "" );
+                        appObject.put("appId", "");
                     }
 
-                    appObject.put( "last_update_time", packageInfo.lastUpdateTime );
+                    appObject.put("last_update_time", packageInfo.lastUpdateTime);
 
                     /**
                      * 设置当前应用为系统应用
                      */
-                    if (Common.packageName.equals( packageName )) {
-                        appObject.put( "type", "0" );
-                        appArray.put( appObject );
+                    if (Common.packageName.equals(packageName)) {
+                        appObject.put("type", "0");
+                        appArray.put(appObject);
                         continue;
                     }
                     /**
@@ -586,23 +577,23 @@ public class DeviceUtil {
                      * 2：用户安装应用
                      */
                     if ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) {
-                        appObject.put( "type", "0" );
+                        appObject.put("type", "0");
                     } else {
-                        if (DatabaseOperate.getSingleInstance().queryAppInfo( packageName ) != null) {
-                            appObject.put( "type", "1" );
+                        if (DatabaseOperate.getSingleInstance().queryAppInfo(packageName) != null) {
+                            appObject.put("type", "1");
                         } else {
-                            appObject.put( "type", "2" );
+                            appObject.put("type", "2");
                         }
                     }
 
-                    appArray.put( appObject );
+                    appArray.put(appObject);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
 
             try {
-                deviceObject.put( "apps", appArray );
+                deviceObject.put("apps", appArray);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -617,17 +608,17 @@ public class DeviceUtil {
          */
         public Builder getOperaterAbout() {//todo baii util phone
 
-            String[] imsis = TheTang.getSingleInstance().getSubscriberId();
+            String[] imsis = PhoneUtils.getSubscriberId(TheTang.getSingleInstance().getContext());
             String[] operaters = new String[2];
             if (imsis != null && imsis.length > 0) {
                 for (int i = 0; i < imsis.length; i++) {
                     if (imsis[i] != null) {
-                        if (imsis[i].startsWith( "46000" ) || imsis[i].startsWith( "46002" ) || imsis[i].startsWith( "46004" )
-                                || imsis[i].startsWith( "46007" ) || imsis[i].startsWith( "46008" )) {
+                        if (imsis[i].startsWith("46000") || imsis[i].startsWith("46002") || imsis[i].startsWith("46004")
+                                || imsis[i].startsWith("46007") || imsis[i].startsWith("46008")) {
                             operaters[i] = "中国移动";
-                        } else if (imsis[i].startsWith( "46001" ) || imsis[i].startsWith( "46006" ) || imsis[i].startsWith( "46009" ) || imsis[i].startsWith( "46010" )) {
+                        } else if (imsis[i].startsWith("46001") || imsis[i].startsWith("46006") || imsis[i].startsWith("46009") || imsis[i].startsWith("46010")) {
                             operaters[i] = "中国联通";
-                        } else if (imsis[i].startsWith( "46003" ) || imsis[i].startsWith( "46005" ) || imsis[i].startsWith( "46011" )) {
+                        } else if (imsis[i].startsWith("46003") || imsis[i].startsWith("46005") || imsis[i].startsWith("46011")) {
                             operaters[i] = "中国电信";
                         }
                     }
@@ -635,8 +626,8 @@ public class DeviceUtil {
             }
             this.main_operator_info = operaters[0];
             this.vice_operator_info = operaters[1];
-            addToObject( "main_operator_info", main_operator_info );
-            addToObject( "vice_operator_info", vice_operator_info );
+            addToObject("main_operator_info", main_operator_info);
+            addToObject("vice_operator_info", vice_operator_info);
             return this;
         }
 
@@ -646,11 +637,11 @@ public class DeviceUtil {
          * @return
          */
         public Builder getLine1Number() {//todo baii util phone
-            String[] nums = TheTang.getSingleInstance().getLine1Number();
+            String[] nums = PhoneUtils.getLine1Number(TheTang.getSingleInstance().getContext());
             this.main_phone_number = nums[0];
             this.vice_phone_number = nums[1];
-            addToObject( "main_phone_number", main_phone_number );
-            addToObject( "vice_phone_number", vice_phone_number );
+            addToObject("main_phone_number", main_phone_number);
+            addToObject("vice_phone_number", vice_phone_number);
             return this;
         }
 
@@ -667,9 +658,9 @@ public class DeviceUtil {
                     String mobileData = NetworkStatsHelper.getFlowData();//querySummaryForDevice, must be used in main thread for xiaomi
 
                     if (mobileData != null) {
-                        String[] datas = mobileData.split( "," );
+                        String[] datas = mobileData.split(",");
                         for (int i = 0; i < datas.length; i++) {
-                            addToObject( Common.mobileDatas[i], datas[i] );
+                            addToObject(Common.mobileDatas[i], datas[i]);
                         }
                     }
                 }
@@ -695,9 +686,9 @@ public class DeviceUtil {
      */
     private static void addToObject(String key, Object value) {
         try {
-            deviceObject.put( key, value );
+            deviceObject.put(key, value);
         } catch (JSONException e) {
-            LogUtil.writeToFile( TAG, e.toString() );
+            LogUtil.writeToFile(TAG, e.toString());
             e.printStackTrace();
         }
     }

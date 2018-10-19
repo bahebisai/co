@@ -4,16 +4,14 @@ import android.content.Context;
 import android.util.Log;
 
 import com.xiaomi.emm.definition.UrlConst;
+import com.xiaomi.emm.features.event.LoginEvent;
+import com.xiaomi.emm.features.http.LoginCallBack;
 import com.xiaomi.emm.features.http.RequestService;
 import com.xiaomi.emm.utils.DataParseUtil;
-import com.xiaomi.emm.features.http.LoginCallBack;
-import com.xiaomi.emm.features.event.LoginEvent;
 import com.xiaomi.emm.utils.LogUtil;
 import com.xiaomi.emm.utils.MDM;
-import com.xiaomi.emm.utils.TheTang;
 import com.xiaomi.emm.utils.UUIDGenerator;
 
-import cn.jpush.android.api.JPushInterface;
 import okhttp3.RequestBody;
 
 /**
@@ -26,17 +24,17 @@ import okhttp3.RequestBody;
 //todo baii impl remain for LoginCallBack
 public class LoginImpl extends BaseImpl<RequestService> {
 
-    Context context;
+    Context mContext;
     public LoginImpl(Context context) {
         super();
-        this.context = context;
+        this.mContext = context;
     }
 
     //登录
     public void login(String username, String passWord) {
         String uuid = UUIDGenerator.getUUID();
         LogUtil.writeToFile(TAG,"Login request!");
-        RequestBody body = DataParseUtil.loginToJson(username,passWord,MDM.getDeviceInfo());
+        RequestBody body = DataParseUtil.loginToJson(mContext, username, passWord, MDM.getDeviceInfo());
 
         if (mService != null) {
             LoginCallBack callBack = new LoginCallBack(new LoginEvent(uuid));

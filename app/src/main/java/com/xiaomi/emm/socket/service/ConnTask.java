@@ -29,6 +29,7 @@ import com.xiaomi.emm.socket.threadtaskpool.ThreadUtils;
 import com.xiaomi.emm.socket.time.StdAlarmImpl;
 import com.xiaomi.emm.socket.utils.StringFormatter;
 import com.xiaomi.emm.utils.LogUtil;
+import com.xiaomi.emm.utils.PhoneUtils;
 import com.xiaomi.emm.utils.PreferencesManager;
 import com.xiaomi.emm.utils.TheTang;
 import com.xiaomi.emm.view.activity.LoginActivity;
@@ -41,8 +42,6 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 
-
-
 /**
  * 后台长连接服务：
  *
@@ -51,6 +50,7 @@ import java.nio.ByteBuffer;
 public class ConnTask {
 	private static final String TAG = "ConnTask";
 
+	private Context mContext;
 	private TVBoxService m_service = null;
 	private TcpClient    m_client  = null;
 	private Bundle bundle;
@@ -136,6 +136,7 @@ public class ConnTask {
 	public ConnTask(TVBoxService service) {
 		super();
 		connTask = this;
+		mContext = service;
 		m_service = service;
 		StdAlarmImpl.init(m_service);
 
@@ -466,10 +467,9 @@ public class ConnTask {
 			stopReconnOpt();
 
 			Log.e(TAG,"没有网络所以不去连接长连接服务器"+"===="+msg);
-			int networkAvaliable = TheTang.getSingleInstance().getNetworkType();
+			int networkAvaliable = PhoneUtils.getNetworkType(TheTang.getSingleInstance().getContext());
 			//Log.e(TAG,"获取当前的网络状态:0：没有网络 1：WIFI网络 2：WAP网络 3：NET网络==="+networkAvaliable);
-			if ( TheTang.getSingleInstance().isNetworkConnected()){
-
+			if (PhoneUtils.isNetworkConnected(mContext)){
 				LogUtil.writeToFile(TAG,"有网络通的情况下重新连接长连接服务器"+networkAvaliable +"===="+msg);
 				Log.e(TAG,"有网络通的情况下有网络重新连接长连接服务器"+networkAvaliable +"===="+msg);
 				reconnect();
@@ -939,10 +939,6 @@ public class ConnTask {
 			intentService.putExtra( "bundle",bundle);
 			TheTang.getSingleInstance().getContext().startService( intentService );
 		*/
-
-
-
-
 		}
 	}
 
@@ -1073,7 +1069,7 @@ public class ConnTask {
 
 		String IPAddress = "";
 		InetAddress ReturnStr1 = null;
-		if ( TheTang.getSingleInstance().isNetworkConnected()) {
+		if (PhoneUtils.isNetworkConnected(mContext)) {
 			try {
 
 

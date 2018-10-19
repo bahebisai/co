@@ -15,6 +15,7 @@ import android.widget.ListView;
 
 import com.xiaomi.emm.R;
 import com.xiaomi.emm.features.lockscreen.NewsLifecycleHandler;
+import com.xiaomi.emm.utils.ConvertUtils;
 import com.xiaomi.emm.view.adapter.FileAdapter;
 import com.xiaomi.emm.base.BaseApplication;
 import com.xiaomi.emm.features.event.NotifyEvent;
@@ -137,7 +138,7 @@ public class FileUpdateActivity extends BaseActivity {
                 e.printStackTrace();
             }
         }
-        return TheTang.getSingleInstance().formatFileSize(size);
+        return ConvertUtils.formatFileSize(size);
     }
 
     @Override

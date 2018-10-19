@@ -76,7 +76,7 @@ public class AppStoreFragment extends BaseFragment {
                 Collections.reverse(list_info);
 
                 for (APPInfo appInfo : list_info) {
-                    PackageManager packageManager = AppUtils.getPackageManager(getContext());
+                    PackageManager packageManager = getContext().getPackageManager();
                     String version = null;
                     try {
                         PackageInfo info = packageManager.getPackageInfo( appInfo.getPackageName(), 0 );
@@ -90,7 +90,7 @@ public class AppStoreFragment extends BaseFragment {
                     appInfo.setVersion( version );
 
                     try {
-                        String size = TheTang.getSingleInstance().queryPackageSize(appInfo.getPackageName());
+                        String size = AppUtils.getAppSize(getContext(), appInfo.getPackageName());
                         appInfo.setSize( size );
 
                     } catch (Exception e) {

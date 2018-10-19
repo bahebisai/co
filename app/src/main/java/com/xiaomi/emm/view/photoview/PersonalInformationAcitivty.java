@@ -33,6 +33,7 @@ import com.xiaomi.emm.features.impl.PhotoUploadImpl;
 import com.xiaomi.emm.features.luban.OnCompressListener;
 import com.xiaomi.emm.features.luban.PhotoUploadListener;
 import com.xiaomi.emm.features.luban.PictureCompressionManager;
+import com.xiaomi.emm.utils.FileUtils;
 import com.xiaomi.emm.utils.LogUtil;
 import com.xiaomi.emm.utils.PreferencesManager;
 import com.xiaomi.emm.utils.TheTang;
@@ -359,7 +360,7 @@ public class PersonalInformationAcitivty extends BaseActivity {
 
                         long fileSize = 0;
                         try {
-                            fileSize = TheTang.getSingleInstance().getFileSizes(file);
+                            fileSize = file.length();
                         } catch (Exception e) {
                             e.printStackTrace();
                             deletePhotps(url);
@@ -385,7 +386,7 @@ public class PersonalInformationAcitivty extends BaseActivity {
                                     @Override
                                     public void run() {
                                         //TheTang.copyFile(file.getPath(),filePic_person.getPath());
-                                        TheTang.copyFile(file.getPath(), filePic_person.getPath());
+                                        FileUtils.copyFile(file.getPath(), filePic_person.getPath());
 
                                         runOnUiThread(new Runnable() {
                                             @Override

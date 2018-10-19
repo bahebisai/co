@@ -43,6 +43,7 @@ import android.support.v4.app.NotificationCompat;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import android.text.format.Formatter;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.widget.Toast;
@@ -245,114 +246,6 @@ public class TheTang {
         mLoginImpl.login(userName, passWord);
     }
 
-
-
-    /**
-     * 获得剩余存储
-     *
-     * @return
-     */
-    public float getRemainStorage() {//todo baii util device or phone
-        //外部存储大小
-        return getAvailSpace(Environment.getExternalStorageDirectory().getAbsolutePath());
-    }
-
-    /**
-     * 获得总存储
-     *
-     * @return
-     */
-    public float getTotalStorage() {//todo baii util device or phone
-        //外部存储大小
-        return getTotalSpace(Environment.getExternalStorageDirectory().getAbsolutePath());
-    }
-
-    /**
-     * 获得剩余存储
-     *
-     * @param path 根路径
-     * @return
-     */
-    public long getAvailSpace(String path) {//todo baii util device or phone
-        StatFs statfs = null;
-        try {
-            statfs = new StatFs(path);
-        } catch (Exception e) {
-            return 0;
-        }
-        long size = statfs.getBlockSize();//获取分区的大小
-        long count = statfs.getAvailableBlocks();//获取可用分区块的个数
-        return size * count;
-    }
-
-    /**
-     * 获得总存储
-     *
-     * @param path 根路径
-     * @return
-     */
-    public long getTotalSpace(String path) {//todo baii util device or phone
-        StatFs statfs = null;
-        try {
-            statfs = new StatFs(path);
-        } catch (Exception e) {
-            return 0;
-        }
-
-        long size = statfs.getBlockSize();//获取分区的大小
-        long count = statfs.getBlockCount();//获取分区块的个数
-        return size * count;
-    }
-
-    /**
-     * 获得应用的数据大小
-     *
-     * @param pkgName
-     * @return
-     * @throws Exception
-     */
-    static String appSize = null;
-
-    public String queryPackageSize(String pkgName) throws Exception {//todo baii util app
-
-        appSize = null;
-
-        if (pkgName != null) {
-
-            if (Build.VERSION.SDK_INT < 26) {
-                PackageManager mPackageManager = AppUtils.getPackageManager(mContext);  //得到pm对象
-                try {
-                    Method getPackageSizeInfo = mPackageManager.getClass().getMethod("getPackageSizeInfo", String.class, IPackageStatsObserver.class);
-                    getPackageSizeInfo.invoke(mPackageManager, pkgName, new IPackageStatsObserver.Stub() {
-                        @Override
-                        public void onGetStatsCompleted(PackageStats pStats, boolean succeeded) throws RemoteException { //异步执行
-                            if (succeeded && pStats != null) {
-                                appSize = TheTang.getSingleInstance().formatFileSize(pStats.codeSize
-                                        + pStats.dataSize + pStats.cacheSize);
-                            }
-                        }
-                    });
-                } catch (Exception ex) {
-                    Log.e(TAG, "NoSuchMethodException");
-                    ex.printStackTrace();
-                }
-            } else {
-                StorageStatsManager mStorageStatsManager = (StorageStatsManager) mContext.getSystemService(Context.STORAGE_STATS_SERVICE);
-                StorageManager mStorageManager = (StorageManager) mContext.getSystemService(Context.STORAGE_SERVICE);
-                UUID uuid = StorageManager.UUID_DEFAULT;
-                StorageStats mStorageStats = mStorageStatsManager.queryStatsForUid(uuid, getAppUid(pkgName));
-                appSize = TheTang.getSingleInstance().formatFileSize(
-                        mStorageStats.getAppBytes() + mStorageStats.getCacheBytes() + mStorageStats.getDataBytes());
-            }
-        }
-
-        if (appSize == null) {
-            appSize = "0B";
-        }
-
-        return appSize;
-    }
-
     /**
      * 月份与时间格式转换
      *
@@ -366,171 +259,6 @@ public class TheTang {
         return mSimpleDateFormat.format(date);
     }
 
-    /**
-     * 将时间转为时长
-     *
-     * @param time
-     * @return
-     */
-    public String formatTimeLength(long time) {//todo baii util time
-        String date = null;
-        String hour = null;
-        String minute = null;
-        String timeResult = null;
-
-        if (time > 24 * 3600 * 1000) {
-            date = time / (24 * 3600 * 1000) + "天";
-        }
-
-        time = time % (24 * 3600 * 1000);
-
-        if (time > 3600 * 1000) {
-            hour = time / (3600 * 1000) + "小时";
-        }
-
-        time = time % (3600 * 1000);
-
-        if (time > 60 * 1000) {
-            minute = time / (60 * 1000) + "分钟";
-        }
-
-        if (date != null) {
-            timeResult = date;
-        }
-
-        if (hour != null) {
-            if (timeResult == null) {
-                timeResult = hour;
-            } else {
-                timeResult += hour;
-            }
-        }
-
-        if (minute != null) {
-            if (timeResult == null) {
-                timeResult = minute;
-            } else {
-                timeResult += minute;
-            }
-        }
-
-        if (timeResult == null) {
-            timeResult = "0分钟";
-        }
-
-        return timeResult;
-    }
-
-    /**
-     * 带单位的数据格式转换
-     *
-     * @param fileS 文件大小  单位为byte
-     * @return
-     */
-    public String formatFileSize(long fileS) {//todo baii util file
-        DecimalFormat df = new DecimalFormat("#.00");
-        String fileSizeString = "";
-        String wrongSize = "0B";
-        if (fileS == 0) {
-            return wrongSize;
-        }
-        if (fileS < 1024) {
-            fileSizeString = df.format((double) fileS) + "B";
-        } else if (fileS < 1048576) {
-            fileSizeString = df.format((double) fileS / 1024) + "KB";
-        } else if (fileS < 1073741824) {
-            fileSizeString = df.format((double) fileS / 1048576) + "MB";
-        } else {
-            fileSizeString = df.format((double) fileS / 1073741824) + "GB";
-        }
-        return fileSizeString;
-    }
-
-    /**
-     * 数据单位转换
-     *
-     * @param fileS 文件大小  单位为byte
-     * @return
-     */
-    public String formatFile(long fileS) {//todo baii util file
-        DecimalFormat df = new DecimalFormat("#.00");
-        String fileSizeString = "";
-        String wrongSize = "";
-        if (fileS == 0) {
-            return wrongSize;
-        }
-        if (fileS < 1024) {
-            fileSizeString = df.format((double) fileS);//+ "B";
-        } else if (fileS < 1048576) {
-            fileSizeString = df.format((double) fileS / 1024); //+ "KB";
-        } else if (fileS < 1073741824) {
-            fileSizeString = df.format((double) fileS / 1048576); //+ "MB";
-        } else {
-            fileSizeString = df.format((double) fileS / 1073741824);//+ "GB";
-        }
-        return fileSizeString;
-    }
-
-    /**
-     * 获取数据单位
-     *
-     * @param size 文件大小  单位为byte
-     * @return
-     */
-    public String getUnit(float size) {//todo baii util file
-        String unit = "";
-        if (size < 1024) {
-            unit = "B";
-        } else if (size < 1048576) {
-            unit = "KB";
-        } else if (size < 1073741824) {
-            unit = "MB";
-        } else {
-            unit = "GB";
-        }
-        return unit;
-    }
-
-
-    /**
-     * 获取定位
-     */
-    public void getLocation() {//todo baii util ???
-        Intent service_intent = new Intent(mContext, LocationService.class);
-        startService(service_intent);
-    }
-
-    //获得当前设置的电话号码
-    public String getTelePhonyNumber() {//todo baii util phone
-        TelephonyManager telephonyManager = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
-        return telephonyManager.getLine1Number();
-    }
-
-    /**
-     * 获取文件大小
-     *
-     * @param file
-     * @return
-     * @throws Exception
-     */
-    public static long getFileSizes(File file) throws Exception {//todo baii util file
-        return file.length();
-    }
-
-    /**
-     * 获得文件后缀
-     *
-     * @param fileName
-     * @param node
-     * @return
-     */
-    public String getFileEnds(String fileName, String node) {//todo baii util file
-        if (fileName != null) {
-            int position = fileName.indexOf(node);
-            return fileName.substring(position + 1, fileName.length());
-        }
-        return null;
-    }
 
     /**
      * 获取已安装App信息
@@ -540,62 +268,6 @@ public class TheTang {
     public List<APPInfo> getInstallAppInfo() {//todo baii util app
         return DatabaseOperate.getSingleInstance().queryInstallAppInfo();
     }
-
-    /**
-     * 获得已安装的应用的图标
-     *
-     * @param info
-     * @return
-     */
-    public Drawable getAppIcon(ApplicationInfo info) {//todo baii util app
-        Drawable drawable = null;
-        PackageManager packageManager = AppUtils.getPackageManager(mContext);
-
-        drawable = info.loadIcon(packageManager);
-        return drawable;
-    }
-
-    /**
-     * 通过包名获得应用的图标
-     *
-     * @param packageName
-     * @return
-     */
-    public Drawable getAppIcon(String packageName) {//todo baii util app
-        PackageManager packageManager = AppUtils.getPackageManager(mContext);
-        ApplicationInfo info = null;
-        try {
-            info = packageManager.getApplicationInfo(packageName, 0);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        if (info == null) {
-            return null;
-        }
-
-        return info.loadIcon(packageManager);
-    }
-
-    /**
-     * 获得已安装的应用的名称
-     *
-     * @param packageName
-     * @return
-     */
-    public String getAppLabel(String packageName) {//todo baii util app
-        String label = null;
-        PackageManager packageManager = AppUtils.getPackageManager(mContext);
-
-        try {
-            PackageInfo packageInfo = packageManager.getPackageInfo(packageName, 0);
-            label = (String) packageManager.getApplicationLabel(packageInfo.applicationInfo);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        return label;
-    }
-
 
     /**
      * 获得线程池对象
@@ -757,7 +429,7 @@ public class TheTang {
             NotificationChannel channel = new NotificationChannel("notification", "notification", NotificationManager.IMPORTANCE_HIGH);
             channel.enableLights(true);
             channel.setLightColor(Color.RED);
-            ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel(channel);
+            ((NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel(channel);
             Notification notification = new Notification.Builder(mContext, "notification")
                     .setContentIntent(pendingIntent)
                     .setContentTitle(title)
@@ -765,11 +437,11 @@ public class TheTang {
 //                    .setDefaults(Notification.DEFAULT_SOUND)
                     .setContentText(content)
                     .build();
-            ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).notify(id, notification);
+            ((NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE)).notify(id, notification);
 
         } else {
 
-            NotificationManager notifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationManager notifyManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
             //实例化NotificationCompat.Builde并设置相关属性
             NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext)
                     .setContentIntent(pendingIntent)
@@ -789,7 +461,7 @@ public class TheTang {
 
     public void cancelNotification(int id) {//todo baii util ???
 
-        ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).cancel(id);
+        ((NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE)).cancel(id);
     }
 
     /**
@@ -817,7 +489,7 @@ public class TheTang {
      * @param net_id
      * @return
      */
-    public String getNetworkInfo(String net_id) {//todo baii util device or phone
+    public String getNetworkInfo(String net_id) {//todo baii util ???
         if ("0".equals(net_id)) {
             return mContext.getResources().getString((int) Common.net_info[0]);
         }
@@ -830,7 +502,7 @@ public class TheTang {
      * @param un_id
      * @return
      */
-    public String getUninstallInfo(String un_id) {//todo baii util app
+    public String getUninstallInfo(String un_id) {//todo baii util ???
         if ("0".equals(un_id)) {
             return mContext.getResources().getString((int) Common.uninstall_info[0]);
         }
@@ -877,15 +549,7 @@ public class TheTang {
                 .post(new StrategeEvent());
     }
 
-    /**
-     * 获取系统服务
-     *
-     * @param service
-     * @return
-     */
-    public Object getSystemService(String service) {
-        return mContext.getSystemService(service);
-    }
+
 
     /**
      * 获取Application上下文
@@ -911,8 +575,8 @@ public class TheTang {
          */
         for (String name : names) {
             try {
-                ApplicationInfo applicationInfo = AppUtils.getPackageManager(mContext).getApplicationInfo(name, 0);
-                deny_apps.put((String) AppUtils.getPackageManager(mContext).getApplicationLabel(applicationInfo), name);
+                ApplicationInfo applicationInfo = mContext.getPackageManager().getApplicationInfo(name, 0);
+                deny_apps.put((String) mContext.getPackageManager().getApplicationLabel(applicationInfo), name);
             } catch (PackageManager.NameNotFoundException e) {
                 e.printStackTrace();
             }
@@ -1022,24 +686,7 @@ public class TheTang {
         DatabaseOperate.getSingleInstance().addAppWhiteList(appBlackWhiteData.appList);
     }
 
-    /**
-     * 获得SD卡cid
-     *
-     * @return
-     */
-    public String getSdcardCid() {//todo baii util device
-        Object localOb = null; // SD Card ID
-        String sd_cid = null;
-        try {
-            localOb = new FileReader("/sys/block/mmcblk1/device/" + "cid");
-            sd_cid = new BufferedReader((Reader) localOb).readLine();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return sd_cid;
-    }
+
 
     /**
      * 解决List重复
@@ -1076,49 +723,6 @@ public class TheTang {
             }
         }
         return newList;
-    }
-
-    /**
-     * 获取Launcher Apps
-     *
-     * @return
-     */
-    public List getLauncherApps() {//todo baii util app
-        LauncherApps apps = (LauncherApps) TheTang.getSingleInstance().getContext().getSystemService(Context.LAUNCHER_APPS_SERVICE);
-
-        UserManager mUserManager = (UserManager) TheTang.getSingleInstance().getContext().getSystemService(Context.USER_SERVICE);
-
-        final List<UserHandle> profiles = mUserManager.getUserProfiles();
-
-        //单用户情况下
-        UserHandle user = profiles.get(0);
-
-        return apps.getActivityList(null, user);
-    }
-
-    /**
-     * 获得Launcher非系统app
-     *
-     * @return
-     */
-    public List getLauncherNoSystemApp() {//todo baii util app
-        List<LauncherActivityInfo> appList = getLauncherApps();
-
-        if (appList == null) {
-            return null;
-        }
-
-        List<LauncherActivityInfo> apps = new ArrayList<>();
-
-        for (LauncherActivityInfo launcherActivityInfo : appList) {
-            if ((launcherActivityInfo.getApplicationInfo().flags & ApplicationInfo.FLAG_SYSTEM) != 0) {
-                apps.add(launcherActivityInfo);
-            }
-        }
-
-        appList.removeAll(apps);
-
-        return appList;
     }
 
     /**
@@ -1190,162 +794,6 @@ public class TheTang {
         }
     }
 
-    public double x_pi = 3.14159265358979324 * 3000.0 / 180.0;
-
-    /**
-     * 火星坐标系 (GCJ-02) 与百度坐标系 (BD-09) 的转换算法 将 GCJ-02 坐标转换成 BD-09 坐标
-     *
-     * @param lat
-     * @param lon
-     */
-    public double[] gcj02_To_Bd09(double lat, double lon) {//todo baii util coor
-        double x = lon, y = lat;
-        //DecimalFormat df = new DecimalFormat("######.000000");
-        double z = Math.sqrt(x * x + y * y) + 0.00002 * Math.sin(y * x_pi);
-        double theta = Math.atan2(y, x) + 0.000003 * Math.cos(x * x_pi);
-        double tempLon = z * Math.cos(theta) + 0.0065;
-        double tempLat = z * Math.sin(theta) + 0.006;
-        double[] gps = {/*Double.parseDouble( df.format(*/ tempLat /*) )*/, /*Double.parseDouble( df.format( */tempLon /*) )*/};
-        return gps;
-    }
-
-    /**
-     * * 火星坐标系 (GCJ-02) 与百度坐标系 (BD-09) 的转换算法 * * 将 BD-09 坐标转换成GCJ-02 坐标 * * @param
-     * bd_lat * @param bd_lon * @return
-     */
-    public double[] bd09_To_Gcj02(double lat, double lon) {//todo baii util coor
-        //DecimalFormat df = new DecimalFormat("######.000000");
-        double x = lon - 0.0065, y = lat - 0.006;
-        double z = Math.sqrt(x * x + y * y) - 0.00002 * Math.sin(y * x_pi);
-        double theta = Math.atan2(y, x) - 0.000003 * Math.cos(x * x_pi);
-        double tempLon = z * Math.cos(theta);
-        double tempLat = z * Math.sin(theta);
-        double[] gps = {tempLat, tempLon};
-        return gps;
-    }
-
-    /**
-     * 获取ResponseBody的内容
-     *
-     * @param response
-     * @return
-     */
-    public String getResponseBodyString(Response<ResponseBody> response) {//todo baii util http ???
-        ResponseBody body = (ResponseBody) response.body();
-        Log.w(TAG, "response body is null!----" + response.code());
-
-        if (body == null) {
-            LogUtil.writeToFile(TAG, "response body is null!" + response.code());
-            return null;
-        }
-
-        String content = null;
-
-        try {
-            content = body.string();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return content;
-    }
-
-
-    /**
-     * 判断发送是否成功
-     *
-     * @return
-     */
-    public boolean whetherSendSuccess(String content) {//todo baii util http ???
-
-        LogUtil.writeToFile(TAG, "content = " + content);
-
-        if (TextUtils.isEmpty(content)) {
-            return false;
-        }
-
-        JSONObject object = null;
-        int resultCode = 0;
-
-        try {
-            object = new JSONObject(content);
-            if (object == null) {
-                LogUtil.writeToFile(TAG, "body object is null!");
-                return false;
-            }
-            resultCode = Integer.valueOf(object.getString("result"));
-            LogUtil.writeToFile(TAG, "resultCode = " + resultCode);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        if (resultCode == 200) {
-            return true;
-        }
-
-        return false;
-    }
-
-
-    /**
-     * 判断发送是否成功
-     *
-     * @return
-     */
-    public boolean whetherSendSuccess(Response<ResponseBody> response) {//todo baii util http ???
-
-        ResponseBody body = (ResponseBody) response.body();
-        //todo baii response.isSuccessful() to replace this method
-        Log.d("baii", "response body is " + body.toString());
-        Log.w(TAG, "response body is null!----" + response.code());
-        LogUtil.writeToFile(TAG, "response body is null!----" + response.code());
-        if (body == null) {
-            LogUtil.writeToFile(TAG, "response body is null!" + response.code());
-            return false;
-        }
-
-        JSONObject object = null;
-        int resultCode = 0;
-
-        try {
-            object = new JSONObject(body.string());
-            if (object == null) {
-                LogUtil.writeToFile(TAG, "body object is null!");
-                return false;
-            }
-            resultCode = Integer.valueOf(object.getString("result"));
-            LogUtil.writeToFile(TAG, "resultCode = " + resultCode);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        if (resultCode == 200) {
-            return true;
-        }
-
-        return false;
-    }
-
-
-    /**
-     * 获取应用UID
-     *
-     * @param packageName
-     * @return
-     */
-    public int getAppUid(String packageName) {//todo baii util app
-        PackageManager packageManager = AppUtils.getPackageManager(mContext);
-        PackageInfo packageInfo = null;
-        try {
-            packageInfo = packageManager.getPackageInfo(packageName, 0);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        int uid = packageInfo.applicationInfo.uid;
-        return uid;
-    }
 
     /**
      * 判断用户访问权限的状态
@@ -1379,207 +827,7 @@ public class TheTang {
         preferencesManager.setComplianceData(Common.securityChrome, "true");
         preferencesManager.setComplianceData(Common.securityChrome_name, securityChromeData.sec_name);
         preferencesManager.setComplianceData(Common.securityChrome_id, securityChromeData.sec_id);
-        preferencesManager.setComplianceData(Common.securityChrome_list, TheTang.getSingleInstance().formatStringFromMap(securityChromeData.sec_white_list));
-    }
-
-    /**
-     * 提取Host
-     *
-     * @param url
-     * @return
-     */
-    public String getHost(String url) {//todo baii util http
-        Pattern p = Pattern.compile("(http://|https://)?([^/]*)", Pattern.CASE_INSENSITIVE);
-        Matcher m = p.matcher(url);
-        return m.find() ? m.group(2) : url;
-    }
-
-    /**
-     * 获取网页图标url
-     *
-     * @param url
-     * @return
-     */
-    public String getUrlForWebClip(String url) {//todo baii util http
-        Document doc = null;
-        String web_url = null;
-
-        if (url.contains("www")) {
-            url = url.replaceFirst("www", "wap");
-        } else {
-            url = url.replaceFirst("//", "//wap.");
-        }
-
-        Log.w(TAG, "getUrlForWebClip：" + url);
-
-        doc = getUrl(url);
-
-        if (doc == null) {
-            return null;
-        }
-
-        Elements element = doc.select("head").select("link");
-        for (Element links : element) {
-            String target = links.attr("rel").toString();
-
-            if (target != null) {
-                if ("shortcut icon".equals(target.toLowerCase())) {
-                    web_url = links.attr("href").toString();
-                    break;
-                }
-            }
-        }
-        Log.w("MainActivity", url);
-
-        return web_url;
-    }
-
-    private Document getUrl(String url) {
-        Document doc = null;
-
-        try {
-            doc = Jsoup.connect(url).get();//timeout(5000).post();
-        } catch (Exception e) {
-
-        }
-        return doc;
-    }
-
-    /**
-     * 将Map转String
-     *
-     * @param data
-     */
-    public String formatStringFromMap(Map<String, String> data) {//todo baii util convert
-
-        if (data == null)
-            return null;
-
-        JSONArray mJsonArray = new JSONArray();
-        Iterator<Map.Entry<String, String>> iterator = data.entrySet().iterator();
-
-        JSONObject object = new JSONObject();
-
-        while (iterator.hasNext()) {
-            Map.Entry<String, String> entry = iterator.next();
-            try {
-                object.put(entry.getKey(), entry.getValue());
-            } catch (JSONException e) {
-
-            }
-        }
-        mJsonArray.put(object);
-        return mJsonArray.toString();
-    }
-
-    /**
-     * String转Map
-     *
-     * @param result
-     * @return
-     */
-    public Map<String, String> formatMapFromString(String result) {//todo baii util convert
-
-        if (result == null)
-            return null;
-
-        Map<String, String> data = new HashMap<String, String>();
-
-        try {
-            JSONArray array = new JSONArray(result);
-            for (int i = 0; i < array.length(); i++) {
-                JSONObject itemObject = array.getJSONObject(i);
-                JSONArray names = itemObject.names();
-                if (names != null) {
-                    for (int j = 0; j < names.length(); j++) {
-                        String name = names.getString(j);
-                        String value = itemObject.getString(name);
-                        data.put(name, value);
-                    }
-                }
-            }
-        } catch (JSONException e) {
-            LogUtil.writeToFile(TAG, " formatMapFromString: " + e.getCause().toString());
-        }
-        return data;
-    }
-
-    // 流量转化
-    public String convertTraffic(long traffic) {//todo baii util convert or phone
-        BigDecimal trafficKB;
-        BigDecimal trafficMB;
-        BigDecimal trafficGB;
-
-        BigDecimal temp = new BigDecimal(traffic);
-        BigDecimal divide = new BigDecimal(1000);
-        trafficKB = temp.divide(divide, 2, 1);
-        if (trafficKB.compareTo(divide) > 0) {
-            trafficMB = trafficKB.divide(divide, 2, 1);
-            if (trafficMB.compareTo(divide) > 0) {
-                trafficGB = trafficMB.divide(divide, 2, 1);
-                return trafficGB.doubleValue() + "GB";
-            } else {
-                return trafficMB.doubleValue() + "MB";
-            }
-        } else {
-            return trafficKB.doubleValue() + "KB";
-        }
-    }
-
-
-    public void noticDilag(Activity activity) {//todo baii util ???
-        if (getNetworkType() == 0 || getNetworkType() == 1) {
-            return;
-        }
-
-
-        if (BaseApplication.getNewsLifecycleHandler().isSameClassName(Lock2Activity.class.getSimpleName()) || BaseApplication.getNewsLifecycleHandler().isSameClassName(InitActivity.class.getSimpleName())) {
-            return;
-
-        }
-
-        if (TheTang.getSingleInstance().getUsageStats()) {
-            long quota = preferencesManager.getTraffictotal("quota");
-            NetworkStatsManager networkStatsManager = (NetworkStatsManager) getContext().getSystemService(NETWORK_STATS_SERVICE);
-            final NetworkStatsHelper networkStatsHelper = new NetworkStatsHelper(networkStatsManager);
-            if (quota > 0 && (quota * 1024 * 1024) < (networkStatsHelper.getAllMonthMobile(getContext(), null))) {
-                if (0 == (preferencesManager.getTraffictotal("quota_flag"))) {
-                    if (builder == null) {
-
-                        builder = new AlertDialog.Builder(activity, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
-                        final AlertDialog normalDialog = builder.create();
-                    }
-
-                    builder.setIcon(R.drawable.dingzhi);
-                    builder.setTitle("额定流量");
-                    builder.setMessage("您当前的移动流量为" + TheTang.getSingleInstance().convertTraffic(networkStatsHelper.getAllMonthMobile(getContext(), null)) + ",已经超过设置的额定移动流量" + quota + "M,是否关闭移动数据? \n  ");
-                    builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            MDM.openDataConnectivity(false);
-                            preferencesManager.setTraffictotal("quota_flag_s", 0);
-                        }
-                    }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                            preferencesManager.removeTraffictotal("quota");
-                            preferencesManager.setTraffictotal("quota_flag", 1);
-                            preferencesManager.setTraffictotal("quota_flag_s", 0);
-                        }
-                    });
-
-                    builder.setCancelable(false);
-                    if (builder != null && preferencesManager.getTraffictotal("quota_flag_s") != 1) {
-                        preferencesManager.setTraffictotal("quota_flag_s", 1);
-                        AlertDialog dialog = builder.show();
-                    }
-
-                }
-
-            }
-
-        }
+        preferencesManager.setComplianceData(Common.securityChrome_list, ConvertUtils.formatStringFromMap(securityChromeData.sec_white_list));
     }
 
     /**
@@ -1591,86 +839,6 @@ public class TheTang {
         preferencesManager.setSettingData(Common.setting_help, settingAboutData.messageForHelp);
         preferencesManager.setSettingData(Common.setting_agreement, settingAboutData.agreementLicense);
         preferencesManager.setSettingData(Common.setting_stand_by, settingAboutData.supportContent);
-    }
-
-    /**
-     * 方法描述：判断某一应用是否正在运行
-     *
-     * @param packageName 应用的包名
-     * @return true 表示正在运行，false表示没有运行
-     */
-    public boolean isAppRunning(String packageName) {//todo baii util app
-        ActivityManager am = (ActivityManager) getContext().getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningTaskInfo> list = am.getRunningTasks(100);
-        if (list.size() <= 0) {
-            return false;
-        }
-        for (ActivityManager.RunningTaskInfo info : list) {
-            if (info.baseActivity.getPackageName().equals(packageName)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * 方法描述：判断某一Service是否正在运行
-     *
-     * @param serviceName Service的全路径： 包名 + service的类名
-     * @return true 表示正在运行，false 表示没有运行
-     */
-    public boolean isServiceRunning(String serviceName) {//todo baii util ??? or app
-        ActivityManager am = (ActivityManager) getContext().getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningServiceInfo> runningServiceInfos = am.getRunningServices(200);
-        if (runningServiceInfos.size() <= 0) {
-            return false;
-        }
-        for (ActivityManager.RunningServiceInfo serviceInfo : runningServiceInfos) {
-            if (serviceInfo.service.getClassName().equals(serviceName)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * 获得sim卡imsi
-     *
-     * @return
-     */
-    public String[] getSubscriberId() {//todo baii util device or phone
-        String[] imsis = new String[2];
-        TelephonyManager telephonyManager = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
-        try {
-            Method getSubscriberId = telephonyManager.getClass().getMethod("getSubscriberId", int.class);
-            if (getSubscriberId != null) {
-                imsis[0] = (String) getSubscriberId.invoke(telephonyManager, 0);
-                imsis[1] = (String) getSubscriberId.invoke(telephonyManager, 1);
-            }
-        } catch (Exception e) {
-            LogUtil.writeToFile(TAG, "getSimSerialNumber " + e.toString());
-        }
-        return imsis;
-    }
-
-    /**
-     * 获得电话号码
-     *
-     * @return
-     */
-    public String[] getLine1Number() {//todo baii util phone
-        String[] nums = new String[2];
-        TelephonyManager telephonyManager = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
-        try {
-            Method getLine1Number = telephonyManager.getClass().getMethod("getLine1Number", int.class);
-            if (getLine1Number != null) {
-                nums[0] = (String) getLine1Number.invoke(telephonyManager, 0);
-                nums[1] = (String) getLine1Number.invoke(telephonyManager, 1);
-            }
-        } catch (Exception e) {
-            LogUtil.writeToFile(TAG, "getSimSerialNumber " + e.toString());
-        }
-        return nums;
     }
 
     /**
@@ -1717,136 +885,6 @@ public class TheTang {
         });
     }
 
-    /**
-     * 复制单个文件
-     *
-     * @param oldPath String 原文件路径 如：c:/fqf.txt
-     * @param newPath String 复制后路径 如：f:/fqf.txt
-     * @return boolean
-     */
-    public static boolean copyFile(String oldPath, String newPath) {//todo baii util file
-        if (TextUtils.isEmpty(oldPath) && TextUtils.isEmpty(newPath)) {
-            return false;
-        }
-
-        try {
-            int bytesum = 0;
-            int byteread = 0;
-            File oldfile = new File(oldPath);
-            if (oldfile.exists()) { //文件存在时
-                InputStream inStream = new FileInputStream(oldPath); //读入原文件
-                FileOutputStream fs = new FileOutputStream(newPath);
-                byte[] buffer = new byte[1444];
-                int length;
-                while ((byteread = inStream.read(buffer)) != -1) {
-                    bytesum += byteread; //字节数 文件大小
-                    fs.write(buffer, 0, byteread);
-                }
-                inStream.close();
-
-            }
-        } catch (Exception e) {
-            Log.e(TAG, "复制单个文件操作出错");
-            e.printStackTrace();
-            return false;
-
-        }
-
-        return true;
-    }
-
-    /**
-     * 更换文件名
-     *
-     * @param basePath
-     * @param oldName
-     * @param newName
-     */
-    public void renameFile(String basePath, String oldName, String newName) {//todo baii util file
-        File mFile = new File(basePath + File.separator + oldName);
-        mFile.renameTo(new File(basePath + File.separator + newName));
-    }
-
-    /**
-     * 启动NetWorkChangeService
-     */
-    public void startNetWorkService() {//todo baii util ???
-        Intent intentService = new Intent(mContext, NetWorkChangeService.class);
-        startService(intentService);
-    }
-
-    /**
-     * 网络是否已经连接
-     */
-    public boolean isNetworkConnected() {//todo baii util phone
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo ni = cm.getActiveNetworkInfo();
-        return ni != null && ni.isConnected();
-    }
-
-    /**
-     * 判断是否有网络连接
-     *
-     * @param context
-     * @return
-     */
-    public boolean isNetworkConnected(Context context) {//todo baii util phone
-        if (context != null) {
-            ConnectivityManager mConnectivityManager = (ConnectivityManager) context.getSystemService(
-                    Context.CONNECTIVITY_SERVICE);
-            NetworkInfo mNetworkInfo = mConnectivityManager.getActiveNetworkInfo();
-
-            //  NetworkCapabilities networkCapabilities = mConnectivityManager.getNetworkCapabilities(mConnectivityManager.getActiveNetwork());
-
-            //  boolean b = networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED);
-
-            //  Log.i("Avalible", "NetworkCapalbilities:"+networkCapabilities.toString()+"  hasCapability=="+b);
-            if (mNetworkInfo != null) {
-                return mNetworkInfo.isAvailable();
-            }
-        }
-
-
-        return false;
-    }
-
-    /**
-     * 是否有可用网络
-     */
-    public boolean isNetworkAvaliable() {//todo baii util phone
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo ni = cm.getActiveNetworkInfo();
-        return ni != null && ni.isConnectedOrConnecting();
-    }
-
-    /**
-     * 获取当前的网络状态: 0：没有网络 1：WIFI网络 2：WAP网络 3：NET网络
-     *
-     * @return
-     */
-    public int getNetworkType() {//todo baii util phone
-        int netType = 0;
-        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        if (networkInfo == null) {
-            return netType;
-        }
-        int nType = networkInfo.getType();
-        if (nType == ConnectivityManager.TYPE_MOBILE) {
-            String extraInfo = networkInfo.getExtraInfo();
-            if (!TextUtils.isEmpty(extraInfo)) {
-                if ("cmnet".equals(extraInfo.toLowerCase())) {
-                    netType = 3;
-                } else {
-                    netType = 2;
-                }
-            }
-        } else if (nType == ConnectivityManager.TYPE_WIFI) {
-            netType = 1;
-        }
-        return netType;
-    }
-
 
     /**
      * 获得状态栏高度
@@ -1870,205 +908,6 @@ public class TheTang {
         return mStatusHeight;
     }
 
-    /**
-     * 获取应用版本号
-     *
-     * @param packageName
-     * @return
-     */
-    public String getAppVersion(String packageName) {//todo baii util app
-        String version = null;
-
-        try {
-            version = mContext.getPackageManager().getPackageInfo(packageName, 0).versionName;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        return version;
-    }
-
-    public String getImei() {//todo baii util device
-        TelephonyManager telephonyManager = (TelephonyManager) mContext.getSystemService(mContext.TELEPHONY_SERVICE);
-        String imei = telephonyManager.getImei(0);
-        LogUtil.writeToFile(TAG, "getImei1 = " + imei);
-        return imei;
-    }
-
-    public String getImei1() {//todo baii util device
-        TelephonyManager telephonyManager = (TelephonyManager) mContext.getSystemService(mContext.TELEPHONY_SERVICE);
-        String imei = telephonyManager.getImei(1);
-        LogUtil.writeToFile(TAG, "getImei2 = " + imei);
-        return imei;
-    }
-
-    //获得Ram
-    public String getTotalRam() {//GB//todo baii util device
-        String path = "/proc/meminfo";
-        String firstLine = null;
-        int totalRam = 0;
-        try {
-            FileReader fileReader = new FileReader(path);
-            BufferedReader br = new BufferedReader(fileReader, 8192);
-            firstLine = br.readLine().split("\\s+")[1];
-            br.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if (firstLine != null) {
-            totalRam = (int) Math.ceil((new Float(Float.valueOf(firstLine) / (1024 * 1024)).doubleValue()));
-        }
-
-        return totalRam + "GB";//返回1GB/2GB/3GB/4GB
-    }
-
-    //获得手机分辨率
-    public String getResolution() {//todo baii util device or view
-        DisplayMetrics mDisplayMetrics = mContext.getResources().getDisplayMetrics();
-        String resolution = mDisplayMetrics.widthPixels + "*" + mDisplayMetrics.heightPixels;
-        return resolution;
-    }
-
-    //获得厂商
-    public String getManufacturers() {//todo baii util device
-        return Build.BRAND;
-    }
-
-    //获得设备型号
-    public String getModel() {//todo baii util device
-        return Build.MODEL;
-    }
-
-    //获得手机版本号
-    public String getAndroidVersion() {//todo baii util device
-        return Build.VERSION.RELEASE;
-    }
-
-    //获得系统版本
-    public String getSystemVersion() {//todo baii util device
-        //  return Build.DISPLAY;
-        return Build.VERSION.RELEASE;
-    }
-
-    public String getIccid() {//todo baii util device
-        String iccid = null;
-        TelephonyManager telephonyManager = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
-        try {
-            Method getSimSerialNumber = telephonyManager.getClass().getMethod("getSimSerialNumber", int.class);
-            if (getSimSerialNumber != null) {
-                iccid = (String) getSimSerialNumber.invoke(telephonyManager, 0);
-            }
-        } catch (Exception e) {
-            LogUtil.writeToFile(TAG, "getSimSerialNumber1 " + e.toString());
-        }
-        return iccid;
-    }
-
-    public String getIccid1() {//todo baii util device
-        String iccid = null;
-        TelephonyManager telephonyManager = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
-        try {
-            Method getSimSerialNumber = telephonyManager.getClass().getMethod("getSimSerialNumber", int.class);
-            if (getSimSerialNumber != null) {
-                iccid = (String) getSimSerialNumber.invoke(telephonyManager, 1);
-            }
-        } catch (Exception e) {
-            LogUtil.writeToFile(TAG, "getSimSerialNumber2 " + e.toString());
-        }
-        return iccid;
-    }
-
-
-    public String getIccid2() {//todo baii util device
-        String iccid = null;
-        //   List<SubscriptionInfo> list = SubscriptionManager.from(mContext).getActiveSubscriptionInfoList();
-        try {
-
-            Method getSubId = SubscriptionManager.class.getMethod("getSubId", int.class);
-            //   Log.w(TAG," ---list.sub= "+list.get(0).getSimSlotIndex());
-            int[] sub = (int[]) getSubId.invoke(null, 1 /*list.get(0).getSimSlotIndex()*/);
-            if (sub != null) {
-                for (int i = 0; i < sub.length; i++) {
-                    Log.w(TAG, "---sub= " + sub[i]);
-
-                    //  String iccid1 = null;
-                    TelephonyManager telephonyManager = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
-                    try {
-                        Method getSimSerialNumber = telephonyManager.getClass().getMethod("getSimSerialNumber", int.class);
-                        if (getSimSerialNumber != null) {
-                            iccid = (String) getSimSerialNumber.invoke(telephonyManager, sub[i]);
-                        }
-                    } catch (Exception e) {
-                        LogUtil.writeToFile(TAG, "getSimSerialNumber2 " + e.toString());
-                    }
-                    Log.w(TAG, " getIccid2-2 =" + iccid);
-                }
-            }
-        } catch (Exception e) {
-            LogUtil.writeToFile(TAG, "getSimSerialNumber " + e.toString());
-        }
-        return iccid;
-    }
-
-    /**
-     * 获得sim卡imsi1
-     *
-     * @return
-     */
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP_MR1)
-    public String getSubscriberId1() {//todo baii util device
-        String imsi = null;
-        TelephonyManager telephonyManager = (TelephonyManager) mContext.getSystemService(TELEPHONY_SERVICE);
-        try {
-            Method getSubId = SubscriptionManager.class.getMethod("getSubId",  int.class);
-            //参数是卡槽1
-            int[] sub= (int[]) getSubId.invoke(null,0);
-            if (sub !=null) {
-                for (int i = 0; i < sub.length; i++) {
-                    // Log.w(TAG, "---sub= " + sub[i]);
-                    Method getSubscriberId = telephonyManager.getClass()
-                            .getMethod("getSubscriberId", int.class);
-                    if (getSubscriberId != null) {
-                        imsi = (String) getSubscriberId.invoke(telephonyManager, sub[i]);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            LogUtil.writeToFile(TAG, "getSimSerialNumber " + e.toString());
-        }
-        Log.w(TAG, "getSubscriberId1 " + imsi);
-        return imsi;
-    }
-
-    /**
-     * 获得sim卡imsi2
-     *
-     * @return
-     */
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP_MR1)
-    public String getSubscriberId2() {//todo baii util device
-        String imsi = null;
-        TelephonyManager telephonyManager = (TelephonyManager) mContext.getSystemService(
-                TELEPHONY_SERVICE);
-        try {
-            Method getSubId = SubscriptionManager.class.getMethod("getSubId",  int.class);
-            //参数是卡槽2
-            int[] sub= (int[]) getSubId.invoke(null,1);
-            if (sub !=null) {
-                for (int i = 0; i < sub.length; i++) {
-                    Log.w(TAG, "---sub= " + sub[i]);
-
-                    Method getSubscriberId = telephonyManager.getClass().getMethod("getSubscriberId", int.class);
-                    if (getSubscriberId != null) {
-                        imsi = (String) getSubscriberId.invoke(telephonyManager, sub[i]);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            LogUtil.writeToFile(TAG, "getSimSerialNumber " + e.toString());
-        }
-        Log.w(TAG, "getSubscriberId2 " + imsi);
-        return imsi;
-    }
 
     /**
      * 获取文件中的数据，转字符，并添加到String
@@ -2150,7 +989,6 @@ public class TheTang {
      * @param lockType
      */
     public static void whetherCancelLock(int lockType) {//todo baii util ???
-
         int hadLockTypes = 0;
         String lockTypeState = preferencesManager.getData(Common.lockTypes[lockType]);
 
@@ -2165,7 +1003,6 @@ public class TheTang {
                 MDM.setPasswordNone();
             }
         }
-
         preferencesManager.removeData(Common.lockTypes[lockType]);
     }
 
@@ -2176,7 +1013,6 @@ public class TheTang {
         for (String type : Common.lockTypes) {
             preferencesManager.removeData(type);
         }
-
         preferencesManager.removeComplianceData(Common.lost_time_frame);
     }
 

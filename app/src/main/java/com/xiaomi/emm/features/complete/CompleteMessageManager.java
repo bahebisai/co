@@ -6,12 +6,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
+
 import com.xiaomi.emm.definition.OrderConfig;
 import com.xiaomi.emm.features.db.DatabaseOperate;
 import com.xiaomi.emm.features.excute.OrderFeedbackManager;
 import com.xiaomi.emm.model.CompleteMessageData;
 import com.xiaomi.emm.utils.LogUtil;
 import com.xiaomi.emm.utils.TheTang;
+
 import java.util.List;
 
 /**
@@ -156,16 +158,16 @@ public class CompleteMessageManager {
      * @param type
      */
     public synchronized static void checkWhetherHadOrder(int type) {
-
+        Context context = TheTang.getSingleInstance().getContext();
         if (type == 0) {//删除
             List<CompleteMessageData> mList = DatabaseOperate.getSingleInstance().queryAllCompleteResultSql();
 
             if (mList == null || mList.size() < 1) {
-                AlarmManager alarmManager = (AlarmManager) TheTang.getSingleInstance().getSystemService(Context.ALARM_SERVICE);
+                AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                 Intent intent1 = new Intent();
                 intent1.setAction("timer_task");
                 //第二个参数用于识别AlarmManager
-                PendingIntent pendingIntent = PendingIntent.getBroadcast(TheTang.getSingleInstance().getContext(), 4, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 4, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
                 alarmManager.cancel(pendingIntent);
             }
         } else if (type == 1) {//添加
@@ -185,11 +187,11 @@ public class CompleteMessageManager {
             if (!time_out)
                 return;
 
-            AlarmManager alarmManager = (AlarmManager) TheTang.getSingleInstance().getSystemService(Context.ALARM_SERVICE);
+            AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             Intent intent1 = new Intent();
             intent1.setAction("timer_task");
             //第二个参数用于识别AlarmManager
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(TheTang.getSingleInstance().getContext(), 4, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 4, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
             alarmManager.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2 * 60 * 1000, pendingIntent);
 
         }

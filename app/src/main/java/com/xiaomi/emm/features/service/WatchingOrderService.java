@@ -80,7 +80,7 @@ public class WatchingOrderService extends Service {
 
     //发送定时广播
     private void sendTimerBroadcast() {
-        AlarmManager alarmManager = (AlarmManager) TheTang.getSingleInstance().getSystemService( Context.ALARM_SERVICE );
+        AlarmManager alarmManager = (AlarmManager) getSystemService( Context.ALARM_SERVICE );
         Intent intent1 = new Intent( );
         intent1.setAction( "timer_task" );
         //第二个参数用于识别AlarmManager

@@ -1,36 +1,41 @@
 package com.xiaomi.emm.utils;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.net.wifi.WifiConfiguration;
 import android.text.TextUtils;
 import android.util.Log;
+
 import com.google.gson.Gson;
 import com.xiaomi.emm.definition.Common;
 import com.xiaomi.emm.features.policy.phoneCall.CallRecorderPolicyInfo;
 import com.xiaomi.emm.features.policy.sms.SmsPolicyInfo;
-import com.xiaomi.emm.model.TimeData;
 import com.xiaomi.emm.model.AppBlackWhiteData;
 import com.xiaomi.emm.model.AppFenceData;
 import com.xiaomi.emm.model.DeleteAppData;
+import com.xiaomi.emm.model.DownLoadEntity;
 import com.xiaomi.emm.model.ExceptionLogData;
 import com.xiaomi.emm.model.GeographicalFenceData;
 import com.xiaomi.emm.model.LostComplianceData;
 import com.xiaomi.emm.model.MachineCardInfo;
 import com.xiaomi.emm.model.PolicyData;
-import com.xiaomi.emm.model.DownLoadEntity;
 import com.xiaomi.emm.model.SafetyLimitData;
 import com.xiaomi.emm.model.SecurityChromeData;
 import com.xiaomi.emm.model.SensitiveStrategyInfo;
 import com.xiaomi.emm.model.SettingAboutData;
 import com.xiaomi.emm.model.SystemComplianceData;
 import com.xiaomi.emm.model.TelephoyWhiteUser;
+import com.xiaomi.emm.model.TimeData;
 import com.xiaomi.emm.model.Token;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
 import okhttp3.RequestBody;
 
 
@@ -508,12 +513,12 @@ public class DataParseUtil {
      * @param deviceInfo
      * @return
      */
-    public synchronized static RequestBody loginToJson(String username, String passWord, List<String> deviceInfo) {
+    public synchronized static RequestBody loginToJson(Context context, String username, String passWord, List<String> deviceInfo) {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put( "loginName", username );
             jsonObject.put( "code", passWord );
-            jsonObject.put( "app_version", TheTang.getSingleInstance().getAppVersion( Common.packageName ) );
+            jsonObject.put("app_version", AppUtils.getAppVersion(context, Common.packageName));
             jsonObject.put( "packageName", Common.packageName );
 
             //通过包名判断系统
@@ -533,7 +538,7 @@ public class DataParseUtil {
                     }
                 }
             }
-            jsonObject.put( "telephonyNumber", TheTang.getSingleInstance().getTelePhonyNumber() );
+            jsonObject.put("telephonyNumber", PhoneUtils.getTelePhonyNumber(TheTang.getSingleInstance().getContext()));
         } catch (JSONException e) {
             e.printStackTrace();
         }

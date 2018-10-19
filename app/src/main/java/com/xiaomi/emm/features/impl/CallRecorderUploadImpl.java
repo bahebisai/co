@@ -9,6 +9,7 @@ import com.xiaomi.emm.features.db.DatabaseOperate;
 import com.xiaomi.emm.features.http.RequestService;
 import com.xiaomi.emm.features.policy.phoneCall.CallRecorderInfo;
 import com.xiaomi.emm.features.resend.MessageResendManager;
+import com.xiaomi.emm.utils.HttpHelper;
 import com.xiaomi.emm.utils.LogUtil;
 import com.xiaomi.emm.utils.TheTang;
 
@@ -80,7 +81,7 @@ public class CallRecorderUploadImpl extends BaseImpl<RequestService> {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 Log.d("baii", "upload call recorder json " + json.toString());
                 LogUtil.writeToFile(TAG, "upload call recorder json " + json.toString());
-                if (TheTang.getSingleInstance().whetherSendSuccess(response)) {
+                if (HttpHelper.whetherSendSuccess(response)) {
                     if (file != null && file.exists()) {
                         file.delete();
                     }
@@ -125,7 +126,7 @@ public class CallRecorderUploadImpl extends BaseImpl<RequestService> {
         mService.uploadInfo(UrlConst.CALL_RECORDER, description, body).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if (TheTang.getSingleInstance().whetherSendSuccess(response)) {
+                if (HttpHelper.whetherSendSuccess(response)) {
                     listener.onSuccess();
                     if (file != null && file.exists()) {//todo impl bai 1111111111111111111111
                         file.delete();

@@ -21,6 +21,7 @@ import com.xiaomi.emm.features.policy.sms.SmsManager;
 import com.xiaomi.emm.model.ClearDeskData;
 import com.xiaomi.emm.model.ConfigureStrategyData;
 import com.xiaomi.emm.model.TimeFenceData;
+import com.xiaomi.emm.utils.ConvertUtils;
 import com.xiaomi.emm.utils.LogUtil;
 import com.xiaomi.emm.utils.PreferencesManager;
 import com.xiaomi.emm.utils.TheTang;
@@ -285,7 +286,7 @@ public class StrategeDetailActivity extends BaseActivity {
                         }
 
                         Map<String, String> sec_white_list = new HashMap<>();
-                        sec_white_list = TheTang.getSingleInstance().formatMapFromString( list );
+                        sec_white_list = ConvertUtils.formatMapFromString( list );
 
                         List<String> url_list = new ArrayList<>();
                         Iterator<Map.Entry<String, String>> iterator = sec_white_list.entrySet().iterator();

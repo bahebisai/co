@@ -1,11 +1,10 @@
 package com.xiaomi.emm.features.policy.device;
 
-import android.content.ContentValues;
 import android.net.wifi.WifiConfiguration;
-import android.os.Parcel;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.miui.enterprise.sdk.APNConfig;
@@ -16,12 +15,15 @@ import com.xiaomi.emm.model.ConfigureStrategyData;
 import com.xiaomi.emm.utils.DataParseUtil;
 import com.xiaomi.emm.utils.LogUtil;
 import com.xiaomi.emm.utils.MDM;
+import com.xiaomi.emm.utils.PhoneUtils;
 import com.xiaomi.emm.utils.PreferencesManager;
 import com.xiaomi.emm.utils.ShortCutManager;
 import com.xiaomi.emm.utils.TheTang;
 import com.xiaomi.emm.utils.VpnUtilss;
 import com.xiaomi.emm.utils.WifyManager;
+
 import org.greenrobot.eventbus.EventBus;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -30,6 +32,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+
 import static android.content.Context.TELEPHONY_SERVICE;
 import static com.xiaomi.emm.utils.MDM.mMDMController;
 
@@ -100,7 +103,6 @@ public class ConfigurationPolicy {
         }
 
         try {
-
             //添加到策列表
             TheTang.getSingleInstance().deleteStrategeInfo( OrderConfig.send_configure_Strategy + "" );
 
@@ -118,7 +120,6 @@ public class ConfigurationPolicy {
         } catch (Exception e) {
             //返给服务器删除成功信息
         }
-
     }
 
     /**
@@ -132,21 +133,17 @@ public class ConfigurationPolicy {
         }
 
         ConfigureStrategyData.ConfigureStrategyBean configureStrategy = data.getConfigureStrategy();
-
         if (configureStrategy == null) {
             return;
         }
 
         PreferencesManager preferencesManager = PreferencesManager.getSingleInstance();
-
         //name
         preferencesManager.setConfiguration( "configuration_name", configureStrategy.getName() );
-
         //code
         preferencesManager.setConfiguration( Common.CODE, data.getCode() );
         preferencesManager.setConfiguration( Common.ID, data.getId() );
         preferencesManager.setConfiguration( Common.alias, preferencesManager.getData( Common.alias ) );
-
         //wifi
         preferencesManager.setConfiguration( "isWifi", configureStrategy.getIsWifi() );
         preferencesManager.setConfiguration( "IsAllowWifiConfig", configureStrategy.getIsAllowWifiConfig() );
@@ -164,7 +161,6 @@ public class ConfigurationPolicy {
         } else {
             preferencesManager.setConfiguration( "VpnConfig", null );
         }
-
         //webclip
         preferencesManager.setConfiguration( "isWebclip", configureStrategy.getIsWebclip() );
 
@@ -236,18 +232,13 @@ public class ConfigurationPolicy {
         }.getType();
 
         ArrayList<ConfigureStrategyData.ConfigureStrategyBean.WebclipListBean> lists = new Gson().fromJson( webclipConfig, type );
-
         for (ConfigureStrategyData.ConfigureStrategyBean.WebclipListBean bean : lists) {
-
             String webClipUrl = bean.getWebClipUrl();
             String webClipName = bean.getWebClipName();
             String webClipImgPath = bean.getWebClipImgPath();
-
             String picName = webClipImgPath.split( "\"" )[webClipImgPath.split( "\"" ).length - 1];
             ShortCutManager.deleteShortCut( webClipUrl, webClipName, picName );
-
         }
-
         EventBus.getDefault().post( new NotifyEvent() );
     }
 
@@ -279,7 +270,6 @@ public class ConfigurationPolicy {
         String IN_PATH = "/MDM/Files/images/";
         String savePath = TheTang.getSingleInstance().getContext().getApplicationContext().getFilesDir().getAbsolutePath() + IN_PATH;
         for (ConfigureStrategyData.ConfigureStrategyBean.WebclipListBean bean : lists) {
-
             ShortcutUtils.removeShortcut( TheTang.getSingleInstance().getContext(), ShortcutUtils.getShortCutIntent( bean.getWebClipUrl() ), bean.getWebClipName() );
             //删除图片
             String picName = bean.getWebClipImgPath().split( "\"" )[bean.getWebClipImgPath().split( "\"" ).length - 1];
@@ -288,7 +278,6 @@ public class ConfigurationPolicy {
                 file.delete();
             }
         }
-
         EventBus.getDefault().post( new NotifyEvent() );
     }
 
@@ -348,7 +337,6 @@ public class ConfigurationPolicy {
                                 }
                             }
                         }
-
                         if (!TextUtils.isEmpty( preferencesManager.getFenceData( Common.configureWifi ) )) {
 
                             WifiConfiguration configuration = WifyManager.IsExsits( preferencesManager.getFenceData( Common.configureWifi ) );
@@ -512,7 +500,7 @@ public class ConfigurationPolicy {
         String networkOperator = telephonyManager.getNetworkOperator();
         String subscriberId = telephonyManager.getSubscriberId();
         //添加到所有的卡槽
-        String[] imsis = TheTang.getSingleInstance().getSubscriberId();
+        String[] imsis = PhoneUtils.getSubscriberId(TheTang.getSingleInstance().getContext());
         for (int i = 0; i < imsis.length; i++) {
             if (!TextUtils.isEmpty(imsis[i])){
 /*                ContentValues values = new ContentValues();
@@ -561,22 +549,9 @@ public class ConfigurationPolicy {
                 //   ContentValues apn1 = mMDMController.getApn( 1834 );
 
                 Log.w( TAG, "subscriberId =  " + subscriberId + "   ----, networkOperator.substring(0,3) =" + networkOperator.substring( 0, 3 ) + "APN---连接状态==" + networkOperator.substring( 3 ) + "+networkOperator.substring(3)  +" + bean.getApnName() + "---" + bean.getApnName() );
-
-
-
-
             }
-
         }
-
-
-
     }
-
-
-
-
-
 
     /**
      * 删除APN配置
@@ -607,7 +582,6 @@ public class ConfigurationPolicy {
         }
     }
 
-
     private static void addVPN(PreferencesManager preferencesManager) {
         //vpn
 
@@ -635,7 +609,6 @@ public class ConfigurationPolicy {
         }
     }
 
-
     private static  void  doAddVPN2(PreferencesManager preferencesManager,ConfigureStrategyData.ConfigureStrategyBean.VpnListBean bean) {
         VpnUtilss.init(TheTang.getSingleInstance().getContext());
 
@@ -661,10 +634,6 @@ public class ConfigurationPolicy {
         }
     }
 
-
-
-
-
     /**
      * 删除VPN配置
      * @param preferencesManager
@@ -686,35 +655,21 @@ public class ConfigurationPolicy {
              */
             for (int i = 0; i < split.length; i++) {
                 VpnUtilss.delete(split[i]);
-
             }
         }else {
             VpnUtilss.delete(keyVpnProfiles);
-
         }
         preferencesManager.removeConfiguration("keyVpnProfile");
-
-
-
     }
 
-
-
-
-
-
-        private static void doAddVPN(PreferencesManager preferencesManager, ConfigureStrategyData.ConfigureStrategyBean.VpnListBean bean) {
-
+    private static void doAddVPN(PreferencesManager preferencesManager, ConfigureStrategyData.ConfigureStrategyBean.VpnListBean bean) {
         if (preferencesManager == null || bean == null) {
             return;
         }
-
         //doVpn(preferencesManager);
           //  IVpnPolicy vpnPolicyService = new VpnPolicyService(TheTang.getSingleInstance().getContext());
           //  IBinder iBinder = vpnPolicyService.asBinder();
            // VpnPolicy vpnPolicy = new VpnPolicy(TheTang.getSingleInstance().getContext(), iBinder);
-
-
         }
 
 /*
@@ -764,11 +719,8 @@ public class ConfigurationPolicy {
         }
 
         command = command + " " + preferencesManager.getConfiguration( "serverAddress" ); //serverAddress": "1",//服务器地址  
-
         command = command + " " + "name  " + preferencesManager.getConfiguration( "accounts" );//accounts": "",//vpn 账号
-
         command = command + " " + "password  " + preferencesManager.getConfiguration( "password" );//password": "1",// vpn 密码
-
         command = command + " " + "linkname  " + preferencesManager.getConfiguration( "connectionName" );// connectionName": "1",//vpn 连接名称
         command = command + " " + "refuse-eap  nodefaultroute";
         command = command + "  idle 1800";
@@ -782,7 +734,6 @@ public class ConfigurationPolicy {
             command = command + "  " + "mppe-128";
         }
         command = command + " " + "unit 100";
-
 
         //preferencesManager.setConfiguration("sharedKey",configureStrategy.getSharedKey());// sharedKey": "1",// 共享秘钥
         //preferencesManager.setConfiguration("isEncryption",configureStrategy.getEncryptionLevel());//: 0,// 是否加密 
@@ -823,10 +774,7 @@ public class ConfigurationPolicy {
             } catch (Exception e2) {
             }
         }
-
     }
-
-
 }
 
 

@@ -8,6 +8,7 @@ import com.xiaomi.emm.definition.UrlConst;
 import com.xiaomi.emm.features.http.RequestService;
 import com.xiaomi.emm.features.luban.PhotoUploadListener;
 import com.xiaomi.emm.utils.DataParseUtil;
+import com.xiaomi.emm.utils.HttpHelper;
 import com.xiaomi.emm.utils.LogUtil;
 import com.xiaomi.emm.utils.PreferencesManager;
 import com.xiaomi.emm.utils.TheTang;
@@ -68,9 +69,9 @@ public class PhotoUploadImpl extends BaseImpl<RequestService>{
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
-                String content = TheTang.getSingleInstance().getResponseBodyString( response );
+                String content = HttpHelper.getResponseBodyString(response);
 
-                if (TheTang.getSingleInstance().whetherSendSuccess( content )) {
+                if (HttpHelper.whetherSendSuccess(content)) {
                     photoUploadListener.onSuccess();
                 } else {
 

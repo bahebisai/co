@@ -16,6 +16,7 @@ import com.xiaomi.emm.model.AppBlackWhiteData;
 import com.xiaomi.emm.model.ClearDeskData;
 import com.xiaomi.emm.model.LostComplianceData;
 import com.xiaomi.emm.model.SystemComplianceData;
+import com.xiaomi.emm.utils.AppUtils;
 import com.xiaomi.emm.utils.LogUtil;
 import com.xiaomi.emm.utils.MDM;
 import com.xiaomi.emm.utils.PreferencesManager;
@@ -403,7 +404,7 @@ public class ExcuteCompliance {
      */
     private static void scanAppWhetherCompliance(AppBlackWhiteData appBlackWhiteData) {
 
-        List<LauncherActivityInfo> launcherActivityInfoList = TheTang.getSingleInstance().getLauncherNoSystemApp();
+        List<LauncherActivityInfo> launcherActivityInfoList = AppUtils.getLauncherNoSystemApp();
 
         List<String> apps = new ArrayList<>();
 

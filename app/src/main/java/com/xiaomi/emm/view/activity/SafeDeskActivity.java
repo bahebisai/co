@@ -19,6 +19,7 @@ import com.xiaomi.emm.model.APPInfo;
 import com.xiaomi.emm.model.ClearDeskData;
 import com.xiaomi.emm.model.ConfigureStrategyData;
 import com.xiaomi.emm.utils.AppUtils;
+import com.xiaomi.emm.utils.ConvertUtils;
 import com.xiaomi.emm.utils.LogUtil;
 import com.xiaomi.emm.utils.MDM;
 import com.xiaomi.emm.utils.PreferencesManager;
@@ -218,7 +219,7 @@ public class SafeDeskActivity extends BaseActivity {
             LogUtil.writeToFile(TAG, "appList = " + app.getPackageName());
         }
 
-        PackageManager packageManager = AppUtils.getPackageManager(this);
+        PackageManager packageManager = getPackageManager();
 
         if (appList != null && appList.size() > 0) {
             for (APPInfo app : appList) {
@@ -440,7 +441,7 @@ public class SafeDeskActivity extends BaseActivity {
 
 
             Map<String, String> sec_white_list = new HashMap<>();
-            sec_white_list = TheTang.getSingleInstance().formatMapFromString(preferencesManager.getComplianceData(Common.securityChrome_list));
+            sec_white_list = ConvertUtils.formatMapFromString(preferencesManager.getComplianceData(Common.securityChrome_list));
 
             List<String> url_list = new ArrayList<>();
             List<String> name_list = new ArrayList<>();
@@ -467,8 +468,8 @@ public class SafeDeskActivity extends BaseActivity {
         Collections.sort(hashSet, new Comparator<ApplicationInfo>() {
             @Override
             public int compare(ApplicationInfo o1, ApplicationInfo o2) {
-                String appLabel = TheTang.getSingleInstance().getAppLabel(o1.packageName);
-                String appLabel1 = TheTang.getSingleInstance().getAppLabel(o2.packageName);
+                String appLabel = AppUtils.getAppLabel(SafeDeskActivity.this, o1.packageName);
+                String appLabel1 = AppUtils.getAppLabel(SafeDeskActivity.this, o2.packageName);
                 return appLabel.compareTo(appLabel1);
             }
         });

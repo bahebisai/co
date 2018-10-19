@@ -86,7 +86,7 @@ public class AppUpdateActivity extends BaseActivity {
                 Collections.reverse(newList);
 
                 for (APPInfo appInfo : newList) {
-                    PackageManager packageManager = AppUtils.getPackageManager(AppUpdateActivity.this);
+                    PackageManager packageManager = getPackageManager();
                     String version = null;
                     try {
                         PackageInfo info = packageManager.getPackageInfo( appInfo.getPackageName(), 0 );
@@ -100,7 +100,7 @@ public class AppUpdateActivity extends BaseActivity {
                     appInfo.setVersion( version );
 
                     try {
-                        String size = TheTang.getSingleInstance().queryPackageSize(appInfo.getPackageName());
+                        String size = AppUtils.getAppSize(AppUpdateActivity.this, appInfo.getPackageName());
                         appInfo.setSize( size );
 
                     } catch (Exception e) {

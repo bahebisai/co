@@ -522,7 +522,7 @@ public class DatabaseOperate {
      */
     public synchronized APPInfo queryAppInfo(String app_id) {
         Cursor cursor = null;
-        APPInfo appInfo = new APPInfo();
+        APPInfo appInfo = null;
         openSQLiteDataBase();
 
         mSQLiteDatabase.beginTransaction();
@@ -530,6 +530,7 @@ public class DatabaseOperate {
             cursor = mSQLiteDatabase.rawQuery( query_app_sql, new String[]{"%" + app_id + "%", "%" + app_id + "%", "%" + app_id + "%"} );
             if (cursor != null && cursor.getCount() > 0) {
                 for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                    appInfo = new APPInfo();
                     appInfo.setAppId( cursor.getString( cursor.getColumnIndex( DataBaseHelper.app_id ) ) );
                     appInfo.setPackageName( cursor.getString( cursor.getColumnIndex( DataBaseHelper.package_name ) ) );
                     appInfo.setAppName( cursor.getString( cursor.getColumnIndex( DataBaseHelper.app_name ) ) );

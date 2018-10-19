@@ -8,8 +8,11 @@ import com.xiaomi.emm.features.event.AvatarUpdateEvent;
 import com.xiaomi.emm.features.event.CompleteEvent;
 import com.xiaomi.emm.features.event.NotifyEvent;
 import com.xiaomi.emm.model.DownLoadEntity;
+import com.xiaomi.emm.utils.FileUtils;
 import com.xiaomi.emm.utils.TheTang;
 import org.greenrobot.eventbus.EventBus;
+
+import java.io.File;
 
 /**
  * Created by Administrator on 2017/8/3.
@@ -40,7 +43,7 @@ public class FileManager{
 
             DatabaseOperate.getSingleInstance().deleteDownLoadFile( downLoadEntity );
 
-            TheTang.getSingleInstance().renameFile( BaseApplication.baseFilesPath, downLoadEntity.saveName,
+            FileUtils.renameFile( BaseApplication.baseFilesPath, downLoadEntity.saveName,
                     downLoadEntity.saveName.substring( 5, downLoadEntity.saveName.length() ) );
 
             downLoadEntity.saveName = downLoadEntity.saveName.substring( 5, downLoadEntity.saveName.length() );
@@ -55,7 +58,7 @@ public class FileManager{
         } else if ( "2".equals( downLoadEntity.type ) ) {
             DatabaseOperate.getSingleInstance().deleteDownLoadFile( downLoadEntity );
 
-            TheTang.getSingleInstance().renameFile( BaseApplication.baseImagesPath, downLoadEntity.saveName,
+            FileUtils.renameFile( BaseApplication.baseImagesPath, downLoadEntity.saveName,
                     downLoadEntity.saveName.substring( 5, downLoadEntity.saveName.length() ) );
 
             //同步成功

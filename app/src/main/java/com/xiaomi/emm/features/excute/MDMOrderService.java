@@ -47,6 +47,7 @@ import com.xiaomi.emm.features.silent.AppTask;
 import com.xiaomi.emm.model.DownLoadEntity;
 import com.xiaomi.emm.socket.bean.UserMgr;
 import com.xiaomi.emm.socket.service.TVBoxService;
+import com.xiaomi.emm.utils.ConvertUtils;
 import com.xiaomi.emm.utils.LogUtil;
 import com.xiaomi.emm.utils.MDM;
 import com.xiaomi.emm.utils.PreferencesManager;
@@ -221,7 +222,7 @@ public class MDMOrderService extends Service{
                 //如果有网络白名单，在关机后需重新设置
                 if (!TextUtils.isEmpty( preferencesManager.getComplianceData( Common.securityChrome ) )) {
                     Map<String, String> sec_white_list = new HashMap<>();
-                    sec_white_list = TheTang.getSingleInstance().formatMapFromString( preferencesManager.getComplianceData( Common.securityChrome_list ) );
+                    sec_white_list = ConvertUtils.formatMapFromString( preferencesManager.getComplianceData( Common.securityChrome_list ) );
                     MDM.excuteChrome( sec_white_list );
                 }
 

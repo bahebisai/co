@@ -40,7 +40,7 @@ public class AppTask {
     DownLoadEntity downLoadEntity = null;
 
     public AppTask() {
-        packageManager = AppUtils.getPackageManager(TheTang.getSingleInstance().getContext());
+        packageManager = TheTang.getSingleInstance().getContext().getPackageManager();
     }
 
     /**

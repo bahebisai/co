@@ -2,10 +2,7 @@ package com.xiaomi.emm.view.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.xiaomi.emm.R;
@@ -21,7 +17,6 @@ import com.xiaomi.emm.features.event.NotifyEvent;
 import com.xiaomi.emm.features.lockscreen.NewsLifecycleHandler;
 import com.xiaomi.emm.model.APPInfo;
 import com.xiaomi.emm.utils.AppUtils;
-import com.xiaomi.emm.utils.TheTang;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -87,13 +82,13 @@ public class AppStoreAdapter extends BaseAdapter {
 
         final String packageName = mList.get(position).getPackageName();
 
-        String label = TheTang.getSingleInstance().getAppLabel(packageName);
+        String label = AppUtils.getAppLabel(mContext, packageName);
 
         if ( TextUtils.isEmpty( label ) ) {
             EventBus.getDefault().post( new NotifyEvent() );
         }
 
-        Drawable drawable = TheTang.getSingleInstance().getAppIcon(packageName);
+        Drawable drawable = AppUtils.getAppIcon(mContext, packageName);
 
         if (drawable != null) {
             mViewHolder.app_icon.setImageDrawable(drawable);
@@ -106,7 +101,7 @@ public class AppStoreAdapter extends BaseAdapter {
                     @Override
                     public void onClick(View v) {
                         NewsLifecycleHandler.LockFlag = true;
-                        Intent intent = AppUtils.getPackageManager(mContext).getLaunchIntentForPackage(packageName);
+                        Intent intent = mContext.getPackageManager().getLaunchIntentForPackage(packageName);
                         mContext.startActivity(intent);
             }
         });

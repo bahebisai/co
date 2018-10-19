@@ -15,6 +15,7 @@ import com.xiaomi.emm.definition.Common;
 import com.xiaomi.emm.definition.OrderConfig;
 import com.xiaomi.emm.features.impl.SendMessageManager;
 import com.xiaomi.emm.model.MessageSendData;
+import com.xiaomi.emm.utils.CoordinateUtils;
 import com.xiaomi.emm.utils.DataParseUtil;
 import com.xiaomi.emm.utils.LogUtil;
 import com.xiaomi.emm.utils.MDM;
@@ -133,7 +134,7 @@ public class LocationService extends Service {
 
         //坐标转换
         Log.w( TAG, location.getLatitude() + "," + location.getLongitude() );
-        double[] gps = TheTang.getSingleInstance().gcj02_To_Bd09( location.getLatitude(), location.getLongitude() );
+        double[] gps = CoordinateUtils.gcj02_To_Bd09( location.getLatitude(), location.getLongitude() );
 
         String locationData = null;
 

@@ -6,6 +6,7 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.xiaomi.emm.R;
+import com.xiaomi.emm.utils.PhoneUtils;
 import com.xiaomi.emm.utils.TheTang;
 
 
@@ -37,7 +38,7 @@ public class TVBoxService extends Service {
         Log.e(TAG, "初始化TVBoxService");
         // 建立长连接任务
         conn_task = new ConnTask(this);
-        if (TheTang.getSingleInstance().isNetworkConnected(TheTang.getSingleInstance().getContext())) {
+        if (PhoneUtils.isNetworkAvailable(this)) {//todo baii isNetworkAvailable
             conn_task.stopReconnOpt();
             conn_task.start();
         }

@@ -43,6 +43,7 @@ import com.xiaomi.emm.features.excute.XiaomiMDMController;
 import com.xiaomi.emm.features.impl.SendMessageManager;
 import com.xiaomi.emm.features.impl.TelephoneWhiteListImpl;
 import com.xiaomi.emm.features.impl.WebclipImageImpl;
+import com.xiaomi.emm.features.location.LocationService;
 import com.xiaomi.emm.features.policy.compliance.ExcuteCompliance;
 import com.xiaomi.emm.features.policy.compliance.machinecard.MachineCardBindingService;
 import com.xiaomi.emm.features.policy.device.ExcuteLimitPolicy;
@@ -532,8 +533,18 @@ public class MDM {
 
         forceLocationService();
 
-        mTheTang.getLocation();
+//        mTheTang.getLocation();
+        startLocationService(mContext);
 
+
+    }
+
+    /**
+     * 获取定位
+     */
+    public static void startLocationService(Context context) {//todo baii util ???
+        Intent service_intent = new Intent(context, LocationService.class);
+        context.startService(service_intent);
     }
 
     /**
@@ -958,7 +969,7 @@ public class MDM {
      * @return
      */
     public static String judgmentAppHadInstall(String packageName) {
-        PackageManager packageManager = AppUtils.getPackageManager(mContext);
+        PackageManager packageManager = mContext.getPackageManager();
         String version = null;
         try {
             PackageInfo info = packageManager.getPackageInfo(packageName, 0);
@@ -1301,8 +1312,8 @@ public class MDM {
         String iccid_card1 = preferencesManager.getComplianceData(Common.iccid_card1);
 
         //卡槽一与卡槽二
-        String iccid = mTheTang.getIccid();
-        String iccid1 = mTheTang.getIccid1();
+        String iccid = PhoneUtils.getIccid(mContext);
+        String iccid1 = PhoneUtils.getIccid1(mContext);
 
         //卡槽一有卡，卡槽二无卡
         if (!TextUtils.isEmpty(iccid) && TextUtils.isEmpty(iccid1)) {
@@ -1662,7 +1673,7 @@ public class MDM {
                 .getRomAvailable()
                 .getDeviceModel()
                 .getDeviceName()
-                .getAllSystemApp()
+                .getAllSystemApp(mContext)
                 .getAppSecurityPassword()
                 .getBluetoothMacAddress()
                 .getBootTime()
@@ -1729,7 +1740,8 @@ public class MDM {
 
                 if (code.equals(String.valueOf(OrderConfig.GetLocationData))) {
                     LogUtil.writeToFile(TAG, "Enable Location service success!");
-                    mTheTang.getLocation();
+//                    mTheTang.getLocation();
+                    startLocationService(context);
                 } else if (code.equals(String.valueOf(OrderConfig.EnableLocationService))) {
                     LogUtil.writeToFile(TAG, "Location service had Enabled!");
                 }
@@ -1889,7 +1901,7 @@ public class MDM {
      * @param packageName
      */
     public static void forbiddenAppNetwork(String packageName) {
-        int uid = mTheTang.getAppUid(packageName);
+        int uid = AppUtils.getAppUid(mContext, packageName);
         MDM.mMDMController.executeShellToSetIptables("-N " + uid);
         MDM.mMDMController.executeShellToSetIptables("-A OUTPUT -m owner --uid-owner " + uid + " -j DROP");
     }
@@ -1900,7 +1912,7 @@ public class MDM {
      * @param packageName
      */
     public static void cancelForbiddenAppNetwork(String packageName) {
-        int uid = mTheTang.getAppUid(packageName);
+        int uid = AppUtils.getAppUid(mContext, packageName);
         MDM.mMDMController.executeShellToSetIptables(" -D OUTPUT -m owner --uid-owner " + uid + " -j DROP ");
     }
 
@@ -1913,7 +1925,7 @@ public class MDM {
             return;
         }
 
-        int uid = mTheTang.getAppUid(packageName);
+        int uid = AppUtils.getAppUid(mContext, packageName);
 
         MDM.mMDMController.executeShellToSetIptables("-N " + uid);
         MDM.mMDMController.executeShellToSetIptables("-A OUTPUT -m owner --uid-owner " + uid + " -j " + uid);
@@ -1933,7 +1945,7 @@ public class MDM {
      * @param packageName
      */
     public static void cancelIPtable(String packageName) {
-        int uid = mTheTang.getAppUid(packageName);
+        int uid = AppUtils.getAppUid(mContext, packageName);
         MDM.mMDMController.executeShellToSetIptables("-F " + uid);
     }
 
@@ -2027,12 +2039,12 @@ public class MDM {
 
         while (iterator.hasNext()) {
             Map.Entry<String, String> entry = iterator.next();
-            last_list.add(mTheTang.getHost(entry.getValue()));//获得url的域名
+            last_list.add(HttpHelper.getHost(entry.getValue()));//获得url的域名
         }
 
         excuteIptables("com.android.browser", last_list);
 
-        int uid = mTheTang.getAppUid("com.android.browser");
+        int uid = AppUtils.getAppUid(mContext, "com.android.browser");
         if (isProcessWork(uid)) {
             killProcess("com.android.browser");
         }
@@ -2083,7 +2095,7 @@ public class MDM {
         //webclip
         for (int i = 0; i < url_list.size(); i++) {
 
-            String url = mTheTang.getUrlForWebClip(url_list.get(i));
+            String url = HttpHelper.getUrlForWebClip(url_list.get(i));
 
             if (url == null) { //网页没有shortcut图片
 
@@ -2114,7 +2126,7 @@ public class MDM {
 
         cancelIPtable("com.android.browser");
 
-        int uid = mTheTang.getAppUid("com.android.browser");
+        int uid = AppUtils.getAppUid(mContext, "com.android.browser");
         if (isProcessWork(uid)) {
             killProcess("com.android.browser");
         }
@@ -2126,7 +2138,7 @@ public class MDM {
         }
 
         Map<String, String> sec_white_list = new HashMap<>();
-        sec_white_list = mTheTang.formatMapFromString(list);
+        sec_white_list = ConvertUtils.formatMapFromString(list);
 
         List<String> url_list = new ArrayList<>();
         List<String> name_list = new ArrayList<>();
@@ -2152,7 +2164,7 @@ public class MDM {
     public static void cancelSecurityChrome() {
         cancelIPtable("com.android.browser");
 
-        int uid = mTheTang.getAppUid("com.android.browser");
+        int uid = AppUtils.getAppUid(mContext, "com.android.browser");
         if (isProcessWork(uid)) {
             killProcess("com.android.browser");
         }
@@ -2164,7 +2176,7 @@ public class MDM {
         }
 
         Map<String, String> sec_white_list = new HashMap<>();
-        sec_white_list = mTheTang.formatMapFromString(list);
+        sec_white_list = ConvertUtils.formatMapFromString(list);
 
         List<String> url_list = new ArrayList<>();
         List<String> name_list = new ArrayList<>();

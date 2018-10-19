@@ -35,10 +35,12 @@ import com.xiaomi.emm.features.event.NotifyEvent;
 import com.xiaomi.emm.features.lockscreen.Lock2Activity;
 import com.xiaomi.emm.features.lockscreen.NewsLifecycleHandler;
 import com.xiaomi.emm.utils.ActivityCollector;
+import com.xiaomi.emm.utils.ConvertUtils;
 import com.xiaomi.emm.utils.DialogInfos;
 import com.xiaomi.emm.utils.LogUtil;
 import com.xiaomi.emm.utils.MDM;
 import com.xiaomi.emm.utils.NetworkStatsHelper;
+import com.xiaomi.emm.utils.PhoneUtils;
 import com.xiaomi.emm.utils.PreferencesManager;
 import com.xiaomi.emm.utils.TheTang;
 import com.xiaomi.emm.view.ViewHolder;
@@ -145,7 +147,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     private void noticDilag() {
-        if (theTang.getNetworkType() == 0 || theTang.getNetworkType() == 1) {
+        if (PhoneUtils.getNetworkType(this) == 0 || PhoneUtils.getNetworkType(this) == 1) {
             return;
         }
         if (Lock2Activity.class.getSimpleName().equals( this.getClass().getSimpleName() ) ||
@@ -158,17 +160,14 @@ public abstract class BaseActivity extends AppCompatActivity {
             return;
         }
         if (TheTang.getSingleInstance().getUsageStats()) {
-
             NetworkStatsManager networkStatsManager = (NetworkStatsManager) getSystemService( NETWORK_STATS_SERVICE );
             final NetworkStatsHelper networkStatsHelper = new NetworkStatsHelper( networkStatsManager );
             if (quota > 0 && (quota * 1024 * 1024) < (NetworkStatsHelper.getAllMonthMobile( this, null ))) {
 
                 if (mMInfos != null) {
-                    mMInfos.setData( "额定流量", "    您当前的移动流量为" + TheTang.getSingleInstance().convertTraffic( NetworkStatsHelper.getAllMonthMobile( this, null ) ) + ",已经超过设置的额定移动流量" + quota + "M,是否关闭移动数据? \n  " );
+                    mMInfos.setData( "额定流量", "    您当前的移动流量为" + ConvertUtils.convertTraffic( NetworkStatsHelper.getAllMonthMobile( this, null ) ) + ",已经超过设置的额定移动流量" + quota + "M,是否关闭移动数据? \n  " );
                 } else {
-
-
-                    mMInfos = new DialogInfos( this, "额定流量", "    您当前的移动流量为" + TheTang.getSingleInstance().convertTraffic( NetworkStatsHelper.getAllMonthMobile( this, null ) ) + ",已经超过设置的额定移动流量" + quota + "M,是否关闭移动数据? \n  ", null, null, new DialogInfos.ConfirmListeners() {
+                    mMInfos = new DialogInfos( this, "额定流量", "    您当前的移动流量为" + ConvertUtils.convertTraffic( NetworkStatsHelper.getAllMonthMobile( this, null ) ) + ",已经超过设置的额定移动流量" + quota + "M,是否关闭移动数据? \n  ", null, null, new DialogInfos.ConfirmListeners() {
 
                         @Override
                         public void sure() {

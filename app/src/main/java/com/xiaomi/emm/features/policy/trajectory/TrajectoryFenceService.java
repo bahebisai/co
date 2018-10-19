@@ -16,6 +16,7 @@ import com.amap.api.location.DPoint;
 import com.xiaomi.emm.definition.Common;
 import com.xiaomi.emm.features.impl.SendMessageManager;
 import com.xiaomi.emm.model.MessageSendData;
+import com.xiaomi.emm.utils.CoordinateUtils;
 import com.xiaomi.emm.utils.DataParseUtil;
 import com.xiaomi.emm.utils.LogUtil;
 import com.xiaomi.emm.utils.PreferencesManager;
@@ -168,7 +169,7 @@ public class TrajectoryFenceService extends Service {
      */
     private float excuteDistance(double currentLng, double currentLat) {
 
-        double[] gps = TheTang.getSingleInstance().bd09_To_Gcj02(lat, lng);
+        double[] gps = CoordinateUtils.bd09_To_Gcj02(lat, lng);
         DPoint centerPoint = new DPoint();
         centerPoint.setLatitude(gps[0]);
         centerPoint.setLongitude(gps[1]);
@@ -199,7 +200,7 @@ public class TrajectoryFenceService extends Service {
 
             //坐标转换
             Log.w(TAG, location.getLatitude() + "," + location.getLongitude());
-            double[] gps = TheTang.getSingleInstance().gcj02_To_Bd09(location.getLatitude(), location.getLongitude());
+            double[] gps = CoordinateUtils.gcj02_To_Bd09(location.getLatitude(), location.getLongitude());
             locationData = DataParseUtil.jsonLocation(gps[1] + "," + gps[0]);
 
              map.put("longitude",gps[1]+"");

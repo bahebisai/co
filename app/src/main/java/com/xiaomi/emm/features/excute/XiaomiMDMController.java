@@ -27,7 +27,10 @@ import com.miui.enterprise.sdk.PhoneManager;
 import com.miui.enterprise.sdk.RestrictionsManager;
 import com.xiaomi.emm.base.EMMDeviceAdminReceiver;
 import com.xiaomi.emm.definition.Common;
+import com.xiaomi.emm.utils.ConvertUtils;
+import com.xiaomi.emm.utils.DeviceUtils;
 import com.xiaomi.emm.utils.LogUtil;
+import com.xiaomi.emm.utils.PhoneUtils;
 import com.xiaomi.emm.utils.TheTang;
 
 import java.util.ArrayList;
@@ -221,32 +224,32 @@ public class XiaomiMDMController extends MDMController {
 //                list.add(TheTang.getSingleInstance().getImei1());
                 list.add(getImei(1));
             } else if (Common.deviceInfo[i].equals("run_memory")) {
-                list.add(TheTang.getSingleInstance().getTotalRam());
+                list.add(DeviceUtils.getTotalRam());
             } else if (Common.deviceInfo[i].equals("phone_storage")) {
-                long storage = (long) TheTang.getSingleInstance().getTotalStorage();
-                list.add(TheTang.getSingleInstance().formatFileSize( storage ));
+                long storage = (long) DeviceUtils.getTotalStorage();
+                list.add(ConvertUtils.formatFileSize( storage ));
             } else if (Common.deviceInfo[i].equals("resolution")){
-                list.add(TheTang.getSingleInstance().getResolution());
+                list.add(DeviceUtils.getResolution(mContext));
             } else if (Common.deviceInfo[i].equals("manufacturers")){
-                list.add(TheTang.getSingleInstance().getManufacturers());
+                list.add(DeviceUtils.getManufacturers());
             } else if (Common.deviceInfo[i].equals("model")){
-                list.add(TheTang.getSingleInstance().getModel());
+                list.add(DeviceUtils.getModel());
             } else if (Common.deviceInfo[i].equals("android_version")){
-                list.add(TheTang.getSingleInstance().getAndroidVersion());
+                list.add(DeviceUtils.getAndroidVersion());
             } else if (Common.deviceInfo[i].equals("system_version")){
-                list.add(TheTang.getSingleInstance().getSystemVersion());
+                list.add(DeviceUtils.getSystemVersion());
             } else if (Common.deviceInfo[i].equals("safe_version")){
                 list.add("");
             } else if (Common.deviceInfo[i].equals("patch_level")){
                 list.add("");
             } else if (Common.deviceInfo[i].equals("sim1_iccid")){
-                list.add(TheTang.getSingleInstance().getIccid1());
+                list.add(PhoneUtils.getIccid1(mContext));
             } else if (Common.deviceInfo[i].equals("sim2_iccid")){
-                list.add(TheTang.getSingleInstance().getIccid2());
+                list.add(PhoneUtils.getIccid2(mContext));
             } else if (Common.deviceInfo[i].equals("sim1_ismi")){
-                list.add(TheTang.getSingleInstance().getSubscriberId1());
+                list.add(PhoneUtils.getSubscriberId1(mContext));
             } else if (Common.deviceInfo[i].equals("sim2_ismi")){
-                list.add(TheTang.getSingleInstance().getSubscriberId2());
+                list.add(PhoneUtils.getSubscriberId2(mContext));
             }
         }
         return list;
