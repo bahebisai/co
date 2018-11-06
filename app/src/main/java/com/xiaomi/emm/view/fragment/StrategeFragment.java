@@ -3,12 +3,10 @@ package com.xiaomi.emm.view.fragment;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
-import android.support.design.widget.TabLayout;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewStub;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -19,10 +17,10 @@ import com.xiaomi.emm.features.db.DatabaseOperate;
 import com.xiaomi.emm.features.event.StrategeEvent;
 import com.xiaomi.emm.model.StrategeInfo;
 import com.xiaomi.emm.utils.LogUtil;
-import com.xiaomi.emm.utils.TheTang;
+import com.xiaomi.emm.features.presenter.TheTang;
 import com.xiaomi.emm.view.activity.StrategeDetailActivity;
 import com.xiaomi.emm.view.adapter.StrategeAdapter;
-import com.xiaomi.emm.view.viewutils.ViewLoaddingInterface;
+import com.xiaomi.emm.view.viewutils.ViewLoadingInterface;
 import com.xiaomi.emm.view.viewutils.ViewLoadingLayout;
 
 import org.greenrobot.eventbus.EventBus;
@@ -102,7 +100,7 @@ public class StrategeFragment extends BaseFragment {
         mListView.setAdapter( mStrategeAdapter );
         viewloading = (ViewLoadingLayout) mViewHolder.get(R.id.viewloading);
 
-        viewloading.setInit(new ViewLoaddingInterface() {
+        viewloading.setInit(new ViewLoadingInterface() {
             @Override
             public void Reload() {
                 //点击重新加载调用

@@ -15,7 +15,7 @@ import com.xiaomi.emm.ITwoProcessAidlInterface;
 import com.xiaomi.emm.R;
 import com.xiaomi.emm.features.excute.MDMOrderService;
 import com.xiaomi.emm.utils.LogUtil;
-import com.xiaomi.emm.utils.TheTang;
+import com.xiaomi.emm.features.presenter.TheTang;
 
 /**
  * 循环播放一段无声音频，以提升进程优先级

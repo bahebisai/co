@@ -12,13 +12,11 @@ import com.xiaomi.emm.model.APPInfo;
 import com.xiaomi.emm.model.CompleteMessageData;
 import com.xiaomi.emm.model.DownLoadEntity;
 import com.xiaomi.emm.model.MessageInfo;
-import com.xiaomi.emm.model.MessageResendData;
 import com.xiaomi.emm.model.MessageSendData;
 import com.xiaomi.emm.model.SensitiveStrategyInfo;
 import com.xiaomi.emm.model.StrategeInfo;
 import com.xiaomi.emm.model.TelephoyWhiteUser;
 import com.xiaomi.emm.utils.LogUtil;
-import com.xiaomi.emm.utils.TheTang;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -1369,7 +1367,7 @@ public class DatabaseOperate {
             }
             mSQLiteDatabase.setTransactionSuccessful();
         } catch (Exception e) {
-            LogUtil.writeToFile( TAG, "query all app " + TheTang.getExceptionInfo( e ) );
+            LogUtil.writeToFile( TAG, "query all app " + LogUtil.getExceptionInfo( e ) );
         } finally {
             mSQLiteDatabase.endTransaction();
         }
@@ -1391,7 +1389,7 @@ public class DatabaseOperate {
             mSQLiteDatabase.execSQL( delete_all_app_compliance_sql );
             mSQLiteDatabase.setTransactionSuccessful();
         } catch (Exception e) {
-            LogUtil.writeToFile( TAG, "delete all app " + TheTang.getExceptionInfo( e ) );
+            LogUtil.writeToFile( TAG, "delete all app " + LogUtil.getExceptionInfo( e ) );
         } finally {
             mSQLiteDatabase.endTransaction();
         }
@@ -1408,7 +1406,7 @@ public class DatabaseOperate {
             mSQLiteDatabase.execSQL( delete_app_compliance_sql, new String[]{packageName} );
             mSQLiteDatabase.setTransactionSuccessful();
         } catch (Exception e) {
-            LogUtil.writeToFile( TAG, "delete simple app " + TheTang.getExceptionInfo( e ) );
+            LogUtil.writeToFile( TAG, "delete simple app " + LogUtil.getExceptionInfo( e ) );
         } finally {
             mSQLiteDatabase.endTransaction();
         }
@@ -1436,7 +1434,7 @@ public class DatabaseOperate {
             }
             mSQLiteDatabase.setTransactionSuccessful();
         } catch (Exception e) {
-            LogUtil.writeToFile( TAG, "add deny app " + TheTang.getExceptionInfo( e ) );
+            LogUtil.writeToFile( TAG, "add deny app " + LogUtil.getExceptionInfo( e ) );
         } finally {
             mSQLiteDatabase.endTransaction();
         }
@@ -1463,7 +1461,7 @@ public class DatabaseOperate {
             }
             mSQLiteDatabase.setTransactionSuccessful();
         } catch (Exception e) {
-            LogUtil.writeToFile( TAG, "query all deny app " + TheTang.getExceptionInfo( e ) );
+            LogUtil.writeToFile( TAG, "query all deny app " + LogUtil.getExceptionInfo( e ) );
         } finally {
             mSQLiteDatabase.endTransaction();
         }
@@ -1487,7 +1485,7 @@ public class DatabaseOperate {
             mSQLiteDatabase.execSQL( update_app_deny, new String[]{type, name} );
             mSQLiteDatabase.setTransactionSuccessful();
         } catch (Exception e) {
-            LogUtil.writeToFile( TAG, "delete all deny app " + TheTang.getExceptionInfo( e ) );
+            LogUtil.writeToFile( TAG, "delete all deny app " + LogUtil.getExceptionInfo( e ) );
         } finally {
             mSQLiteDatabase.endTransaction();
         }
@@ -1504,7 +1502,7 @@ public class DatabaseOperate {
             mSQLiteDatabase.execSQL( delete_all_app_deny_sql );
             mSQLiteDatabase.setTransactionSuccessful();
         } catch (Exception e) {
-            LogUtil.writeToFile( TAG, "delete all deny app " + TheTang.getExceptionInfo( e ) );
+            LogUtil.writeToFile( TAG, "delete all deny app " + LogUtil.getExceptionInfo( e ) );
         } finally {
             mSQLiteDatabase.endTransaction();
         }
@@ -1531,7 +1529,7 @@ public class DatabaseOperate {
             }
             mSQLiteDatabase.setTransactionSuccessful();
         } catch (Exception e) {
-            LogUtil.writeToFile( TAG, "query deny app by type " + TheTang.getExceptionInfo( e ) );
+            LogUtil.writeToFile( TAG, "query deny app by type " + LogUtil.getExceptionInfo( e ) );
         } finally {
             mSQLiteDatabase.endTransaction();
         }
@@ -1563,7 +1561,7 @@ public class DatabaseOperate {
             }
             mSQLiteDatabase.setTransactionSuccessful();
         } catch (Exception e) {
-            LogUtil.writeToFile( TAG, "query deny app by name " + TheTang.getExceptionInfo( e ) );
+            LogUtil.writeToFile( TAG, "query deny app by name " + LogUtil.getExceptionInfo( e ) );
         } finally {
             mSQLiteDatabase.endTransaction();
         }
@@ -1612,7 +1610,7 @@ public class DatabaseOperate {
 
             mSQLiteDatabase.setTransactionSuccessful();
         } catch (Exception e) {
-            LogUtil.writeToFile( TAG, "add_backResult_sqlr " + TheTang.getExceptionInfo( e ) );
+            LogUtil.writeToFile( TAG, "add_backResult_sqlr " + LogUtil.getExceptionInfo( e ) );
         } finally {
             mSQLiteDatabase.endTransaction();
         }
@@ -1645,7 +1643,7 @@ public class DatabaseOperate {
             }
             mSQLiteDatabase.setTransactionSuccessful();
         } catch (Exception e) {
-            LogUtil.writeToFile( TAG, "query_backResult_sql " + TheTang.getExceptionInfo( e ) );
+            LogUtil.writeToFile( TAG, "query_backResult_sql " + LogUtil.getExceptionInfo( e ) );
         } finally {
             mSQLiteDatabase.endTransaction();
         }
@@ -1671,7 +1669,7 @@ public class DatabaseOperate {
             }
             mSQLiteDatabase.setTransactionSuccessful();
         } catch (Exception e) {
-            LogUtil.writeToFile( TAG, "delete_backResult_sql" + TheTang.getExceptionInfo( e ) );
+            LogUtil.writeToFile( TAG, "delete_backResult_sql" + LogUtil.getExceptionInfo( e ) );
             Log.w( TAG, "delete_backResult_sql" + e.toString() );
         } finally {
             mSQLiteDatabase.endTransaction();
@@ -1698,7 +1696,7 @@ public class DatabaseOperate {
             }
             mSQLiteDatabase.setTransactionSuccessful();
         } catch (Exception e) {
-            LogUtil.writeToFile( TAG, "add_completeResult_sql " + TheTang.getExceptionInfo( e ) );
+            LogUtil.writeToFile( TAG, "add_completeResult_sql " + LogUtil.getExceptionInfo( e ) );
         } finally {
             mSQLiteDatabase.endTransaction();
         }
@@ -1729,7 +1727,7 @@ public class DatabaseOperate {
             }
             mSQLiteDatabase.setTransactionSuccessful();
         } catch (Exception e) {
-            LogUtil.writeToFile( TAG, "queryAll_completeResult_sql " + TheTang.getExceptionInfo( e ) );
+            LogUtil.writeToFile( TAG, "queryAll_completeResult_sql " + LogUtil.getExceptionInfo( e ) );
         } finally {
             mSQLiteDatabase.endTransaction();
         }
@@ -1762,7 +1760,7 @@ public class DatabaseOperate {
             }
             mSQLiteDatabase.setTransactionSuccessful();
         } catch (Exception e) {
-            LogUtil.writeToFile( TAG, "query complete result by type " + TheTang.getExceptionInfo( e ) );
+            LogUtil.writeToFile( TAG, "query complete result by type " + LogUtil.getExceptionInfo( e ) );
         } finally {
             mSQLiteDatabase.endTransaction();
         }
@@ -1798,7 +1796,7 @@ public class DatabaseOperate {
             }
             mSQLiteDatabase.setTransactionSuccessful();
         } catch (Exception e) {
-            LogUtil.writeToFile( TAG, "query complete result by type " + TheTang.getExceptionInfo( e ) );
+            LogUtil.writeToFile( TAG, "query complete result by type " + LogUtil.getExceptionInfo( e ) );
         } finally {
             mSQLiteDatabase.endTransaction();
         }
@@ -1823,7 +1821,7 @@ public class DatabaseOperate {
             mSQLiteDatabase.execSQL( update_completeResult_sql, new String[]{ result, type, id } );
             mSQLiteDatabase.setTransactionSuccessful();
         } catch (Exception e) {
-            LogUtil.writeToFile( TAG, "update complete result " + TheTang.getExceptionInfo( e ) );
+            LogUtil.writeToFile( TAG, "update complete result " + LogUtil.getExceptionInfo( e ) );
         } finally {
             mSQLiteDatabase.endTransaction();
         }
@@ -1842,7 +1840,7 @@ public class DatabaseOperate {
             mSQLiteDatabase.execSQL( update_completeTime_sql, new String[]{time, type } );
             mSQLiteDatabase.setTransactionSuccessful();
         } catch (Exception e) {
-            LogUtil.writeToFile( TAG, "update complete time " + TheTang.getExceptionInfo( e ) );
+            LogUtil.writeToFile( TAG, "update complete time " + LogUtil.getExceptionInfo( e ) );
         } finally {
             mSQLiteDatabase.endTransaction();
         }
@@ -1862,7 +1860,7 @@ public class DatabaseOperate {
             mSQLiteDatabase.execSQL( update_completeResultAndTime_sql, new String[]{result, time, type, id } );
             mSQLiteDatabase.setTransactionSuccessful();
         } catch (Exception e) {
-            LogUtil.writeToFile( TAG, "update complete time " + TheTang.getExceptionInfo( e ) );
+            LogUtil.writeToFile( TAG, "update complete time " + LogUtil.getExceptionInfo( e ) );
         } finally {
             mSQLiteDatabase.endTransaction();
         }
@@ -1883,7 +1881,7 @@ public class DatabaseOperate {
 
             mSQLiteDatabase.setTransactionSuccessful();
         } catch (Exception e) {
-            LogUtil.writeToFile( TAG, "delete_completeResult_sql" + TheTang.getExceptionInfo( e ) );
+            LogUtil.writeToFile( TAG, "delete_completeResult_sql" + LogUtil.getExceptionInfo( e ) );
         } finally {
             mSQLiteDatabase.endTransaction();
         }
@@ -1905,7 +1903,7 @@ public class DatabaseOperate {
             mSQLiteDatabase.setTransactionSuccessful();
             insertSuccess = true;
         } catch (Exception e) {
-            LogUtil.writeToFile( TAG, "add sensitive word " + TheTang.getExceptionInfo( e ) );
+            LogUtil.writeToFile( TAG, "add sensitive word " + LogUtil.getExceptionInfo( e ) );
         } finally {
             mSQLiteDatabase.endTransaction();
         }

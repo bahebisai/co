@@ -1,4 +1,4 @@
-package com.xiaomi.emm.utils;
+package com.xiaomi.emm.features.service;
 
 import android.app.ActivityManager;
 import android.app.job.JobInfo;
@@ -12,10 +12,9 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.xiaomi.emm.features.excute.MDMOrderService;
+import com.xiaomi.emm.features.presenter.TheTang;
 
 import java.util.List;
-
-import static android.app.Service.START_NOT_STICKY;
 
 /**
  * Created by Administrator on 2017/10/20.

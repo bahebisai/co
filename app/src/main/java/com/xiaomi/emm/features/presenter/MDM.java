@@ -1,4 +1,4 @@
-package com.xiaomi.emm.utils;
+package com.xiaomi.emm.features.presenter;
 
 import android.app.ActivityManager;
 import android.app.Service;
@@ -44,6 +44,8 @@ import com.xiaomi.emm.features.impl.SendMessageManager;
 import com.xiaomi.emm.features.impl.TelephoneWhiteListImpl;
 import com.xiaomi.emm.features.impl.WebclipImageImpl;
 import com.xiaomi.emm.features.location.LocationService;
+import com.xiaomi.emm.features.manager.PreferencesManager;
+import com.xiaomi.emm.features.manager.ShortCutManager;
 import com.xiaomi.emm.features.policy.compliance.ExcuteCompliance;
 import com.xiaomi.emm.features.policy.compliance.machinecard.MachineCardBindingService;
 import com.xiaomi.emm.features.policy.device.ExcuteLimitPolicy;
@@ -59,6 +61,15 @@ import com.xiaomi.emm.model.SafetyLimitData;
 import com.xiaomi.emm.model.SecurityChromeData;
 import com.xiaomi.emm.model.SettingAboutData;
 import com.xiaomi.emm.model.TelephoyWhiteUser;
+import com.xiaomi.emm.utils.AppUtils;
+import com.xiaomi.emm.utils.ConvertUtils;
+import com.xiaomi.emm.utils.DeviceUtils;
+import com.xiaomi.emm.utils.FileUtils;
+import com.xiaomi.emm.utils.HttpHelper;
+import com.xiaomi.emm.utils.JsonGenerateUtil;
+import com.xiaomi.emm.utils.LogUtil;
+import com.xiaomi.emm.utils.PhoneUtils;
+import com.xiaomi.emm.utils.TimeUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
@@ -1312,8 +1323,8 @@ public class MDM {
         String iccid_card1 = preferencesManager.getComplianceData(Common.iccid_card1);
 
         //卡槽一与卡槽二
-        String iccid = PhoneUtils.getIccid(mContext);
-        String iccid1 = PhoneUtils.getIccid1(mContext);
+        String iccid = PhoneUtils.getIccid(mContext, 0);
+        String iccid1 = PhoneUtils.getIccid(mContext, 1);
 
         //卡槽一有卡，卡槽二无卡
         if (!TextUtils.isEmpty(iccid) && TextUtils.isEmpty(iccid1)) {
@@ -1664,41 +1675,14 @@ public class MDM {
     /**
      * 获得所有设备信息
      */
-    public static String getAllDeviceInfo() {
-
-        DeviceUtil deviceUtil = new DeviceUtil.Builder()
-                .getAlias()
-                .getDeviceType()
-                .getRomTotal()
-                .getRomAvailable()
-                .getDeviceModel()
-                .getDeviceName()
-                .getAllSystemApp(mContext)
-                .getAppSecurityPassword()
-                .getBluetoothMacAddress()
-                .getBootTime()
-                .getCamera()
-                .getCpu()
-                .getIsRoot()
-                .getPowerStatus()
-                .getSdCardAvailableCapacity()
-                .getSdCardTotalCapacity()
-                .getSdCardSerialNumber()
-                .getUDID()
-                .getWifiMac()
-                .getSystem()
-                .getClientLastUpdateTime()
-                .getOperaterAbout()
-                .getLine1Number()
-                .getMobileData()
-                .build();
+    public static void sendAllDeviceInfo() {
 /*        DeviceImpl deviceImpl = new DeviceImpl(mContext);
         deviceImpl.sendDeviceInfo(deviceUtil.getDeviceInfo());*/
 //todo impl bai 444444444444
-        MessageSendData data = new MessageSendData(Common.device_impl, deviceUtil.getDeviceInfo(), false);
+        MessageSendData data = new MessageSendData(Common.device_impl, JsonGenerateUtil.getDeviceInfoString(mContext), false);
+        Log.d("baii", "json " + data.getJsonContent());
         SendMessageManager manager = new SendMessageManager(mContext);
         manager.sendMessage(data);
-        return deviceUtil.getDeviceInfo();
     }
 
     
@@ -1804,7 +1788,7 @@ public class MDM {
         String model = android.os.Build.MODEL; //系统型号
         String alias = PreferencesManager.getSingleInstance().getData(Common.alias); //alias
 
-        File logFile = LogFileUtil.excuteFile(date);
+        File logFile = FileUtils.generateLogZip(TimeUtils.getDates(date, 7), BaseApplication.baseLogsPath + "/crash/crash");
         JSONObject json = new JSONObject();
         try {
             json.put("version", version);
@@ -2138,7 +2122,7 @@ public class MDM {
         }
 
         Map<String, String> sec_white_list = new HashMap<>();
-        sec_white_list = ConvertUtils.formatMapFromString(list);
+        sec_white_list = ConvertUtils.jsonStringToMap(list);
 
         List<String> url_list = new ArrayList<>();
         List<String> name_list = new ArrayList<>();
@@ -2176,7 +2160,7 @@ public class MDM {
         }
 
         Map<String, String> sec_white_list = new HashMap<>();
-        sec_white_list = ConvertUtils.formatMapFromString(list);
+        sec_white_list = ConvertUtils.jsonStringToMap(list);
 
         List<String> url_list = new ArrayList<>();
         List<String> name_list = new ArrayList<>();
@@ -2266,11 +2250,11 @@ public class MDM {
 
         //判断是否为第一次挂载sd卡
         if (TextUtils.isEmpty(sd)) {
-            preferencesManager.setComplianceData(Common.system_sd_id, TheTang.getSingleInstance().getSDCardId());
+            preferencesManager.setComplianceData(Common.system_sd_id, DeviceUtils.getSDCardId(mContext));
             return;
         }
 
-        String cid = TheTang.getSingleInstance().getSDCardId();
+        String cid = DeviceUtils.getSDCardId(mContext);
         //String sd = preferencesManager.getComplianceData( Common.system_sd_id );
 
         if (!sd.equals(cid)) {

@@ -2,10 +2,7 @@ package com.xiaomi.emm.view.activity;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.AlarmManager;
 import android.app.AppOpsManager;
-import android.app.PendingIntent;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -19,18 +16,12 @@ import com.xiaomi.emm.definition.Common;
 import com.xiaomi.emm.features.excute.MDMOrderService;
 import com.xiaomi.emm.features.keepalive.JobSchedulerManager;
 import com.xiaomi.emm.features.keepalive.PlayerMusicService;
-import com.xiaomi.emm.features.policy.fence.TimeFenceReceiver;
-import com.xiaomi.emm.features.service.WatchingOrderService;
 import com.xiaomi.emm.utils.ActivityCollector;
-import com.xiaomi.emm.utils.LogUtil;
-import com.xiaomi.emm.utils.MDM;
-import com.xiaomi.emm.utils.PreferencesManager;
-import com.xiaomi.emm.utils.TheTang;
+import com.xiaomi.emm.features.presenter.MDM;
+import com.xiaomi.emm.features.manager.PreferencesManager;
+import com.xiaomi.emm.features.presenter.TheTang;
 import com.xiaomi.emm.view.listener.PermissionListener;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -165,7 +156,7 @@ public class InitActivity extends BaseActivity {
         if (requestCode == 1101) {
             if (!hasPermission()) {
                 //若用户未开启权限，则引导用户开启“Apps with usage access”权限
-                Toast.makeText( TheTang.getSingleInstance().getContext(), getResources().getString(R.string.usage_access), Toast.LENGTH_LONG ).show();
+                Toast.makeText(this, getResources().getString(R.string.usage_access), Toast.LENGTH_LONG ).show();
                 finish();
             }
         }

@@ -5,7 +5,6 @@ package com.xiaomi.emm.socket.tcp;
 import android.util.Log;
 
 import com.xiaomi.emm.utils.LogUtil;
-import com.xiaomi.emm.utils.TheTang;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -198,8 +197,8 @@ public class TcpClient {
 					m_response.onConnectFailed();
 				}
 
-				Log.e(LOG_TAG, TheTang.getExceptionInfo(e));
-				LogUtil.writeToFile(LOG_TAG, TheTang.getExceptionInfo(e));
+				Log.e(LOG_TAG, LogUtil.getExceptionInfo(e));
+				LogUtil.writeToFile(LOG_TAG, LogUtil.getExceptionInfo(e));
 
 			}
 		}
@@ -236,7 +235,7 @@ public class TcpClient {
 		} catch (IOException e) {
 			e.printStackTrace();
 			Log.e(LOG_TAG, e.toString());
-			LogUtil.writeToFile(LOG_TAG, TheTang.getExceptionInfo(e));
+			LogUtil.writeToFile(LOG_TAG, LogUtil.getExceptionInfo(e));
 			if (m_response != null) {
 				//	LogUtil.writeToFile(LOG_TAG, "m_response.onConnectFailed -2-连接失败"+ TheTang.getExceptionInfo(e));
 				m_response.onConnectFailed();

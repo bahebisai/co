@@ -1,7 +1,6 @@
 package com.xiaomi.emm.features.service;
 
 import android.app.AlarmManager;
-import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
@@ -13,10 +12,9 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.xiaomi.emm.R;
-import com.xiaomi.emm.features.complete.CompleteMessageManager;
+import com.xiaomi.emm.features.manager.CompleteMessageManager;
 import com.xiaomi.emm.features.event.CompleteEvent;
-import com.xiaomi.emm.utils.SystemUtils;
-import com.xiaomi.emm.utils.TheTang;
+import com.xiaomi.emm.features.presenter.TheTang;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;

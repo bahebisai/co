@@ -1,9 +1,7 @@
 package com.xiaomi.emm.features.policy.compliance;
 
-import android.app.Service;
 import android.content.Intent;
 import android.content.pm.LauncherActivityInfo;
-import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -18,9 +16,9 @@ import com.xiaomi.emm.model.LostComplianceData;
 import com.xiaomi.emm.model.SystemComplianceData;
 import com.xiaomi.emm.utils.AppUtils;
 import com.xiaomi.emm.utils.LogUtil;
-import com.xiaomi.emm.utils.MDM;
-import com.xiaomi.emm.utils.PreferencesManager;
-import com.xiaomi.emm.utils.TheTang;
+import com.xiaomi.emm.features.presenter.MDM;
+import com.xiaomi.emm.features.manager.PreferencesManager;
+import com.xiaomi.emm.features.presenter.TheTang;
 
 import java.util.ArrayList;
 import java.util.List;

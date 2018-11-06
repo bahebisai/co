@@ -1,21 +1,24 @@
 package com.xiaomi.emm.utils;
 
-import android.content.Context;
-import android.util.Log;
-
-import com.xiaomi.emm.R;
-import com.xiaomi.emm.model.TimeData;
-
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class TimeUtils {//todo baii util time separate to time and timeData
+public class TimeUtils {
     private static final String TAG = TimeUtils.class.getName();
+
+    /**
+     * 根据后台下发时间的开始时间字串获取该天零点的Date对象
+     *
+     * @param startTime
+     * @return
+     */
     public static Date getStartDate(String startTime) {
 //            String dateStr = "2018-1-1";
         startTime = startTime.replaceAll("/", "-");
@@ -27,14 +30,19 @@ public class TimeUtils {//todo baii util time separate to time and timeData
         }
         Date date = new Date();
         try {
-            date = dateFormat.parse(startTime);
-//            Log.d("baii", "date 0 " + date.toString());//date 0 Wed Jan 31 00:00:00 GMT+08:00 2018
+            date = dateFormat.parse(startTime);//date 0 Wed Jan 31 00:00:00 GMT+08:00 2018
         } catch (ParseException e) {
             e.printStackTrace();
         }
         return date;
     }
 
+    /**
+     * 根据后台下发时间的结束时间字串获取第二天零点的Date对象
+     *
+     * @param endTime
+     * @return
+     */
     public static Date getEndDate(String endTime) {
 //        endTime = endTime.replaceAll()
 //        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");//bai 与下发时间格式保持一致
@@ -49,33 +57,19 @@ public class TimeUtils {//todo baii util time separate to time and timeData
 
         Date date = new Date();
         try {
-            date = dateFormat.parse(endTime);
-//            Log.d("baii", "date 0 " + date.toString());//date 0 Wed Jan 31 00:00:00 GMT+08:00 2018
+            date = dateFormat.parse(endTime);//date 0 Wed Jan 31 00:00:00 GMT+08:00 2018
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(date);
             calendar.add(Calendar.DAY_OF_MONTH, 1);
-            date = calendar.getTime();
-//            Log.d("baii", "date 1 " + date.toString());//date 1 Thu Feb 01 00:00:00 GMT+08:00 2018
+            date = calendar.getTime();//date 1 Thu Feb 01 00:00:00 GMT+08:00 2018
         } catch (ParseException e) {
             e.printStackTrace();
         }
         return date;
     }
 
-    public static boolean isExpired(long time, TimeData timeData) {
-        Date dateEnd = getEndDate(timeData.getEndDateRange());
-        Date now = new Date(time);
-        if (now.after(dateEnd)) {
-//            Log.d("baii", "isExpired-------------------------------");
-            LogUtil.writeToFile(TAG,"isExpired-------------------------------");
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     /**
-     * 得到时分
+     * 毫秒得到时分yyyyMMdd HHmmss
      *
      * @return 字符串 HHmm
      */
@@ -88,7 +82,7 @@ public class TimeUtils {//todo baii util time separate to time and timeData
     }
 
     /**
-     * 得到星期几
+     * 得到星期几，与后台类型相同的表示
      *
      * @return 字符串 HHmm
      */
@@ -102,6 +96,7 @@ public class TimeUtils {//todo baii util time separate to time and timeData
 
     /**
      * 通过毫秒获取到当前日期
+     *
      * @param time
      * @return pattern eg.2018-1-1
      */
@@ -112,85 +107,21 @@ public class TimeUtils {//todo baii util time separate to time and timeData
         return dateString;
     }
 
-    public static boolean isNumeric(String str){
+    public static boolean isNumeric(String str) {//baii util ??? todo
         Pattern pattern = Pattern.compile("[0-9]*");
         Matcher isNum = pattern.matcher(str);
-        if( !isNum.matches() ){
+        if (!isNum.matches()) {
             return false;
         }
         return true;
     }
 
-
-    public static boolean isInTimeUnitRange(long time, TimeData timeData) {
-        int weekDay = getWeekDay(time);
-        for (TimeData.TimeUnit timeUnit : timeData.getTimeUnits()) {
-            String type = timeUnit.getUnitType();
-            boolean isInDayRange = false;
-//            Log.d("baii", "type " + type);
-            switch (type) {
-                case "1": //每天
-                    isInDayRange = true;
-                    break;
-                case "2": //每周
-                    if (String.valueOf(weekDay).equals(timeUnit.getTypeDate())) {
-                        isInDayRange = true;
-                    }
-                    break;
-                case "3": //工作日，周一到周五
-                    if (weekDay >= 0 && weekDay <= 5) {
-                        isInDayRange = true;
-                    }
-                    break;
-                case "4":  //特定时间
-                    String date = getMonthDay(time);
-//                    Log.d("baii", "date sms " + date);
-//                    Log.d("baii", "date type " + timeUnit.getTypeDate());
-                    if (date.equals(timeUnit.getTypeDate())) {
-                        isInDayRange = true;
-                    }
-                    break;
-                default:
-                    break;
-            }
-            if (isInDayRange) {
-//                Log.d("baii", "in day-------------------------------");
-                String hmTime = getHmString(time);
-                String startTime = timeUnit.getStartTime().replace(":", "");
-                String endTime = timeUnit.getEndTime().replace(":", "");
-                if (isInTimeRange(startTime, endTime, hmTime)) {
-//                    Log.d("baii", "in time-------------------------------");
-                    LogUtil.writeToFile(TAG, "in time-------------------------------");
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    public static boolean isInDateRange(long time, TimeData timeData) {
-        Date dateStart = getStartDate(timeData.getStartDateRange());
-        Date dateEnd = getEndDate(timeData.getEndDateRange());
-        Date dateSms = new Date(time);
-        if (dateSms.after(dateStart) && dateSms.before(dateEnd)) {
-//            Log.d("baii", "in date-------------------------------");
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    private static boolean isInTimeRange(String start, String end, String smsTime) {
-        int startTime = Integer.parseInt(start);
-        int endTime = Integer.parseInt(end);
-        int toCompare = Integer.parseInt(smsTime);
-        if (toCompare >= startTime && toCompare <= endTime) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
+    /**
+     * 获取毫秒对应的日期格式yyyy-MM-dd HH:mm:ss
+     *
+     * @param time
+     * @return
+     */
     public static String getDateString(long time) {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = new Date(time);
@@ -198,6 +129,12 @@ public class TimeUtils {//todo baii util time separate to time and timeData
         return dateString;
     }
 
+    /**
+     * 根据时间字串yyyyMMddHHmmss获取yyyy-MM-dd HH:mm:ss类型字串
+     *
+     * @param startTime
+     * @return
+     */
     public static String getDateString(String startTime) {
         DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
         Date date = new Date();
@@ -210,37 +147,112 @@ public class TimeUtils {//todo baii util time separate to time and timeData
         return formatter.format(date);
     }
 
-
-    public static String getDisplayTimeString(TimeData timeData) {
-        StringBuilder stringBuilder = new StringBuilder();
-        Context context = TheTang.getSingleInstance().getContext();
-
-        stringBuilder.append(context.getResources().getString(R.string.time_range, timeData.getStartDateRange() + " ~ " + timeData.getEndDateRange()))
-                .append("\n");
-        for (TimeData.TimeUnit timeUnit : timeData.getTimeUnits()) {
-            String type = timeUnit.getUnitType();
-//            Log.d("baii", "type " + type);
-            switch (type) {
-                case "1": //每天
-                    stringBuilder.append(context.getResources().getString(R.string.every_day));
-                    break;
-                case "2": //每周
-                    stringBuilder.append(context.getResources().getString(R.string.every_week)).append(timeUnit.getTypeDate()).append("\n");
-                    break;
-                case "3": //工作日，周一到周五
-                    stringBuilder.append(context.getResources().getString(R.string.time_work));
-                    break;
-                case "4":  //特定时间
-                    stringBuilder.append(context.getResources().getString(R.string.special_time)).append(timeUnit.getTypeDate()).append("\n");
-                    break;
-                default:
-                    break;
-            }
-            String startTime = timeUnit.getStartTime();
-            String endTime = timeUnit.getEndTime();
-            stringBuilder.append(startTime).append(" - ").append(endTime).append("\n");
+    /**
+     * 获得duration对应的日期
+     *
+     * @param duration 天数，如7
+     * @return
+     */
+    public static List<String> getDates(String mDate, int duration) {
+        List<String> dateList = new ArrayList<>();
+        SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date beginDate = null;
+        try {
+            beginDate = mSimpleDateFormat.parse(mDate);//String 转 日期
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
-//        Log.d("baii", stringBuilder.toString());
-        return stringBuilder.toString();
+
+        for (int i = 0; i <= duration; i++) {
+            Calendar date = Calendar.getInstance();
+            date.setTime(beginDate);
+            date.set(Calendar.DATE, date.get(Calendar.DATE) - i);
+            String endDate = null;
+            endDate = mSimpleDateFormat.format(date.getTime());
+            dateList.add(endDate);
+        }
+        return dateList;
+    }
+
+    /**
+     * 获取截至今天零点本月的毫秒时间
+     *
+     * @return
+     */
+    public static long getTimeOfMonth() {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+
+        return (cal.getTimeInMillis());
+        //  return new Date().getTime();
+    }
+
+    /**
+     * 获得本月第一天0点时间
+     *
+     * @return
+     */
+    public static long getFirstDayTimeOfMonth() {
+        Calendar cal = Calendar.getInstance();
+        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
+        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMinimum(Calendar.DAY_OF_MONTH));
+
+        SimpleDateFormat mm = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        String format1 = mm.format(cal.getTime());
+        long time = 0;
+        try {
+            time = mm.parse(format1).getTime();
+        } catch (ParseException e) {
+            return time;
+        }
+        return time;
+    }
+
+    /**
+     * 获得本周日24点时间
+     *
+     * @return
+     */
+    public static int getTimesWeeknight() {
+        Calendar cal = Calendar.getInstance();
+        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
+        cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        return (int) ((cal.getTime().getTime() + (7 * 24 * 60 * 60 * 1000)) / 1000);
+    }
+
+    /**
+     * //获得当天24点时间
+     *
+     * @return
+     */
+    public static int getTimesnight() {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, 24);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return (int) (cal.getTimeInMillis() / 1000);
+    }
+
+    /**
+     * 获得本周一0点时间
+     *
+     * @return
+     */
+    public static long getMondayTime() {
+        Calendar cal = Calendar.getInstance();
+        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
+        cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        SimpleDateFormat mm = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        String format1 = mm.format(cal.getTime());
+
+        try {
+            return mm.parse(format1).getTime();
+        } catch (ParseException e) {
+            return 0;
+        }
     }
 }

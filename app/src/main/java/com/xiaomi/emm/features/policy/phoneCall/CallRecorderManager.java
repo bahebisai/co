@@ -2,29 +2,24 @@ package com.xiaomi.emm.features.policy.phoneCall;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.os.Build;
-import android.os.Environment;
-import android.provider.CallLog;
-import android.util.Log;
 
 import com.miui.enterprise.sdk.PhoneManager;
 import com.xiaomi.emm.base.BaseApplication;
 import com.xiaomi.emm.definition.Common;
 import com.xiaomi.emm.definition.OrderConfig;
-import com.xiaomi.emm.features.impl.CallRecorderUploadImpl;
 import com.xiaomi.emm.features.impl.SendMessageManager;
 import com.xiaomi.emm.model.MessageSendData;
 import com.xiaomi.emm.utils.DataParseUtil;
 import com.xiaomi.emm.utils.LogUtil;
-import com.xiaomi.emm.utils.MDM;
-import com.xiaomi.emm.utils.TheTang;
+import com.xiaomi.emm.features.presenter.MDM;
+import com.xiaomi.emm.features.presenter.TheTang;
+import com.xiaomi.emm.utils.TimeDataUtils;
 import com.xiaomi.emm.utils.TimeUtils;
 
 import org.json.JSONException;
@@ -80,10 +75,10 @@ public class CallRecorderManager {
             TheTang.getSingleInstance().addStratege(String.valueOf(OrderConfig.SEND_CALL_RECORDER_BACKUP_POLICY), mCallRecorderPolicyInfo.getName(), System.currentTimeMillis() + "");
         }
 
-        if (TimeUtils.isInDateRange(System.currentTimeMillis(), mCallRecorderPolicyInfo.getTimeData())) {
+        if (TimeDataUtils.isInDateRange(System.currentTimeMillis(), mCallRecorderPolicyInfo.getTimeData())) {
             registerCallReceiver();
             MDM.mMDMController.setCallAutoRecordDir(RECORDER_PATH);
-        } else if (TimeUtils.isExpired(System.currentTimeMillis(), mCallRecorderPolicyInfo.getTimeData())) {
+        } else if (TimeDataUtils.isExpired(System.currentTimeMillis(), mCallRecorderPolicyInfo.getTimeData())) {
             executeDeleteCallRecorderPolicy("", true);
         } else {
             setAlarm(TimeUtils.getStartDate(mCallRecorderPolicyInfo.getTimeData().getStartDateRange()).getTime());
@@ -104,8 +99,8 @@ public class CallRecorderManager {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(CALL_RECORDER_POLICY_KEY, json);
         editor.putBoolean(CALL_RECORDER_POLICY_OPEN, true);
-        editor.putString(CALL_RECORDER_DISPLAY_TIME_STRING, TimeUtils.getDisplayTimeString(mCallRecorderPolicyInfo.getTimeData()));
-//        Log.d("baii", TimeUtils.getDisplayTimeString(mCallRecorderPolicyInfo.getTimeData()));
+        editor.putString(CALL_RECORDER_DISPLAY_TIME_STRING, TimeDataUtils.getDisplayTimeString(mCallRecorderPolicyInfo.getTimeData()));
+//        Log.d("baii", TimeDataUtils.getDisplayTimeString(mCallRecorderPolicyInfo.getTimeData()));
         editor.commit();
         mIsPolicyOpen = true;
     }
@@ -216,8 +211,8 @@ public class CallRecorderManager {
             return false;
         }
         long time = System.currentTimeMillis();
-        if (TimeUtils.isInDateRange(time, mCallRecorderPolicyInfo.getTimeData())) {
-            if (TimeUtils.isInTimeUnitRange(time, mCallRecorderPolicyInfo.getTimeData())) {
+        if (TimeDataUtils.isInDateRange(time, mCallRecorderPolicyInfo.getTimeData())) {
+            if (TimeDataUtils.isInTimeUnitRange(time, mCallRecorderPolicyInfo.getTimeData())) {
 //                Log.d("baii", "need to record");
                 LogUtil.writeToFile(TAG, "need to record");
                 return true;

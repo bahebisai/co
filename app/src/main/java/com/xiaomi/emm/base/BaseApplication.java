@@ -9,12 +9,10 @@ import com.xiaomi.emm.R;
 import com.xiaomi.emm.features.db.DatabaseOperate;
 import com.xiaomi.emm.features.excute.XiaomiMDMController;
 import com.xiaomi.emm.features.lockscreen.NewsLifecycleHandler;
-import com.xiaomi.emm.features.policy.sms.SmsManager;
-import com.xiaomi.emm.utils.LogException;
 import com.xiaomi.emm.utils.LogUtil;
-import com.xiaomi.emm.utils.MDM;
-import com.xiaomi.emm.utils.PreferencesManager;
-import com.xiaomi.emm.utils.TheTang;
+import com.xiaomi.emm.features.presenter.MDM;
+import com.xiaomi.emm.features.manager.PreferencesManager;
+import com.xiaomi.emm.features.presenter.TheTang;
 
 import java.io.File;
 import java.util.List;
@@ -63,20 +61,18 @@ public class BaseApplication extends Application {
         callback = new NewsLifecycleHandler();
         registerActivityLifecycleCallbacks(callback);
         initPathAndCreate();
-        LogUtil.init( this );
-//        HuaweiMDMController.getSingleInstance().init( this );
 
-        XiaomiMDMController.getSingleInstance().init(this);
+        LogUtil.getSingleInstance().init(this);
         //极光推送初始化
         //JPushInterface.setDebugMode( true );
         // JPushInterface.init( this );
 
+        XiaomiMDMController.getSingleInstance().init(this);
         TheTang.getSingleInstance().init( this);
         MDM.getSingleInstance().init( this );
         DatabaseOperate.getSingleInstance().init( this );
         PreferencesManager.getSingleInstance().init( this );
         //全局uncheckedException捕获
-        LogException.getSingleInstance().init(this);
 
     }
 

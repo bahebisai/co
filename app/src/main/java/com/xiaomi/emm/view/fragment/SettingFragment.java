@@ -1,37 +1,28 @@
 package com.xiaomi.emm.view.fragment;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.Toast;
 
 import com.xiaomi.emm.R;
-import com.xiaomi.emm.base.BaseApplication;
 import com.xiaomi.emm.definition.Common;
 import com.xiaomi.emm.features.impl.SettingRequestImpl;
 import com.xiaomi.emm.utils.ActivityCollector;
-import com.xiaomi.emm.utils.MDM;
-import com.xiaomi.emm.utils.PreferencesManager;
+import com.xiaomi.emm.features.presenter.MDM;
+import com.xiaomi.emm.features.manager.PreferencesManager;
 import com.xiaomi.emm.view.activity.AboutActivity;
 import com.xiaomi.emm.view.activity.AgreementActivity;
 import com.xiaomi.emm.view.activity.HelpActivity;
 import com.xiaomi.emm.view.activity.OldPasswordActivity;
 import com.xiaomi.emm.view.activity.SupportActivity;
-
-import org.greenrobot.eventbus.util.ErrorDialogFragmentFactory;
-
-import java.util.List;
 
 /**
  * Created by Administrator on 2017/6/27.

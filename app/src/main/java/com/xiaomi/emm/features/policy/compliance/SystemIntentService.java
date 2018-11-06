@@ -5,9 +5,9 @@ import android.content.Intent;
 
 import com.xiaomi.emm.R;
 import com.xiaomi.emm.features.lockscreen.flowreceive.FlowTotalReceiver;
-import com.xiaomi.emm.utils.MDM;
-import com.xiaomi.emm.utils.PreferencesManager;
-import com.xiaomi.emm.utils.TheTang;
+import com.xiaomi.emm.features.presenter.MDM;
+import com.xiaomi.emm.features.manager.PreferencesManager;
+import com.xiaomi.emm.features.presenter.TheTang;
 
 
 /**

@@ -7,7 +7,7 @@ import android.widget.TextView;
 import com.xiaomi.emm.R;
 import com.xiaomi.emm.features.event.MessageEvent;
 import com.xiaomi.emm.model.MessageInfo;
-import com.xiaomi.emm.utils.TheTang;
+import com.xiaomi.emm.features.presenter.TheTang;
 
 import org.greenrobot.eventbus.EventBus;
 

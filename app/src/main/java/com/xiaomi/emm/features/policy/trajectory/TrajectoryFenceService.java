@@ -19,8 +19,8 @@ import com.xiaomi.emm.model.MessageSendData;
 import com.xiaomi.emm.utils.CoordinateUtils;
 import com.xiaomi.emm.utils.DataParseUtil;
 import com.xiaomi.emm.utils.LogUtil;
-import com.xiaomi.emm.utils.PreferencesManager;
-import com.xiaomi.emm.utils.TheTang;
+import com.xiaomi.emm.features.manager.PreferencesManager;
+import com.xiaomi.emm.features.presenter.TheTang;
 
 import org.json.JSONObject;
 

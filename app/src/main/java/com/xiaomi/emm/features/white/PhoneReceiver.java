@@ -20,9 +20,9 @@ import com.xiaomi.emm.model.MessageSendData;
 import com.xiaomi.emm.model.PhoneLog;
 import com.xiaomi.emm.model.TelephoyWhiteUser;
 import com.xiaomi.emm.utils.LogUtil;
-import com.xiaomi.emm.utils.PreferencesManager;
-import com.xiaomi.emm.utils.TheTang;
-import com.xiaomi.emm.utils.WifyManager;
+import com.xiaomi.emm.features.manager.PreferencesManager;
+import com.xiaomi.emm.features.presenter.TheTang;
+import com.xiaomi.emm.utils.WifiHelper;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -158,7 +158,7 @@ public class PhoneReceiver extends BroadcastReceiver {
         }
 
         Log.w( TAG, new Gson().toJson( phoneLogs ) );
-        String ssid = WifyManager.getSSID();
+        String ssid = WifiHelper.getSSID();
         if (!TextUtils.isEmpty( ssid )) {
 /*            ComingNumberLogImpl comingNumberLogImpl = new ComingNumberLogImpl( TheTang.getSingleInstance().getContext() );
             comingNumberLogImpl.sendComingNumberLog( new Gson().toJson( phoneLogs ) );*/

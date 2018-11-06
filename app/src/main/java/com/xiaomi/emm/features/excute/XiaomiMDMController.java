@@ -31,7 +31,6 @@ import com.xiaomi.emm.utils.ConvertUtils;
 import com.xiaomi.emm.utils.DeviceUtils;
 import com.xiaomi.emm.utils.LogUtil;
 import com.xiaomi.emm.utils.PhoneUtils;
-import com.xiaomi.emm.utils.TheTang;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -216,7 +215,6 @@ public class XiaomiMDMController extends MDMController {
     public List<String> getDeviceInfo() {
         List<String> list = new ArrayList<>();
         for (int i = 0; i < Common.deviceInfo.length; i++) {
-
             if (Common.deviceInfo[i].equals("imei")) {
 //                list.add(TheTang.getSingleInstance().getImei());
                 list.add(getImei(0));
@@ -233,7 +231,7 @@ public class XiaomiMDMController extends MDMController {
             } else if (Common.deviceInfo[i].equals("manufacturers")){
                 list.add(DeviceUtils.getManufacturers());
             } else if (Common.deviceInfo[i].equals("model")){
-                list.add(DeviceUtils.getModel());
+                list.add(DeviceUtils.getDeviceModel());
             } else if (Common.deviceInfo[i].equals("android_version")){
                 list.add(DeviceUtils.getAndroidVersion());
             } else if (Common.deviceInfo[i].equals("system_version")){
@@ -243,9 +241,9 @@ public class XiaomiMDMController extends MDMController {
             } else if (Common.deviceInfo[i].equals("patch_level")){
                 list.add("");
             } else if (Common.deviceInfo[i].equals("sim1_iccid")){
-                list.add(PhoneUtils.getIccid1(mContext));
+                list.add(PhoneUtils.getIccid(mContext, 0));
             } else if (Common.deviceInfo[i].equals("sim2_iccid")){
-                list.add(PhoneUtils.getIccid2(mContext));
+                list.add(PhoneUtils.getIccid(mContext, 1));
             } else if (Common.deviceInfo[i].equals("sim1_ismi")){
                 list.add(PhoneUtils.getSubscriberId1(mContext));
             } else if (Common.deviceInfo[i].equals("sim2_ismi")){

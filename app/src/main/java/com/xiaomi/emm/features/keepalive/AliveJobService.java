@@ -11,8 +11,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.xiaomi.emm.definition.Common;
+import com.xiaomi.emm.utils.AppUtils;
 import com.xiaomi.emm.utils.LogUtil;
-import com.xiaomi.emm.utils.SystemUtils;
 import com.xiaomi.emm.view.activity.InitActivity;
 
 /**
@@ -34,7 +34,7 @@ public class AliveJobService extends JobService {
         @Override
         public boolean handleMessage(Message msg) {
             // 具体任务逻辑
-            if(SystemUtils.isAPPALive(getApplicationContext(), Common.packageName)){
+            if(AppUtils.isAPPALive(getApplicationContext(), Common.packageName)){
                 //Toast.makeText(getApplicationContext(), "APP活着的", Toast.LENGTH_SHORT)
                 //        .show();
             }else{

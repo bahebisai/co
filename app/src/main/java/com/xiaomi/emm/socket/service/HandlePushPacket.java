@@ -8,12 +8,10 @@ import android.util.Log;
 import com.xiaomi.emm.socket.constant.AppErr;
 import com.xiaomi.emm.socket.packet.PushDevPacket;
 import com.xiaomi.emm.socket.tcp.TcpClient;
-import com.xiaomi.emm.socket.threadtaskpool.ThreadUtils;
 import com.xiaomi.emm.socket.utils.Formatter;
 import com.xiaomi.emm.socket.utils.StringFormatter;
 import com.xiaomi.emm.features.excute.MDMOrderReciver1;
 import com.xiaomi.emm.utils.LogUtil;
-import com.xiaomi.emm.utils.TheTang;
 
 import org.json.JSONObject;
 
@@ -21,8 +19,6 @@ import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
-
-import cn.jpush.android.api.JPushInterface;
 
 
 /**
@@ -270,7 +266,7 @@ public class HandlePushPacket {
 			sendRetPacket(AppErr.ERR_SYSTEM, "程序异常错");
 
 			e.printStackTrace();
-			Log.w(TAG, "qry() OMS查询客户端信息及参数配置异常=" + TheTang.getExceptionInfo(e));
+			Log.w(TAG, "qry() OMS查询客户端信息及参数配置异常=" + LogUtil.getExceptionInfo(e));
 		//	Log.w(TAG, e);
 		}
 	}
@@ -299,7 +295,7 @@ public class HandlePushPacket {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			Log.w(TAG, "send_packet() 发送OMS查询客户端信息的回应包异常=" + TheTang.getExceptionInfo(e));
+			Log.w(TAG, "send_packet() 发送OMS查询客户端信息的回应包异常=" + LogUtil.getExceptionInfo(e));
 		}
 	}
 
@@ -325,7 +321,7 @@ public class HandlePushPacket {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			Log.w(TAG, "sendResponsePacket() 发送OMS查询客户端全局变量的回应包异常=" + TheTang.getExceptionInfo(e));
+			Log.w(TAG, "sendResponsePacket() 发送OMS查询客户端全局变量的回应包异常=" + LogUtil.getExceptionInfo(e));
 		}
 	}
 

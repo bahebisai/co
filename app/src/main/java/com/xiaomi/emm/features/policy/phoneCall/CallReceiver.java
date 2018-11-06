@@ -7,7 +7,7 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import com.miui.enterprise.sdk.PhoneManager;
-import com.xiaomi.emm.utils.MDM;
+import com.xiaomi.emm.features.presenter.MDM;
 
 public class CallReceiver extends BroadcastReceiver {
     public static final String ACTION_CALL_CONNECTED = PhoneManager.ACTION_CALL_CONNECTED;

@@ -7,7 +7,7 @@ import android.webkit.WebView;
 import com.xiaomi.emm.R;
 import com.xiaomi.emm.definition.Common;
 import com.xiaomi.emm.utils.AppUtils;
-import com.xiaomi.emm.utils.TheTang;
+import com.xiaomi.emm.features.presenter.TheTang;
 
 /**
  * Created by Administrator on 2017/8/10.
@@ -25,7 +25,7 @@ public class AboutActivity extends BaseActivity {
     @Override
     protected void initData() {
         String version = null;
-        version = AppUtils.getAppVersion(this, Common.packageName);
+        version = AppUtils.getAppVersionName(this, Common.packageName);
 
         about_str = "<html lang=\"en\">\n" +
                 "  <head>\n" +

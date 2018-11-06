@@ -18,15 +18,15 @@ import com.xiaomi.emm.features.policy.fence.GaodeGeographicalFenceService;
 import com.xiaomi.emm.features.service.NetWorkChangeService;
 import com.xiaomi.emm.model.PolicyData;
 import com.xiaomi.emm.utils.LogUtil;
-import com.xiaomi.emm.utils.MDM;
-import com.xiaomi.emm.utils.PreferencesManager;
-import com.xiaomi.emm.utils.TheTang;
+import com.xiaomi.emm.features.presenter.MDM;
+import com.xiaomi.emm.features.manager.PreferencesManager;
+import com.xiaomi.emm.features.presenter.TheTang;
 import com.xiaomi.emm.view.activity.MainActivity;
 import com.xiaomi.emm.view.activity.SafeDeskActivity;
 
 import org.greenrobot.eventbus.EventBus;
 
-import static com.xiaomi.emm.utils.MDM.mMDMController;
+import static com.xiaomi.emm.features.presenter.MDM.mMDMController;
 
 /**
  * Created by Administrator on 2017/11/7.

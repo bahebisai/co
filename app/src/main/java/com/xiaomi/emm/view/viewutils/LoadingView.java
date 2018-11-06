@@ -15,14 +15,13 @@ import android.widget.LinearLayout;
 
 import com.xiaomi.emm.R;
 
-
 /**
  *
  */
 public class LoadingView extends FrameLayout {
 
-        private final int[] mResDrawable = {R.mipmap.icon_star_7, R.mipmap.icon_star_7, R.mipmap.icon_star_7, R.mipmap.icon_star_7,R.mipmap.icon_star_7};
-   // private final int[] mResDrawable = {R.drawable.icon_star_1, R.drawable.icon_star_2, R.drawable.icon_star_3 , R.drawable.icon_star_4 , R.drawable.icon_star_5};
+    private final int[] mResDrawable = {R.mipmap.icon_star_7, R.mipmap.icon_star_7, R.mipmap.icon_star_7, R.mipmap.icon_star_7, R.mipmap.icon_star_7};
+    // private final int[] mResDrawable = {R.drawable.icon_star_1, R.drawable.icon_star_2, R.drawable.icon_star_3 , R.drawable.icon_star_4 , R.drawable.icon_star_5};
     //private final int[] mResDrawable = {R.drawable.icon_star_6, R.drawable.icon_star_6, R.drawable.icon_star_6 , R.drawable.icon_star_6 , R.drawable.icon_star_6};
     private int mIndex;//当前图片的下标
     private boolean mSkip = true;
@@ -94,25 +93,19 @@ public class LoadingView extends FrameLayout {
         backAnimation = new TranslateAnimation(0, 0, MAX_HEIGHT, 0);
         backAnimation.setDuration(DURATION);
         backAnimation.setFillAfter(true);
-        rotateAnimation = new RotateAnimation(0,72,
+        rotateAnimation = new RotateAnimation(0, 72,
                 Animation.RELATIVE_TO_SELF, 0.5f, //0.5 = 1/2的自己父控件的长度
                 Animation.RELATIVE_TO_SELF, 0.5f);//0.5 = 1/2的自己的长度
         rotateAnimation.setRepeatCount(0);
         rotateAnimation.setDuration(DURATION);
-
-
 //        rotateAnimation.setAnimationListener(animationListener);
-
-
         animationSet = new AnimationSet(true);
         animationSet.addAnimation(rotateAnimation);
         animationSet.addAnimation(translateAnimation);
 
-
         animationSet2 = new AnimationSet(true);
         animationSet2.addAnimation(rotateAnimation);
         animationSet2.addAnimation(backAnimation);
-
 
         translateAnimation.setAnimationListener(animationListener);
         backAnimation.setAnimationListener(animationListener);
@@ -120,7 +113,6 @@ public class LoadingView extends FrameLayout {
         animationSet2.setInterpolator(mContext, android.R.anim.decelerate_interpolator);
         animationSet.setInterpolator(mContext, android.R.anim.accelerate_interpolator);
         animationSet.start();
-
     }
 
     Animation.AnimationListener animationListener = new Animation.AnimationListener() {
@@ -151,13 +143,10 @@ public class LoadingView extends FrameLayout {
         }
     };
 
-
     /**
      * 此View向下的俯冲动画结束的回调
      */
     public interface OnViewAnimEndListener {
         void onDropDown();
     }
-
-
 }

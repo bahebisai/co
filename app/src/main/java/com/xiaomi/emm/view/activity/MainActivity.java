@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.storage.StorageManager;
-import android.os.storage.StorageVolume;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -27,13 +25,10 @@ import com.xiaomi.emm.base.BaseApplication;
 import com.xiaomi.emm.definition.Common;
 import com.xiaomi.emm.features.event.AvatarUpdateEvent;
 import com.xiaomi.emm.features.excute.MDMOrderService;
-import com.xiaomi.emm.features.policy.compliance.machinecard.MachineCardBindingService;
-import com.xiaomi.emm.features.policy.fence.GaodeGeographicalFenceService;
-import com.xiaomi.emm.features.service.WatchingOrderService;
 import com.xiaomi.emm.utils.LogUtil;
-import com.xiaomi.emm.utils.MDM;
-import com.xiaomi.emm.utils.PreferencesManager;
-import com.xiaomi.emm.utils.TheTang;
+import com.xiaomi.emm.features.presenter.MDM;
+import com.xiaomi.emm.features.manager.PreferencesManager;
+import com.xiaomi.emm.features.presenter.TheTang;
 import com.xiaomi.emm.view.fragment.AppStoreFragment;
 import com.xiaomi.emm.view.fragment.MessageFragment;
 import com.xiaomi.emm.view.fragment.SettingFragment;
@@ -47,10 +42,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
-import java.lang.reflect.Array;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.List;
 import java.util.Set;
 
 /**

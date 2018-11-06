@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.xiaomi.emm.utils.TheTang;
+import com.xiaomi.emm.features.presenter.TheTang;
 import com.xiaomi.emm.view.ViewHolder;
 
 import org.greenrobot.eventbus.EventBus;

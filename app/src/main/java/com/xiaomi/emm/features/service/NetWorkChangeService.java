@@ -21,11 +21,11 @@ import com.xiaomi.emm.model.MessageSendData;
 import com.xiaomi.emm.utils.AppUtils;
 import com.xiaomi.emm.utils.JsonGenerateUtil;
 import com.xiaomi.emm.utils.LogUtil;
-import com.xiaomi.emm.utils.MDM;
+import com.xiaomi.emm.features.presenter.MDM;
 import com.xiaomi.emm.utils.PhoneUtils;
-import com.xiaomi.emm.utils.PreferencesManager;
-import com.xiaomi.emm.utils.TheTang;
-import com.xiaomi.emm.utils.WifyManager;
+import com.xiaomi.emm.features.manager.PreferencesManager;
+import com.xiaomi.emm.features.presenter.TheTang;
+import com.xiaomi.emm.utils.WifiHelper;
 
 import org.json.JSONObject;
 
@@ -113,7 +113,7 @@ public class NetWorkChangeService extends IntentService {
      */
     private void sendAppVersion() {
         String oldVersion = PreferencesManager.getSingleInstance().getData( Common.appVersion );
-        String newVersion = AppUtils.getAppVersion(this, getPackageName());
+        String newVersion = AppUtils.getAppVersionName(this, getPackageName());
         if (TextUtils.isEmpty( oldVersion ) || !oldVersion.equals( newVersion )) {
   /*          UpdateAPPVersionImpl mUpdateAPPVersionImpl = new UpdateAPPVersionImpl( TheTang.getSingleInstance().getContext() );
             mUpdateAPPVersionImpl.sendUpdateAppVersion();*/
@@ -124,7 +124,7 @@ public class NetWorkChangeService extends IntentService {
 
     private void sendUpdateVersion() {
         String alias = PreferencesManager.getSingleInstance().getData(Common.alias);
-        String newVersion = AppUtils.getAppVersion(this, Common.packageName);
+        String newVersion = AppUtils.getAppVersionName(this, Common.packageName);
         Map<String, String> map = new ArrayMap<>();
         map.put("alias", alias);
         map.put("appVersion", newVersion);
@@ -322,9 +322,9 @@ public class NetWorkChangeService extends IntentService {
                 Log.w( TAG, "WLANBroadcastReceiver --> onReceive--> WIFI_STATE_ENABLED WLAN已经打开" );
 
                 //有围栏内有wifi设置的情况下配置
-                if (WifyManager.isWifiEnabled()) {
+                if (WifiHelper.isWifiEnabled()) {
 
-                    Log.w( TAG, "有围栏内有wifi设置的情况下配置" + WifyManager.getSSID() );
+                    Log.w( TAG, "有围栏内有wifi设置的情况下配置" + WifiHelper.getSSID() );
                     if (!TextUtils.isEmpty( preferencesManager.getFenceData( Common.insideAndOutside ) ) &&
                             "true".equals( preferencesManager.getFenceData( Common.insideAndOutside ) )) {
 
@@ -335,12 +335,12 @@ public class NetWorkChangeService extends IntentService {
 
                             if (!TextUtils.isEmpty( preferencesManager.getFenceData( "conect" ) )) {
 
-                                Log.w( TAG, "有围栏内有wifi设置的配置----" + WifyManager.isWifiEnabled() );
-                                WifiConfiguration wifiConfiguration = WifyManager.CreateWifiInfo( preferencesManager.getFenceData( Common.configureWifi ), preferencesManager.getFenceData( Common.wifi_password ), Integer.parseInt( preferencesManager.getFenceData( Common.safeType ) ) );
+                                Log.w( TAG, "有围栏内有wifi设置的配置----" + WifiHelper.isWifiEnabled() );
+                                WifiConfiguration wifiConfiguration = WifiHelper.CreateWifiInfo( preferencesManager.getFenceData( Common.configureWifi ), preferencesManager.getFenceData( Common.wifi_password ), Integer.parseInt( preferencesManager.getFenceData( Common.safeType ) ) );
 
-                                if (!TextUtils.isEmpty( WifyManager.getSSID() ) && wifiConfiguration != null && !WifyManager.getSSID().equals( wifiConfiguration.SSID )) {
+                                if (!TextUtils.isEmpty( WifiHelper.getSSID() ) && wifiConfiguration != null && !WifiHelper.getSSID().equals( wifiConfiguration.SSID )) {
 
-                                    boolean network_connect = WifyManager.addNetwork_Connect( wifiConfiguration );
+                                    boolean network_connect = WifiHelper.addNetwork_Connect( wifiConfiguration );
 
 
                                     Log.w( TAG, wifiConfiguration.SSID + "network_connect===" + network_connect + "netid=" + preferencesManager.getFenceData( Common.wifi_password ) );

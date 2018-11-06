@@ -8,9 +8,9 @@ import com.xiaomi.emm.features.event.LoginEvent;
 import com.xiaomi.emm.features.http.LoginCallBack;
 import com.xiaomi.emm.features.http.RequestService;
 import com.xiaomi.emm.utils.DataParseUtil;
+import com.xiaomi.emm.utils.DeviceUtils;
 import com.xiaomi.emm.utils.LogUtil;
-import com.xiaomi.emm.utils.MDM;
-import com.xiaomi.emm.utils.UUIDGenerator;
+import com.xiaomi.emm.features.presenter.MDM;
 
 import okhttp3.RequestBody;
 
@@ -32,7 +32,7 @@ public class LoginImpl extends BaseImpl<RequestService> {
 
     //登录
     public void login(String username, String passWord) {
-        String uuid = UUIDGenerator.getUUID();
+        String uuid = DeviceUtils.getUUID();
         LogUtil.writeToFile(TAG,"Login request!");
         RequestBody body = DataParseUtil.loginToJson(mContext, username, passWord, MDM.getDeviceInfo());
 

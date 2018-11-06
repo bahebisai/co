@@ -3,13 +3,11 @@ package com.xiaomi.emm.features.http;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.xiaomi.emm.definition.Common;
 import com.xiaomi.emm.model.LoginBackData;
 import com.xiaomi.emm.features.event.LoginEvent;
 import com.xiaomi.emm.model.Token;
 import com.xiaomi.emm.utils.DataParseUtil;
 import com.xiaomi.emm.utils.LogUtil;
-import com.xiaomi.emm.utils.PreferencesManager;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;

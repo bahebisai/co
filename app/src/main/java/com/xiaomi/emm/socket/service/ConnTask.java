@@ -30,8 +30,8 @@ import com.xiaomi.emm.socket.time.StdAlarmImpl;
 import com.xiaomi.emm.socket.utils.StringFormatter;
 import com.xiaomi.emm.utils.LogUtil;
 import com.xiaomi.emm.utils.PhoneUtils;
-import com.xiaomi.emm.utils.PreferencesManager;
-import com.xiaomi.emm.utils.TheTang;
+import com.xiaomi.emm.features.manager.PreferencesManager;
+import com.xiaomi.emm.features.presenter.TheTang;
 import com.xiaomi.emm.view.activity.LoginActivity;
 
 import org.json.JSONException;
@@ -328,7 +328,7 @@ public class ConnTask {
 				m_recv_buf.clear();
 
 				e.printStackTrace();
-				Log.e(TAG, "handleRecvMsg() 处理返回包异常=" + TheTang.getExceptionInfo(e));
+				Log.e(TAG, "handleRecvMsg() 处理返回包异常=" + LogUtil.getExceptionInfo(e));
 				break;
 			}
 			//刚好一包所以清除
@@ -467,14 +467,13 @@ public class ConnTask {
 			stopReconnOpt();
 
 			Log.e(TAG,"没有网络所以不去连接长连接服务器"+"===="+msg);
-			int networkAvaliable = PhoneUtils.getNetworkType(TheTang.getSingleInstance().getContext());
-			//Log.e(TAG,"获取当前的网络状态:0：没有网络 1：WIFI网络 2：WAP网络 3：NET网络==="+networkAvaliable);
+			int networkAvailable = PhoneUtils.getNetWorkState(TheTang.getSingleInstance().getContext());
 			if (PhoneUtils.isNetworkConnected(mContext)){
-				LogUtil.writeToFile(TAG,"有网络通的情况下重新连接长连接服务器"+networkAvaliable +"===="+msg);
-				Log.e(TAG,"有网络通的情况下有网络重新连接长连接服务器"+networkAvaliable +"===="+msg);
+				LogUtil.writeToFile(TAG,"有网络通的情况下重新连接长连接服务器"+networkAvailable +"===="+msg);
+				Log.e(TAG,"有网络通的情况下有网络重新连接长连接服务器"+networkAvailable +"===="+msg);
 				reconnect();
 			} else {
-				LogUtil.writeToFile(TAG,"网络不通所以不去连接长连接服务器"+networkAvaliable+"===="+msg);
+				LogUtil.writeToFile(TAG,"网络不通所以不去连接长连接服务器"+networkAvailable+"===="+msg);
 				Log.e(TAG,"没有网络所以不去连接长连接服务器"+"===="+msg);
 
 				//如果网络中断，则启动定时
@@ -763,8 +762,8 @@ public class ConnTask {
 				m_recv_buf.clear();
 
 				e.printStackTrace();
-				Log.w(TAG, "handleRecvMsg() 处理返回包异常=" + TheTang.getExceptionInfo(e));
-				LogUtil.writeToFile(TAG, "handleRecvMsg() 处理返回包异常=" + TheTang.getExceptionInfo(e));
+				Log.w(TAG, "handleRecvMsg() 处理返回包异常=" + LogUtil.getExceptionInfo(e));
+				LogUtil.writeToFile(TAG, "handleRecvMsg() 处理返回包异常=" + LogUtil.getExceptionInfo(e));
 				break;
 			}
 

@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.xiaomi.emm.R;
 import com.xiaomi.emm.definition.Common;
 import com.xiaomi.emm.model.StrategeInfo;
-import com.xiaomi.emm.utils.TheTang;
+import com.xiaomi.emm.features.presenter.TheTang;
 
 import java.util.ArrayList;
 import java.util.List;

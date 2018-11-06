@@ -1,12 +1,7 @@
 package com.xiaomi.emm.features.silent;
 
-import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.os.Handler;
-import android.os.Looper;
-import android.support.v4.content.FileProvider;
 import android.util.Log;
 
 import com.xiaomi.emm.base.BaseApplication;
@@ -17,11 +12,10 @@ import com.xiaomi.emm.features.event.APKEvent;
 import com.xiaomi.emm.features.event.CompleteEvent;
 import com.xiaomi.emm.model.APPInfo;
 import com.xiaomi.emm.model.DownLoadEntity;
-import com.xiaomi.emm.utils.AppUtils;
 import com.xiaomi.emm.utils.LogUtil;
-import com.xiaomi.emm.utils.MDM;
-import com.xiaomi.emm.utils.PreferencesManager;
-import com.xiaomi.emm.utils.TheTang;
+import com.xiaomi.emm.features.presenter.MDM;
+import com.xiaomi.emm.features.manager.PreferencesManager;
+import com.xiaomi.emm.features.presenter.TheTang;
 
 import org.greenrobot.eventbus.EventBus;
 

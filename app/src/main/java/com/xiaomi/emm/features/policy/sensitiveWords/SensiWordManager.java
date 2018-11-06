@@ -2,14 +2,13 @@ package com.xiaomi.emm.features.policy.sensitiveWords;
 
 import android.content.ComponentName;
 import android.content.Context;
-import android.util.Log;
 
 import com.xiaomi.emm.definition.OrderConfig;
 import com.xiaomi.emm.features.db.DatabaseOperate;
 import com.xiaomi.emm.features.excute.XiaomiMDMController;
 import com.xiaomi.emm.model.SensitiveStrategyInfo;
 import com.xiaomi.emm.utils.LogUtil;
-import com.xiaomi.emm.utils.TheTang;
+import com.xiaomi.emm.features.presenter.TheTang;
 
 import java.util.HashMap;
 

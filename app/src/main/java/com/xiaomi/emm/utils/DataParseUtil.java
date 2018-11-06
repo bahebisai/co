@@ -8,8 +8,11 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.xiaomi.emm.definition.Common;
+import com.xiaomi.emm.features.manager.PreferencesManager;
 import com.xiaomi.emm.features.policy.phoneCall.CallRecorderPolicyInfo;
 import com.xiaomi.emm.features.policy.sms.SmsPolicyInfo;
+import com.xiaomi.emm.features.presenter.MDM;
+import com.xiaomi.emm.features.presenter.TheTang;
 import com.xiaomi.emm.model.AppBlackWhiteData;
 import com.xiaomi.emm.model.AppFenceData;
 import com.xiaomi.emm.model.DeleteAppData;
@@ -40,7 +43,7 @@ import okhttp3.RequestBody;
 
 
 /**
- * Created by Administrator on 2017/6/16.
+ * 后台Push的json数据解析类
  */
 
 public class DataParseUtil {
@@ -59,14 +62,13 @@ public class DataParseUtil {
      */
     public static String jSon(String target, String extra) {
         String code = null;
-
         try {
-            JSONObject jsonObject = new JSONObject( extra );
+            JSONObject jsonObject = new JSONObject(extra);
             if (jsonObject != null) {
                 code = jsonObject.getString(target);
             }
         } catch (JSONException e) {
-            Log.d( TAG, "BaseJSONException" );
+            Log.d(TAG, "BaseJSONException");
             e.printStackTrace();
         }
         return code;
@@ -82,18 +84,16 @@ public class DataParseUtil {
     public static String jSonOpt(String target, String extra) {
         String code = null;
         try {
-            JSONObject jsonObject = new JSONObject( extra );
+            JSONObject jsonObject = new JSONObject(extra);
             if (jsonObject != null) {
                 code = jsonObject.optString(target);
             }
         } catch (JSONException e) {
-            Log.d( TAG, "BaseJSONException" );
+            Log.d(TAG, "BaseJSONException");
             e.printStackTrace();
         }
         return code;
     }
-
-
 
     /**
      * 解析List<String>
@@ -109,15 +109,14 @@ public class DataParseUtil {
             for (int i = 0; i < list.size(); i++) {
                 try {
                     jsonObject = new JSONObject();
-                    jsonObject.put( jsonName + String.valueOf( i ), list.get( i ) );
-                    jsonArray.put( jsonObject );
+                    jsonObject.put(jsonName + String.valueOf(i), list.get(i));
+                    jsonArray.put(jsonObject);
                 } catch (JSONException e) {
-                    Log.d( TAG, "This is list feedback JSONException!" );
+                    Log.d(TAG, "This is list feedback JSONException!");
                     e.printStackTrace();
                 }
             }
         }
-
         if (jsonArray != null) {
             return jsonArray.toString();
         }
@@ -136,14 +135,13 @@ public class DataParseUtil {
         if (list != null && list.size() > 0) {
             for (int i = 0; i < (list.size() >= data.length ? data.length : list.size()); i++) {
                 try {
-                    jsonObject.put( data[i], list.get( i ) );
+                    jsonObject.put(data[i], list.get(i));
                 } catch (JSONException e) {
-                    Log.d( TAG, "This is list JSONException!" );
+                    Log.d(TAG, "This is list JSONException!");
                     e.printStackTrace();
                 }
             }
         }
-
         return jsonObject.toString();
     }
 
@@ -154,7 +152,7 @@ public class DataParseUtil {
      * @return
      */
     public synchronized static String jSonCode(String extra) {
-        return jSon( "code", extra );
+        return jSon("code", extra);
     }
 
     /**
@@ -164,7 +162,7 @@ public class DataParseUtil {
      * @return
      */
     public static boolean jSonEnable(String extra) {
-        return Boolean.parseBoolean( jSon( "enable", extra ) );
+        return Boolean.parseBoolean(jSon("enable", extra));
     }
 
     /**
@@ -175,7 +173,7 @@ public class DataParseUtil {
      * @return
      */
     public synchronized static String jSonString(String key, String extra) {
-        return jSon( key, extra );
+        return jSon(key, extra);
     }
 
     /**
@@ -185,28 +183,27 @@ public class DataParseUtil {
      * @return
      */
     public static List<TelephoyWhiteUser> jSonWhiteList(String extra) {
-        Log.d( TAG, "白名单解析="+ extra);
+        Log.d(TAG, "白名单解析=" + extra);
         List<TelephoyWhiteUser> userlist = new ArrayList<TelephoyWhiteUser>();
         try {
-            JSONObject jsonObject = new JSONObject( extra );
-            JSONArray whiteArray = jsonObject.getJSONArray( "whitelist" );
+            JSONObject jsonObject = new JSONObject(extra);
+            JSONArray whiteArray = jsonObject.getJSONArray("whitelist");
             if (whiteArray != null && whiteArray.length() > 0) {
                 for (int i = 0; i < whiteArray.length(); i++) {
                     TelephoyWhiteUser mTelephoyWhiteUser = new TelephoyWhiteUser();
-                    JSONObject telephoywhiteuser = whiteArray.getJSONObject( i );
+                    JSONObject telephoywhiteuser = whiteArray.getJSONObject(i);
 
-                    mTelephoyWhiteUser.setUserName( telephoywhiteuser.getString( "username" ) );
-                    mTelephoyWhiteUser.setUserId( telephoywhiteuser.getString( "userId" ) );
+                    mTelephoyWhiteUser.setUserName(telephoywhiteuser.getString("username"));
+                    mTelephoyWhiteUser.setUserId(telephoywhiteuser.getString("userId"));
                     //mTelephoyWhiteUser.setUserAddress(telephoywhiteuser.getString("userAddress"));
-                    mTelephoyWhiteUser.setTelephonyNumber( telephoywhiteuser.getString( "telephonyNumber" )  );
-                    userlist.add( mTelephoyWhiteUser );
+                    mTelephoyWhiteUser.setTelephonyNumber(telephoywhiteuser.getString("telephonyNumber"));
+                    userlist.add(mTelephoyWhiteUser);
                 }
             }
         } catch (JSONException e) {
-            Log.d( TAG, "WhiteUserJSONException" );
+            Log.d(TAG, "WhiteUserJSONException");
             e.printStackTrace();
         }
-
         return userlist;
     }
 
@@ -219,25 +216,23 @@ public class DataParseUtil {
      */
     public /*synchronized*/ static List<DownLoadEntity> jSonInstallApplicationList(String code, String extra) {
         List<DownLoadEntity> applist = new ArrayList<DownLoadEntity>();
-
         // APPInfo appInfo;
         try {
             DownLoadEntity entity = new DownLoadEntity();
             entity.code = code;
-            JSONObject jsonObject = new JSONObject( extra );
-            entity.app_id = jsonObject.getString( "id" );
-            entity.sendId = jsonObject.getString( "sendId" );
-            entity.internet = jsonObject.getString( "is_internet" );
-            entity.uninstall = jsonObject.getString( "is_uninstall" );
-            entity.packageName = jsonObject.getString( "packageName" );
-            entity.version = jsonObject.getString( "version" );
+            JSONObject jsonObject = new JSONObject(extra);
+            entity.app_id = jsonObject.getString("id");
+            entity.sendId = jsonObject.getString("sendId");
+            entity.internet = jsonObject.getString("is_internet");
+            entity.uninstall = jsonObject.getString("is_uninstall");
+            entity.packageName = jsonObject.getString("packageName");
+            entity.version = jsonObject.getString("version");
             entity.type = "0";
-            applist.add( entity );
+            applist.add(entity);
         } catch (JSONException e) {
-            Log.d( TAG, "AppListJSONException" );
+            Log.d(TAG, "AppListJSONException");
             e.printStackTrace();
         }
-
         return applist;
     }
 
@@ -250,25 +245,23 @@ public class DataParseUtil {
      */
     public synchronized static List<DownLoadEntity> jSonDeviceUpdate(String code, String extra) {
         List<DownLoadEntity> applist = new ArrayList<DownLoadEntity>();
-
         // APPInfo appInfo;
         try {
             DownLoadEntity entity = new DownLoadEntity();
             entity.code = code;
-            JSONObject jsonObject = new JSONObject( extra );
-            entity.app_id = jsonObject.getString( "id" );
-            entity.sendId = jsonObject.getString( "sendId" );
+            JSONObject jsonObject = new JSONObject(extra);
+            entity.app_id = jsonObject.getString("id");
+            entity.sendId = jsonObject.getString("sendId");
             entity.internet = "1";
             entity.uninstall = "0";
             entity.packageName = Common.packageName;
-            entity.version = jsonObject.getString( "version" );
+            entity.version = jsonObject.getString("version");
             entity.type = "0";
-            applist.add( entity );
+            applist.add(entity);
         } catch (JSONException e) {
-            Log.d( TAG, "DeviceUpdateListJSONException" );
+            Log.d(TAG, "DeviceUpdateListJSONException");
             e.printStackTrace();
         }
-
         return applist;
     }
 
@@ -281,18 +274,17 @@ public class DataParseUtil {
      */
     public synchronized static List<DownLoadEntity> jSonUninstallApplicationList(String code, String extra) {
         List<DownLoadEntity> applist = new ArrayList<DownLoadEntity>();
-
         // APPInfo appInfo;
         try {
             DownLoadEntity entity = new DownLoadEntity();
             entity.code = code;
-            JSONObject jsonObject = new JSONObject( extra );
-            String id = jsonObject.getString( "id" );
+            JSONObject jsonObject = new JSONObject(extra);
+            String id = jsonObject.getString("id");
             entity.app_id = id;
-            entity.sendId = jsonObject.getString( "sendId" );
-            applist.add( entity );
+            entity.sendId = jsonObject.getString("sendId");
+            applist.add(entity);
         } catch (JSONException e) {
-            Log.d( TAG, "AppListJSONException" );
+            Log.d(TAG, "AppListJSONException");
             e.printStackTrace();
         }
         return applist;
@@ -305,22 +297,21 @@ public class DataParseUtil {
      * @return
      */
     public synchronized static List<DownLoadEntity> jSonFileNameList(String code, String extra) {
-        Log.e(TAG,"文件解析="+extra);
+        Log.e(TAG, "文件解析=" + extra);
         List<DownLoadEntity> applist = new ArrayList<DownLoadEntity>();
         // APPInfo appInfo;
         try {
             DownLoadEntity entity = new DownLoadEntity();
-            JSONObject jsonObject = new JSONObject( extra );
-            entity.app_id = jsonObject.getString( "id" );
-            entity.sendId = jsonObject.getString( "sendId" );
+            JSONObject jsonObject = new JSONObject(extra);
+            entity.app_id = jsonObject.getString("id");
+            entity.sendId = jsonObject.getString("sendId");
             entity.type = "1";
             entity.code = code;
-            applist.add( entity );
+            applist.add(entity);
         } catch (JSONException e) {
-            Log.d( TAG, "FileListJSONException" );
+            Log.d(TAG, "FileListJSONException");
             e.printStackTrace();
         }
-
         return applist;
     }
 
@@ -348,16 +339,15 @@ public class DataParseUtil {
             for (int i = 0; i < listUser.size(); i++) {
                 try {
                     jsonObject = new JSONObject();
-                    jsonObject.put( "userName", listUser.get( i ).getUserName() );
-                    jsonObject.put( "telephonyNumber", listUser.get( i ).getTelephonyNumber() );
-                    jsonArray.put( jsonObject );
+                    jsonObject.put("userName", listUser.get(i).getUserName());
+                    jsonObject.put("telephonyNumber", listUser.get(i).getTelephonyNumber());
+                    jsonArray.put(jsonObject);
                 } catch (JSONException e) {
-                    Log.d( TAG, "White list feedback JSONException!" );
+                    Log.d(TAG, "White list feedback JSONException!");
                     e.printStackTrace();
                 }
             }
         }
-
         if (jsonObject != null) {
             return jsonObject.toString();
         }
@@ -377,23 +367,23 @@ public class DataParseUtil {
         buf.append("\n");
      */
     public synchronized static String parseContactInfo(String allContactInfo) {
-        String[] singleContactInfo = allContactInfo.split( "\n" );
+        String[] singleContactInfo = allContactInfo.split("\n");
         JSONArray jsonArray = new JSONArray();
         for (String contactInfo : singleContactInfo) {
-            String[] infos = contactInfo.split( "," );
+            String[] infos = contactInfo.split(",");
             JSONObject jsonObject = new JSONObject();
             if (infos != null && infos.length > 1) {
                 for (int i = 1; i < infos.length; i++) {
-                    String[] keys = infos[i].split( "==" );
+                    String[] keys = infos[i].split("==");
                     try {
-                        jsonObject.put( keys[0], keys[1] );
+                        jsonObject.put(keys[0], keys[1]);
                     } catch (JSONException e) {
-                        Log.d( TAG, "ContactInfo JSONException!" );
+                        Log.d(TAG, "ContactInfo JSONException!");
                         e.printStackTrace();
                     }
                 }
             }
-            jsonArray.put( jsonObject );
+            jsonArray.put(jsonObject);
         }
         if (jsonArray != null) {
             return jsonArray.toString();
@@ -410,28 +400,28 @@ public class DataParseUtil {
      * @param contentValues
      * @return 解析APN
      */
-    public synchronized  static String parseAPNContentValues(ContentValues contentValues) {
+    public synchronized static String parseAPNContentValues(ContentValues contentValues) {
         JSONObject jsonObject = new JSONObject();
         try {
             if (contentValues != null) {
-                jsonObject.put( "_id", contentValues.get( "_id" ) );
-                jsonObject.put( "name", contentValues.get( "name" ) );
-                jsonObject.put( "apn", contentValues.get( "myapn" ) );
-                jsonObject.put( "type", contentValues.get( "type" ) );
-                jsonObject.put( "numeric", contentValues.get( "numeric" ) );
-                jsonObject.put( "mcc", contentValues.get( "mcc" ) );
-                jsonObject.put( "mnc", contentValues.get( "mnc" ) );
-                jsonObject.put( "proxy", contentValues.get( "proxy" ) );
-                jsonObject.put( "port", contentValues.get( "port" ) );
-                jsonObject.put( "mmsproxy", contentValues.get( "mmsproxy" ) );
-                jsonObject.put( "mmsport", contentValues.get( "mmsport" ) );
-                jsonObject.put( "user", contentValues.get( "user" ) );
-                jsonObject.put( "server", contentValues.get( "server" ) );
-                jsonObject.put( "password", contentValues.get( "password" ) );
-                jsonObject.put( "mmsc", contentValues.get( "mmsc" ) );
+                jsonObject.put("_id", contentValues.get("_id"));
+                jsonObject.put("name", contentValues.get("name"));
+                jsonObject.put("apn", contentValues.get("myapn"));
+                jsonObject.put("type", contentValues.get("type"));
+                jsonObject.put("numeric", contentValues.get("numeric"));
+                jsonObject.put("mcc", contentValues.get("mcc"));
+                jsonObject.put("mnc", contentValues.get("mnc"));
+                jsonObject.put("proxy", contentValues.get("proxy"));
+                jsonObject.put("port", contentValues.get("port"));
+                jsonObject.put("mmsproxy", contentValues.get("mmsproxy"));
+                jsonObject.put("mmsport", contentValues.get("mmsport"));
+                jsonObject.put("user", contentValues.get("user"));
+                jsonObject.put("server", contentValues.get("server"));
+                jsonObject.put("password", contentValues.get("password"));
+                jsonObject.put("mmsc", contentValues.get("mmsc"));
             }
         } catch (JSONException e) {
-            Log.d( TAG, "Parse APN ContentValues JSONException!" );
+            Log.d(TAG, "Parse APN ContentValues JSONException!");
             e.printStackTrace();
         }
         if (jsonObject != null) {
@@ -449,25 +439,25 @@ public class DataParseUtil {
     public synchronized static ContentValues jSonAPNContentValues(String contentValues) {
         ContentValues contentValues1 = new ContentValues();
         try {
-            JSONObject jsonObject = new JSONObject( contentValues );
+            JSONObject jsonObject = new JSONObject(contentValues);
             if (jsonObject != null) {
-                contentValues1.put( "name", jsonObject.getString( "name" ) );
-                contentValues1.put( "apn", jsonObject.getString( "myapn" ) );
-                contentValues1.put( "type", jsonObject.getString( "type" ) );
-                contentValues1.put( "numeric", jsonObject.getString( "numeric" ) );
-                contentValues1.put( "mcc", jsonObject.getString( "mcc" ) );
-                contentValues1.put( "mnc", jsonObject.getString( "mnc" ) );
-                contentValues1.put( "proxy", jsonObject.getString( "proxy" ) );
-                contentValues1.put( "port", jsonObject.getString( "port" ) );
-                contentValues1.put( "mmsproxy", jsonObject.getString( "mmsproxy" ) );
-                contentValues1.put( "mmsport", jsonObject.getString( "mmsport" ) );
-                contentValues1.put( "user", jsonObject.getString( "user" ) );
-                contentValues1.put( "server", jsonObject.getString( "server" ) );
-                contentValues1.put( "password", jsonObject.getString( "password" ) );
-                contentValues1.put( "mmsc", jsonObject.getString( "mmsc" ) );
+                contentValues1.put("name", jsonObject.getString("name"));
+                contentValues1.put("apn", jsonObject.getString("myapn"));
+                contentValues1.put("type", jsonObject.getString("type"));
+                contentValues1.put("numeric", jsonObject.getString("numeric"));
+                contentValues1.put("mcc", jsonObject.getString("mcc"));
+                contentValues1.put("mnc", jsonObject.getString("mnc"));
+                contentValues1.put("proxy", jsonObject.getString("proxy"));
+                contentValues1.put("port", jsonObject.getString("port"));
+                contentValues1.put("mmsproxy", jsonObject.getString("mmsproxy"));
+                contentValues1.put("mmsport", jsonObject.getString("mmsport"));
+                contentValues1.put("user", jsonObject.getString("user"));
+                contentValues1.put("server", jsonObject.getString("server"));
+                contentValues1.put("password", jsonObject.getString("password"));
+                contentValues1.put("mmsc", jsonObject.getString("mmsc"));
             }
         } catch (JSONException e) {
-            Log.d( TAG, "JSON APN ContentValues JSONException!" );
+            Log.d(TAG, "JSON APN ContentValues JSONException!");
             e.printStackTrace();
         }
         return contentValues1;
@@ -482,12 +472,12 @@ public class DataParseUtil {
     public synchronized static String jsonLocation(String location) {
         JSONObject jsonObject = new JSONObject();
         if (location != null) {
-            String[] locations = location.split( "," );
+            String[] locations = location.split(",");
             try {
-                jsonObject.put( "longitude", locations[0] );
-                jsonObject.put( "latitude", locations[1] );
+                jsonObject.put("longitude", locations[0]);
+                jsonObject.put("latitude", locations[1]);
             } catch (JSONException e) {
-                Log.d( TAG, "Location JSONException" );
+                Log.d(TAG, "Location JSONException");
                 e.printStackTrace();
             }
         }
@@ -516,24 +506,24 @@ public class DataParseUtil {
     public synchronized static RequestBody loginToJson(Context context, String username, String passWord, List<String> deviceInfo) {
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put( "loginName", username );
-            jsonObject.put( "code", passWord );
-            jsonObject.put("app_version", AppUtils.getAppVersion(context, Common.packageName));
-            jsonObject.put( "packageName", Common.packageName );
+            jsonObject.put("loginName", username);
+            jsonObject.put("code", passWord);
+            jsonObject.put("app_version", AppUtils.getAppVersionName(context, Common.packageName));
+            jsonObject.put("packageName", Common.packageName);
 
             //通过包名判断系统
             //if ("com.zoomtech.emm".equals(Common.packageName)) {
 //                jsonObject.put( "adaptSystem", "2" );
             //} else {
-                jsonObject.put( "adaptSystem", "1" );
+            jsonObject.put("adaptSystem", "1");
             //}
 
             if (deviceInfo != null && deviceInfo.size() > 0) {
-                for (int i = 0; i < (deviceInfo.size() >= Common.deviceInfo.length?  Common.deviceInfo.length : deviceInfo.size()); i++) {
+                for (int i = 0; i < (deviceInfo.size() >= Common.deviceInfo.length ? Common.deviceInfo.length : deviceInfo.size()); i++) {
                     try {
-                        jsonObject.put( Common.deviceInfo[i], deviceInfo.get( i ) );
+                        jsonObject.put(Common.deviceInfo[i], deviceInfo.get(i));
                     } catch (JSONException e) {
-                        Log.d( TAG, "This is list JSONException!" );
+                        Log.d(TAG, "This is list JSONException!");
                         e.printStackTrace();
                     }
                 }
@@ -542,8 +532,8 @@ public class DataParseUtil {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        RequestBody body = RequestBody.create( okhttp3.MediaType.parse(
-                "application/json;charset=UTF-8" ), jsonObject.toString() );
+        RequestBody body = RequestBody.create(okhttp3.MediaType.parse(
+                "application/json;charset=UTF-8"), jsonObject.toString());
         return body;
     }
 
@@ -557,15 +547,14 @@ public class DataParseUtil {
     public synchronized static String feedbackToJson(String sendId, String feedback_code, String result) {
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put( "alias", PreferencesManager.getSingleInstance().getData( "alias" ) );
-            jsonObject.put( "feedback_code", feedback_code );
-            jsonObject.put( "result", result );
-            jsonObject.put( "sendId", sendId );
+            jsonObject.put("alias", PreferencesManager.getSingleInstance().getData("alias"));
+            jsonObject.put("feedback_code", feedback_code);
+            jsonObject.put("result", result);
+            jsonObject.put("sendId", sendId);
         } catch (Exception e) {
-            LogUtil.writeToFile( TAG, "Feedback to Json " + e.getCause().toString() );
+            LogUtil.writeToFile(TAG, "Feedback to Json " + e.getCause().toString());
             e.printStackTrace();
         }
-
         return jsonObject.toString();
     }
 
@@ -580,13 +569,13 @@ public class DataParseUtil {
     public synchronized static String feedbackToJson(String sendId, String feedback_code, String file_id, String result) {
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put( "alias", PreferencesManager.getSingleInstance().getData( "alias" ) );
-            jsonObject.put( "feedback_code", feedback_code );
-            jsonObject.put( "id", file_id );
-            jsonObject.put( "result", result );
-            jsonObject.put( "sendId", sendId );
+            jsonObject.put("alias", PreferencesManager.getSingleInstance().getData("alias"));
+            jsonObject.put("feedback_code", feedback_code);
+            jsonObject.put("id", file_id);
+            jsonObject.put("result", result);
+            jsonObject.put("sendId", sendId);
         } catch (Exception e) {
-            LogUtil.writeToFile( TAG, "Feedback to Json " + e.getCause().toString() );
+            LogUtil.writeToFile(TAG, "Feedback to Json " + e.getCause().toString());
             e.printStackTrace();
         }
         return jsonObject.toString();
@@ -600,19 +589,19 @@ public class DataParseUtil {
      * @param result
      * @return
      */
-    public synchronized static RequestBody feedbackToJsonConpliance(String sendId,String feedback_code, String file_id, String send_id, String result) {
+    public synchronized static RequestBody feedbackToJsonConpliance(String sendId, String feedback_code, String file_id, String send_id, String result) {
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put( "alias", PreferencesManager.getSingleInstance().getData( "alias" ) );
-            jsonObject.put( "feedback_code", feedback_code );
-            jsonObject.put( "id", file_id );
-            jsonObject.put( "sendId", send_id );
+            jsonObject.put("alias", PreferencesManager.getSingleInstance().getData("alias"));
+            jsonObject.put("feedback_code", feedback_code);
+            jsonObject.put("id", file_id);
+            jsonObject.put("sendId", send_id);
         } catch (Exception e) {
-            LogUtil.writeToFile( TAG, "Feedback to Json " + e.getCause().toString() );
+            LogUtil.writeToFile(TAG, "Feedback to Json " + e.getCause().toString());
             e.printStackTrace();
         }
-        RequestBody body = RequestBody.create( okhttp3.MediaType.parse(
-                "application/json;charset=UTF-8" ), jsonObject.toString() );
+        RequestBody body = RequestBody.create(okhttp3.MediaType.parse(
+                "application/json;charset=UTF-8"), jsonObject.toString());
         return body;
     }
 
@@ -623,21 +612,17 @@ public class DataParseUtil {
      * @return
      */
     public synchronized static Token loginBackParse(JSONObject jsonObject) {
-
         final Token token = new Token();
         try {
-
-            String message = jsonObject.getString( "message" );
-            LogUtil.writeToFile( TAG, message );
-            final JSONObject object1 = new JSONObject( message );
-
+            String message = jsonObject.getString("message");
+            LogUtil.writeToFile(TAG, message);
+            final JSONObject object1 = new JSONObject(message);
             if (object1 != null) {
-                token.setAccess_token( object1.getString( Common.token ) );
-                token.setUser_alias( object1.getString( Common.alias ) );
-                token.setKeepAliveHost( object1.getString( Common.keepAliveHost ) );
-                token.setKeepAlivePort( object1.getString( Common.keepAlivePort ) );
-
-                TheTang.getSingleInstance().getThreadPoolObject().submit( new Runnable() {
+                token.setAccess_token(object1.getString(Common.token));
+                token.setUser_alias(object1.getString(Common.alias));
+                token.setKeepAliveHost(object1.getString(Common.keepAliveHost));
+                token.setKeepAlivePort(object1.getString(Common.keepAlivePort));
+                TheTang.getSingleInstance().getThreadPoolObject().submit(new Runnable() {
                     @Override
                     public void run() {
                         /**
@@ -645,21 +630,18 @@ public class DataParseUtil {
                          */
                         String openWhiteList = null;
                         try {
-                            openWhiteList = object1.getString( "openWhiteList" );
+                            openWhiteList = object1.getString("openWhiteList");
                             if (openWhiteList != null && "1".equals(openWhiteList)) {
                                 MDM.startPhoneWhite();
                             } else {
                                 MDM.stopPhoneWhite();
                             }
-
                             /*List<TelephoyWhiteUser> list = new ArrayList<>();
-
                             JSONArray jsonArray1 = object1.getJSONArray( "whiteList1" );
                             if (jsonArray1 != null && jsonArray1.length() > 0) {
                                 for (int i = 0; i < jsonArray1.length(); i++) {
                                     TelephoyWhiteUser mTelephoyWhiteUser = new TelephoyWhiteUser();
                                     JSONObject telephoywhiteuser = jsonArray1.getJSONObject( i );
-
                                     mTelephoyWhiteUser.setUserName( telephoywhiteuser.getString( "username" ) );
                                     mTelephoyWhiteUser.setUserId( telephoywhiteuser.getString( "userId" ) );
                                     //mTelephoyWhiteUser.setUserAddress(telephoywhiteuser.getString("userAddress"));
@@ -683,27 +665,24 @@ public class DataParseUtil {
 
                             //存储设置相关数据
                             SettingAboutData settingAboutData = new SettingAboutData();
-                            JSONObject jsonObject1 = object1.getJSONObject( Common.setting_clientManagement );
-                            settingAboutData.messageForHelp = jsonObject1.getString( Common.setting_help );
-                            settingAboutData.agreementLicense = jsonObject1.getString( Common.setting_agreement );
-                            settingAboutData.supportContent = jsonObject1.getString( Common.setting_stand_by );
+                            JSONObject jsonObject1 = object1.getJSONObject(Common.setting_clientManagement);
+                            settingAboutData.messageForHelp = jsonObject1.getString(Common.setting_help);
+                            settingAboutData.agreementLicense = jsonObject1.getString(Common.setting_agreement);
+                            settingAboutData.supportContent = jsonObject1.getString(Common.setting_stand_by);
                             TheTang.getSingleInstance().storageSettingAboutData(settingAboutData);
 
                            /* DatabaseOperate databaseOperate = DatabaseOperate.getSingleInstance();
                             databaseOperate.addTelephonyWhiteList( list );
-
                             //insert telephony white data
-
                             for (TelephoyWhiteUser mTelephoyWhiteUser: list) {
                                 MDM.insertContact( mTelephoyWhiteUser.getUserName(), mTelephoyWhiteUser.getTelephonyNumber() );
                             }
-
                             token.setWhiteList( list );*/
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
-                } );
+                });
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -718,44 +697,44 @@ public class DataParseUtil {
      * @return
      */
     public synchronized static PolicyData jsonPolicyData(String extra) {
-        Log.e(TAG,"限制策略="+extra);
+        Log.e(TAG, "限制策略=" + extra);
         PolicyData policyData = new PolicyData();
         try {
-            JSONObject policy = new JSONObject( extra );
-            JSONArray policyArray = policy.getJSONArray( Common.middle_policy );
+            JSONObject policy = new JSONObject(extra);
+            JSONArray policyArray = policy.getJSONArray(Common.middle_policy);
             if (policyArray != null) {
                 for (int i = 0; i < policyArray.length(); i++) {
-                    JSONObject policyOrder = policyArray.getJSONObject( i );
-                    policyData.name = policyOrder.getString( "name" );
+                    JSONObject policyOrder = policyArray.getJSONObject(i);
+                    policyData.name = policyOrder.getString("name");
                     //policyData.id = policyOrder.getString( "id" );
-                    policyData.allowUpdateTime = policyOrder.getString( Common.middle_allowUpdateTime );
-                    policyData.allowSoundRecording = policyOrder.getString( Common.middle_allowSoundRecording );
-                    policyData.allowMobileData = policyOrder.getString( Common.allowMobileData );
-                    policyData.allowCamera = policyOrder.getString( Common.middle_allowCamera );
-                    policyData.allowSdCard = policyOrder.getString( Common.middle_allowSdCard );
-                    policyData.allowUsb = policyOrder.getString( Common.middle_allowUsb );
-                    policyData.allowLocation = policyOrder.getString( Common.middle_allowLocation );
+                    policyData.allowUpdateTime = policyOrder.getString(Common.middle_allowUpdateTime);
+                    policyData.allowSoundRecording = policyOrder.getString(Common.middle_allowSoundRecording);
+                    policyData.allowMobileData = policyOrder.getString(Common.allowMobileData);
+                    policyData.allowCamera = policyOrder.getString(Common.middle_allowCamera);
+                    policyData.allowSdCard = policyOrder.getString(Common.middle_allowSdCard);
+                    policyData.allowUsb = policyOrder.getString(Common.middle_allowUsb);
+                    policyData.allowLocation = policyOrder.getString(Common.middle_allowLocation);
 
-                    policyData.allowMobileHotspot = policyOrder.getString( Common.middle_allowMobileHotspot );
-                    policyData.allowWifi = policyOrder.getString( Common.middle_allowWifi );
+                    policyData.allowMobileHotspot = policyOrder.getString(Common.middle_allowMobileHotspot);
+                    policyData.allowWifi = policyOrder.getString(Common.middle_allowWifi);
                     //policyData.allowRestoreFactorySettings = policyOrder.getString( Common.middle_allowRestoreFactorySettings );
 
-                    policyData.allowMessage = policyOrder.getString( Common.middle_allowMessage );
-                    policyData.allowBluetooth = policyOrder.getString( Common.middle_allowBluetooth );
+                    policyData.allowMessage = policyOrder.getString(Common.middle_allowMessage);
+                    policyData.allowBluetooth = policyOrder.getString(Common.middle_allowBluetooth);
 
-                    policyData.allowScreenshot = policyOrder.getString( Common.middle_allowScreenshot );
-                    policyData.allowDropdown = policyOrder.getString( Common.middle_allowDropdown );
-                    policyData.allowReset = policyOrder.getString( Common.middle_allowReset );
-                    policyData.allowNFC = policyOrder.getString( Common.middle_allowNFC );
-                    policyData.allowModifySystemtime = policyOrder.getString( Common.middle_allowModifySystemtime );
+                    policyData.allowScreenshot = policyOrder.getString(Common.middle_allowScreenshot);
+                    policyData.allowDropdown = policyOrder.getString(Common.middle_allowDropdown);
+                    policyData.allowReset = policyOrder.getString(Common.middle_allowReset);
+                    policyData.allowNFC = policyOrder.getString(Common.middle_allowNFC);
+                    policyData.allowModifySystemtime = policyOrder.getString(Common.middle_allowModifySystemtime);
 
-                    policyData.allowTelephone = policyOrder.getString( Common.middle_telephone );
-                    policyData.allowTelephoneWhiteList = policyOrder.getString( Common.middle_telephoneWhiteList );
+                    policyData.allowTelephone = policyOrder.getString(Common.middle_telephone);
+                    policyData.allowTelephoneWhiteList = policyOrder.getString(Common.middle_telephoneWhiteList);
                 }
             }
         } catch (JSONException e) {
             e.printStackTrace();
-            LogUtil.writeToFile(TAG,TheTang.getExceptionInfo(e));
+            LogUtil.writeToFile(TAG, LogUtil.getExceptionInfo(e));
         }
         return policyData;
     }
@@ -768,20 +747,16 @@ public class DataParseUtil {
      */
     public synchronized static LostComplianceData jSonLostCompilance(String extra) {
         LostComplianceData lostComplianceData = new LostComplianceData();
-
         try {
-            JSONObject lost = new JSONObject( extra );
+            JSONObject lost = new JSONObject(extra);
             lostComplianceData.lost_compliance = "true";
-            lostComplianceData.missingId = lost.getInt( "id" );
-            lostComplianceData.lost_name = lost.getString( "name" );
-            lostComplianceData.lost_time = lost.getString( Common.lost_time );
-
-            String compliance_excute = lost.getString( "missingHandle" );
-
+            lostComplianceData.missingId = lost.getInt("id");
+            lostComplianceData.lost_name = lost.getString("name");
+            lostComplianceData.lost_time = lost.getString(Common.lost_time);
+            String compliance_excute = lost.getString("missingHandle");
             if ("0".equals(compliance_excute)) {
                 lostComplianceData.lost_password = lost.getString("lockPwd");
             }
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -796,29 +771,24 @@ public class DataParseUtil {
      */
     public synchronized static SystemComplianceData jSonSystemCompilance(String extra) {
         SystemComplianceData systemComplianceData = new SystemComplianceData();
-
         try {
-            JSONObject system = new JSONObject( extra );
+            JSONObject system = new JSONObject(extra);
             systemComplianceData.systemCompliance = "true";
-            systemComplianceData.systemComplianceId = system.getString( "id" );
-            systemComplianceData.systemComplianceName = system.getString( "name" );
+            systemComplianceData.systemComplianceId = system.getString("id");
+            systemComplianceData.systemComplianceName = system.getString("name");
             //systemComplianceData.systemComplianceDelayHour = system.getString( Common.system_compliance_delay );
-            String compliance_excute = system.getString( "illegalHandle" );
-
+            String compliance_excute = system.getString("illegalHandle");
             if ("0".equals(compliance_excute)) {
-                systemComplianceData.lockPwd =  system.getString("lockPwd");
+                systemComplianceData.lockPwd = system.getString("lockPwd");
             }
-
             JSONArray complianceStrategy = system.getJSONArray("complianceStrategy");
-
             for (int i = 0; i < complianceStrategy.length(); i++) {
                 /*String stratege = system.optString( Common.system_info[i] );
 
                 if (TextUtils.isEmpty( stratege )) {
                     continue;
                 }*/
-
-                switch (Integer.parseInt( complianceStrategy.optString(i) )) {
+                switch (Integer.parseInt(complianceStrategy.optString(i))) {
                     case 0:
                         systemComplianceData.systemSd = "true";
                         break;
@@ -841,7 +811,6 @@ public class DataParseUtil {
                         break;
                 }
             }
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -850,32 +819,29 @@ public class DataParseUtil {
 
     /**
      * 解析应用合规数据
+     *
      * @param extra
      * @return
      */
     public synchronized static AppBlackWhiteData jSonAppCompilance(String extra) {
         AppBlackWhiteData appBlackWhiteData = new AppBlackWhiteData();
         try {
-            JSONObject appObject = new JSONObject( extra );
-            appBlackWhiteData.id = appObject.getString( "id" );
-            appBlackWhiteData.name = appObject.getString( "name" );
-            appBlackWhiteData.type = appObject.getString( Common.appType );
-            appBlackWhiteData.appList = new ArrayList<>(  );
+            JSONObject appObject = new JSONObject(extra);
+            appBlackWhiteData.id = appObject.getString("id");
+            appBlackWhiteData.name = appObject.getString("name");
+            appBlackWhiteData.type = appObject.getString(Common.appType);
+            appBlackWhiteData.appList = new ArrayList<>();
 
-            String compliance_excute = appObject.getString( "illegalHandle" );
-
+            String compliance_excute = appObject.getString("illegalHandle");
             if ("0".equals(compliance_excute)) {
-                appBlackWhiteData.lockPwd =  appObject.getString("lockPwd");
+                appBlackWhiteData.lockPwd = appObject.getString("lockPwd");
             }
-
-            JSONArray jsonArray = appObject.getJSONArray( Common.appList );
-
-            if ( jsonArray != null ) {
+            JSONArray jsonArray = appObject.getJSONArray(Common.appList);
+            if (jsonArray != null) {
                 for (int i = 0; i < jsonArray.length(); i++) {
-                    appBlackWhiteData.appList.add(jsonArray.get( i ).toString());
+                    appBlackWhiteData.appList.add(jsonArray.get(i).toString());
                 }
             }
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -883,38 +849,32 @@ public class DataParseUtil {
     }
 
     /**
+     * 解析地理围栏
      *
-     *  解析地理围栏
      * @param extra
      * @return
      */
     public synchronized static GeographicalFenceData jSonGeographicalFence(String extra) {
-
         GeographicalFenceData geographicalFenceData = new GeographicalFenceData();
         try {
-            JSONObject fenceObject = new JSONObject( extra );
-
+            JSONObject fenceObject = new JSONObject(extra);
             geographicalFenceData.geographical_fence = "true";
-
-            JSONArray geographicalArray = fenceObject.getJSONArray( "policy" );
-
+            JSONArray geographicalArray = fenceObject.getJSONArray("policy");
             for (int i = 0; i < geographicalArray.length(); i++) {
-                JSONObject strategeObject = geographicalArray.getJSONObject( i );
-                geographicalFenceData.geographical_fence_name = strategeObject.getString( Common.geographical_fence_name );
-                String[] coordinate = strategeObject.getString( Common.coordinate ).split( "," );
+                JSONObject strategeObject = geographicalArray.getJSONObject(i);
+                geographicalFenceData.geographical_fence_name = strategeObject.getString(Common.geographical_fence_name);
+                String[] coordinate = strategeObject.getString(Common.coordinate).split(",");
                 geographicalFenceData.fence_longitude = coordinate[0];
                 geographicalFenceData.fence_latitude = coordinate[1];
-                geographicalFenceData.radius = strategeObject.getString( Common.radius );
+                geographicalFenceData.radius = strategeObject.getString(Common.radius);
                 //geographicalFenceData.geo_id = strategeObject.getString( "id" );
-
-                jsonConfigurationFence( geographicalFenceData, strategeObject );
+                jsonConfigurationFence(geographicalFenceData, strategeObject);
             }
-
         } catch (JSONException e) {
             e.printStackTrace();
             String str = e.toString();
-            LogUtil.writeToFile( TAG, "json geographical fence " + e.toString() );
-            Log.w(TAG,TheTang.getExceptionInfo(e));
+            LogUtil.writeToFile(TAG, "json geographical fence " + e.toString());
+            Log.w(TAG, LogUtil.getExceptionInfo(e));
         }
         return geographicalFenceData;
     }
@@ -926,11 +886,10 @@ public class DataParseUtil {
      * @param strategeObject
      */
     private synchronized static void jsonConfigurationFence(GeographicalFenceData geographicalFenceData, JSONObject strategeObject) {
-
-        jsonDeviceConfiguration( geographicalFenceData, strategeObject );
-        jsonSecurityChrome( geographicalFenceData, strategeObject );
-        jsonCustomDesktop( geographicalFenceData, strategeObject );
-        jsonDoubleDomain( geographicalFenceData, strategeObject );
+        jsonDeviceConfiguration(geographicalFenceData, strategeObject);
+        jsonSecurityChrome(geographicalFenceData, strategeObject);
+        jsonCustomDesktop(geographicalFenceData, strategeObject);
+        jsonDoubleDomain(geographicalFenceData, strategeObject);
     }
 
     /**
@@ -940,53 +899,47 @@ public class DataParseUtil {
      * @param strategeObject
      */
     private synchronized static void jsonDeviceConfiguration(GeographicalFenceData geographicalFenceData, JSONObject strategeObject) {
-
         try {
             if ("null".equals(strategeObject.getString(Common.lockScreen)) || "2".equals(strategeObject.getString(Common.lockScreen))) {
                 geographicalFenceData.allowDevice = "false";
                 return;
             }
-
             geographicalFenceData.allowDevice = "true";
+            geographicalFenceData.lockScreen = strategeObject.getString(Common.lockScreen);
+            geographicalFenceData.lockPassword = strategeObject.getString("lockPwd");
+            geographicalFenceData.allowMobileData = strategeObject.getString(Common.allowMobileData);
+            geographicalFenceData.allowCloseWifi = strategeObject.getString(Common.allowCloseWifi);
 
-            geographicalFenceData.lockScreen = strategeObject.getString( Common.lockScreen );
-            geographicalFenceData.lockPassword = strategeObject.getString( "lockPwd" );
-            geographicalFenceData.allowMobileData = strategeObject.getString( Common.allowMobileData );
+            geographicalFenceData.allowOpenWifi = strategeObject.getString(Common.allowOpenWifi);
+            geographicalFenceData.allowConfigureWifi = strategeObject.getString(Common.allowConfigureWifi);
+            geographicalFenceData.configureWifi = strategeObject.getString(Common.configureWifi);
+            geographicalFenceData.allowAutomaticJoin = strategeObject.getString(Common.allowAutomaticJoin);
+            geographicalFenceData.hiddenNetwork = strategeObject.getString(Common.hiddenNetwork);
+            geographicalFenceData.safeType = strategeObject.getString(Common.safeType);
+            geographicalFenceData.wifiPassword = strategeObject.getString(Common.wifi_password);
 
-            geographicalFenceData.allowCloseWifi = strategeObject.getString( Common.allowCloseWifi );
+            geographicalFenceData.allowCamera = strategeObject.getString(Common.allowCamera);
+            geographicalFenceData.allowBluetooth = strategeObject.getString(Common.allowBluetooth);
+            geographicalFenceData.allowContainSwitching = strategeObject.getString(Common.allowContainSwitching);
 
-            geographicalFenceData.allowOpenWifi = strategeObject.getString( Common.allowOpenWifi );
-            geographicalFenceData.allowConfigureWifi = strategeObject.getString( Common.allowConfigureWifi );
-            geographicalFenceData.configureWifi = strategeObject.getString( Common.configureWifi );
-            geographicalFenceData.allowAutomaticJoin = strategeObject.getString( Common.allowAutomaticJoin );
-            geographicalFenceData.hiddenNetwork = strategeObject.getString( Common.hiddenNetwork );
-            geographicalFenceData.safeType = strategeObject.getString( Common.safeType );
-            geographicalFenceData.wifiPassword = strategeObject.getString( Common.wifi_password );
-
-            geographicalFenceData.allowCamera = strategeObject.getString( Common.allowCamera );
-            geographicalFenceData.allowBluetooth = strategeObject.getString( Common.allowBluetooth );
-            geographicalFenceData.allowContainSwitching = strategeObject.getString( Common.allowContainSwitching );
-
-            geographicalFenceData.mobileHotspot = strategeObject.getString( Common.mobileHotspot );
+            geographicalFenceData.mobileHotspot = strategeObject.getString(Common.mobileHotspot);
             //geographicalFenceData.locationService = strategeObject.getString( Common.locationService );
-            geographicalFenceData.matTransmission = strategeObject.getString( Common.matTransmission );
-            geographicalFenceData.shortMessage = strategeObject.getString( Common.shortMessage );
-            geographicalFenceData.soundRecording = strategeObject.getString( Common.soundRecording );
+            geographicalFenceData.matTransmission = strategeObject.getString(Common.matTransmission);
+            geographicalFenceData.shortMessage = strategeObject.getString(Common.shortMessage);
+            geographicalFenceData.soundRecording = strategeObject.getString(Common.soundRecording);
 
-            geographicalFenceData.banScreenshot = strategeObject.getString( Common.banScreenshot );
-            geographicalFenceData.allowDropdown = strategeObject.getString( Common.allowDropdown );
-            geographicalFenceData.allowReset = strategeObject.getString( Common.allowReset );
-            geographicalFenceData.allowNFC = strategeObject.getString( Common.allowNFC );
-            geographicalFenceData.allowModifySystemtime = strategeObject.getString( Common.allowModifySystemtime );
+            geographicalFenceData.banScreenshot = strategeObject.getString(Common.banScreenshot);
+            geographicalFenceData.allowDropdown = strategeObject.getString(Common.allowDropdown);
+            geographicalFenceData.allowReset = strategeObject.getString(Common.allowReset);
+            geographicalFenceData.allowNFC = strategeObject.getString(Common.allowNFC);
+            geographicalFenceData.allowModifySystemtime = strategeObject.getString(Common.allowModifySystemtime);
 
-            geographicalFenceData.telephone = strategeObject.getString( Common.geo_telephone );
-            geographicalFenceData.telephoneWhiteList = strategeObject.getString( Common.geo_telephoneWhiteList );
-
+            geographicalFenceData.telephone = strategeObject.getString(Common.geo_telephone);
+            geographicalFenceData.telephoneWhiteList = strategeObject.getString(Common.geo_telephoneWhiteList);
         } catch (JSONException e) {
             e.printStackTrace();
-            LogUtil.writeToFile( TAG, "json device configuration " + e.getCause().toString() );
-            Log.w(TAG,TheTang.getExceptionInfo(e));
-
+            LogUtil.writeToFile(TAG, "json device configuration " + e.getCause().toString());
+            Log.w(TAG, LogUtil.getExceptionInfo(e));
         }
     }
 
@@ -999,7 +952,7 @@ public class DataParseUtil {
     private synchronized static void jsonSecurityChrome(GeographicalFenceData geographicalFenceData, JSONObject strategeObject) {
         try {
             if ("null".equals(strategeObject.getString(Common.webPageList)) || "2".equals(strategeObject.getString(Common.webPageList))) {
-                Log.w(TAG,"strategeObject.getString( Common.webPageList )="+strategeObject.getString( Common.webPageList ));
+                Log.w(TAG, "strategeObject.getString( Common.webPageList )=" + strategeObject.getString(Common.webPageList));
                 geographicalFenceData.allowChrome = null;
                 return;
             } else {
@@ -1011,7 +964,7 @@ public class DataParseUtil {
             }
         } catch (JSONException e) {
             e.printStackTrace();
-            Log.w(TAG,TheTang.getExceptionInfo(e));
+            Log.w(TAG, LogUtil.getExceptionInfo(e));
         }
     }
 
@@ -1023,26 +976,22 @@ public class DataParseUtil {
      */
     private synchronized static void jsonCustomDesktop(GeographicalFenceData geographicalFenceData, JSONObject strategeObject) {
         try {
-            if ("null".equals(strategeObject.getString( Common.setToSecureDesktop )) ||  "2".equals(strategeObject.getString( Common.setToSecureDesktop )) ) {
+            if ("null".equals(strategeObject.getString(Common.setToSecureDesktop)) || "2".equals(strategeObject.getString(Common.setToSecureDesktop))) {
                 geographicalFenceData.allowDesktop = "false";
                 return;
             }
-
             geographicalFenceData.allowDesktop = "true";
-            geographicalFenceData.setToSecureDesktop = strategeObject.getString( Common.setToSecureDesktop );
-            geographicalFenceData.displayContacts = strategeObject.getString( Common.displayContacts );
-            geographicalFenceData.displayMessage = strategeObject.getString( Common.displayMessage );
-            geographicalFenceData.displayCall = strategeObject.getString( Common.displayCall );
-
+            geographicalFenceData.setToSecureDesktop = strategeObject.getString(Common.setToSecureDesktop);
+            geographicalFenceData.displayContacts = strategeObject.getString(Common.displayContacts);
+            geographicalFenceData.displayMessage = strategeObject.getString(Common.displayMessage);
+            geographicalFenceData.displayCall = strategeObject.getString(Common.displayCall);
             geographicalFenceData.json_Apploication = strategeObject.getString(Common.applicationProgram);
-            Log.w(TAG,"--json_Apploication--"+geographicalFenceData.json_Apploication);
-
+            Log.w(TAG, "--json_Apploication--" + geographicalFenceData.json_Apploication);
         } catch (JSONException e) {
             e.printStackTrace();
-            LogUtil.writeToFile( TAG, "json custom desktop " + e.getCause().toString() );
-            Log.w(TAG,TheTang.getExceptionInfo(e));
+            LogUtil.writeToFile(TAG, "json custom desktop " + e.getCause().toString());
+            Log.w(TAG, LogUtil.getExceptionInfo(e));
         }
-
     }
 
     /**
@@ -1057,118 +1006,115 @@ public class DataParseUtil {
                 geographicalFenceData.allowDoubleDomain = "false";
                 return;
             }
-
             geographicalFenceData.allowDoubleDomain = "true";
-            geographicalFenceData.twoDomainControl = strategeObject.getString( Common.twoDomainControl );
+            geographicalFenceData.twoDomainControl = strategeObject.getString(Common.twoDomainControl);
         } catch (JSONException e) {
             e.printStackTrace();
-            LogUtil.writeToFile( TAG, "json double domain " + e.getCause().toString() );
-            Log.w(TAG,TheTang.getExceptionInfo(e));
+            LogUtil.writeToFile(TAG, "json double domain " + e.getCause().toString());
+            Log.w(TAG, LogUtil.getExceptionInfo(e));
         }
     }
 
     /**
      * 应用黑白名单解析
+     *
      * @param extra
      * @return
      */
     public synchronized static AppBlackWhiteData jsonBlackWhiteList(String extra) {
         AppBlackWhiteData appBlackWhiteData = new AppBlackWhiteData();
-
         try {
-            JSONObject jsonObject = new JSONObject( extra );
-            appBlackWhiteData.id = jsonObject.getString( "id" );
-            appBlackWhiteData.type = jsonObject.getString( "type" );
-            appBlackWhiteData.name = jsonObject.getString( "name" );
-            appBlackWhiteData.appList = new ArrayList<>(  );
-            JSONArray jsonArray = jsonObject.getJSONArray( "list" );
+            JSONObject jsonObject = new JSONObject(extra);
+            appBlackWhiteData.id = jsonObject.getString("id");
+            appBlackWhiteData.type = jsonObject.getString("type");
+            appBlackWhiteData.name = jsonObject.getString("name");
+            appBlackWhiteData.appList = new ArrayList<>();
+            JSONArray jsonArray = jsonObject.getJSONArray("list");
             if (jsonArray != null) {
                 for (int i = 0; i < jsonArray.length(); i++) {
-                    String packageName = jsonArray.getJSONObject( i ).getString( "appPackage" );
-                    appBlackWhiteData.appList.add( packageName );
+                    String packageName = jsonArray.getJSONObject(i).getString("appPackage");
+                    appBlackWhiteData.appList.add(packageName);
                 }
             }
         } catch (JSONException e) {
             e.printStackTrace();
             String str = e.toString();
-            LogUtil.writeToFile( TAG, "json black white list " + str );
+            LogUtil.writeToFile(TAG, "json black white list " + str);
         }
         return appBlackWhiteData;
     }
 
     /**
      * 机卡绑定解析
+     *
      * @param extra
      */
     public synchronized static MachineCardInfo jsonMachineCard(String extra) {
         MachineCardInfo machineCardInfo = new MachineCardInfo();
         try {
-            JSONObject jsonObject = new JSONObject( extra );
+            JSONObject jsonObject = new JSONObject(extra);
             machineCardInfo.machineCard = "true";
-            JSONArray jsonArray = jsonObject.getJSONArray( "policy" );
+            JSONArray jsonArray = jsonObject.getJSONArray("policy");
             //machineCardInfo.iccid = jsonArray.getJSONObject( 0 ).getString( Common.iccid_card );
             //machineCardInfo.imei = jsonArray.getJSONObject( 0 ).getString( Common.imei_phone );
-            LogUtil.writeToFile( TAG, "iccid = " + machineCardInfo.iccid + "," + "imei = " + machineCardInfo.imei );
+            LogUtil.writeToFile(TAG, "iccid = " + machineCardInfo.iccid + "," + "imei = " + machineCardInfo.imei);
         } catch (JSONException e) {
             e.printStackTrace();
-            Log.w(TAG,TheTang.getExceptionInfo(e));
+            Log.w(TAG, LogUtil.getExceptionInfo(e));
         }
         return machineCardInfo;
     }
 
     /**
      * 异常Log 解析
+     *
      * @param extra
      * @return
      */
     public static ExceptionLogData jsonExceptionLog(String extra) {
         ExceptionLogData exceptionLogData = new ExceptionLogData();
-
-        exceptionLogData.logId = DataParseUtil.jSon( "id",extra );
-        exceptionLogData.isWifiUpload = DataParseUtil.jSon( "isWifiUpload",extra );
-        exceptionLogData.date = DataParseUtil.jSon( "date",extra );
+        exceptionLogData.logId = DataParseUtil.jSon("id", extra);
+        exceptionLogData.isWifiUpload = DataParseUtil.jSon("isWifiUpload", extra);
+        exceptionLogData.date = DataParseUtil.jSon("date", extra);
         return exceptionLogData;
     }
 
     /**
      * 安全浏览器解析
+     *
      * @param extra
      * @return
      */
     public static SecurityChromeData jsonSecurityData(String extra) {
         SecurityChromeData securityChromeData = new SecurityChromeData();
         try {
-            JSONObject jsonObject = new JSONObject( extra );
-            JSONArray jsonArray = jsonObject.getJSONArray( "policy" );
-            securityChromeData.sec_name = jsonArray.getJSONObject( 0 ).getString( "name" );
+            JSONObject jsonObject = new JSONObject(extra);
+            JSONArray jsonArray = jsonObject.getJSONArray("policy");
+            securityChromeData.sec_name = jsonArray.getJSONObject(0).getString("name");
             //securityChromeData.sec_id = jsonArray.getJSONObject( 0 ).getString( "id" );
-            JSONArray list = jsonArray.getJSONObject( 0 ).getJSONArray( "explorerWhitelist" );
-
-            securityChromeData.sec_white_list = new HashMap<>(  );
-
-            if (list == null) {
-
-            } else {
+            JSONArray list = jsonArray.getJSONObject(0).getJSONArray("explorerWhitelist");
+            securityChromeData.sec_white_list = new HashMap<>();
+            if (list != null) {
                 for (int i = 0; i < list.length(); i++) {
                     try {
-                        securityChromeData.sec_white_list.put( list.getJSONObject( i ).getString( "whitelistName" ),
-                                list.getJSONObject( i ).getString( "whitelistAddress" ) );
+                        securityChromeData.sec_white_list.put(list.getJSONObject(i).getString("whitelistName"),
+                                list.getJSONObject(i).getString("whitelistAddress"));
                     } catch (Exception e) {
-                        LogUtil.writeToFile( TAG, "SecurityChromeData: " + e.getCause().toString() );
-                        Log.w(TAG,TheTang.getExceptionInfo(e));
+                        LogUtil.writeToFile(TAG, "SecurityChromeData: " + e.getCause().toString());
+                        Log.w(TAG, LogUtil.getExceptionInfo(e));
                     }
                 }
             }
         } catch (JSONException e) {
             e.printStackTrace();
-            Log.w(TAG,TheTang.getExceptionInfo(e));
+            Log.w(TAG, LogUtil.getExceptionInfo(e));
         }
-
         return securityChromeData;
     }
 
     /**
      * 解析要删除的app的数据
+     *
      * @param orderCode
      * @param extra
      * @return
@@ -1177,19 +1123,19 @@ public class DataParseUtil {
         DeleteAppData deleteAppData = new DeleteAppData();
         JSONObject jsonObject = null;
         try {
-            jsonObject = new JSONObject( extra );
-            deleteAppData.packageName = jsonObject.getString( "packageName" ) ;
-            deleteAppData.app_id = jsonObject.getString( "id" ) ;
+            jsonObject = new JSONObject(extra);
+            deleteAppData.packageName = jsonObject.getString("packageName");
+            deleteAppData.app_id = jsonObject.getString("id");
         } catch (JSONException e) {
             e.printStackTrace();
-            Log.w(TAG,TheTang.getExceptionInfo(e));
+            Log.w(TAG, LogUtil.getExceptionInfo(e));
         }
-
         return deleteAppData;
     }
 
     /**
      * 解析设置相关数据
+     *
      * @param extra
      * @return
      */
@@ -1197,14 +1143,14 @@ public class DataParseUtil {
         SettingAboutData settingAboutData = new SettingAboutData();
         JSONObject jsonObject = null;
         try {
-            jsonObject = new JSONObject( extra );
-            JSONObject jsonObject1 = jsonObject.getJSONObject( Common.setting_clientManagement );
-            settingAboutData.messageForHelp = jsonObject1.getString( Common.setting_help );
-            settingAboutData.agreementLicense = jsonObject1.getString( Common.setting_agreement );
-            settingAboutData.supportContent = jsonObject1.getString( Common.setting_stand_by );
+            jsonObject = new JSONObject(extra);
+            JSONObject jsonObject1 = jsonObject.getJSONObject(Common.setting_clientManagement);
+            settingAboutData.messageForHelp = jsonObject1.getString(Common.setting_help);
+            settingAboutData.agreementLicense = jsonObject1.getString(Common.setting_agreement);
+            settingAboutData.supportContent = jsonObject1.getString(Common.setting_stand_by);
         } catch (JSONException e) {
             e.printStackTrace();
-            Log.w(TAG,TheTang.getExceptionInfo(e));
+            Log.w(TAG, LogUtil.getExceptionInfo(e));
         }
         return settingAboutData;
     }
@@ -1212,18 +1158,15 @@ public class DataParseUtil {
     /**
      * 解析用Gson送数据
      */
-    public static <T> T jsonToData (Class< T > clazz ,String extra){
-        T t=null;
+    public static <T> T jsonToData(Class<T> clazz, String extra) {
+        T t = null;
         try {
-
-             t = new Gson().fromJson(extra, clazz);
-        }catch (Exception e){
+            t = new Gson().fromJson(extra, clazz);
+        } catch (Exception e) {
             e.printStackTrace();
-            Log.w(TAG,TheTang.getExceptionInfo(e));
+            Log.w(TAG, LogUtil.getExceptionInfo(e));
         }
-
         return t;
-
     }
 
     /**
@@ -1233,79 +1176,74 @@ public class DataParseUtil {
      * @return
      */
     public static List<DownLoadEntity> jSonPictureNameList(String code, String extra) {
-        Log.e(TAG,"头像解析=" + extra);
+        Log.e(TAG, "头像解析=" + extra);
         List<DownLoadEntity> applist = new ArrayList<DownLoadEntity>();
         // APPInfo appInfo;
         try {
             DownLoadEntity entity = new DownLoadEntity();
-            JSONObject jsonObject = new JSONObject( extra );
+            JSONObject jsonObject = new JSONObject(extra);
             entity.app_id = "000";
-            entity.sendId = jsonObject.getString( "sendId" );
+            entity.sendId = jsonObject.getString("sendId");
             entity.type = "2";
             entity.code = code;
-            applist.add( entity );
+            applist.add(entity);
         } catch (JSONException e) {
-            Log.d( TAG, "PictureListJSONException" );
+            Log.d(TAG, "PictureListJSONException");
             e.printStackTrace();
         }
-
         return applist;
     }
 
     /**
      * 安全配置解析
+     *
      * @param extra
      * @return
      */
     public static SafetyLimitData jsonSafetyLimitData(String extra) {
-        SafetyLimitData safetyLimitData  = new SafetyLimitData();
+        SafetyLimitData safetyLimitData = new SafetyLimitData();
         JSONObject jsonObject = null;
         try {
-            jsonObject = new JSONObject( extra );
-            JSONObject jsonObject1 = jsonObject.getJSONObject( Common.banSecurity );
+            jsonObject = new JSONObject(extra);
+            JSONObject jsonObject1 = jsonObject.getJSONObject(Common.banSecurity);
 
-            safetyLimitData.banCamera = "0".equals( jsonObject1.getString( Common.banCamera ) ) ? "1":"0";
-            safetyLimitData.banWifi = "0".equals( jsonObject1.getString( Common.banWifi )) ? "1":"0";
-            safetyLimitData.banMobileData = "0".equals( jsonObject1.getString( Common.banMobileData )) ? "1":"0";
-            safetyLimitData.banBluetooth = "0".equals( jsonObject1.getString( Common.banBluetooth )) ? "1":"0";
-            safetyLimitData.banLocation = "0".equals( jsonObject1.getString( Common.banLocation )) ? "1":"0";
-            safetyLimitData.banMtp = "0".equals( jsonObject1.getString( Common.banMtp )) ? "1":"0";
-            safetyLimitData.banSoundRecord = "0".equals( jsonObject1.getString( Common.banSoundRecord )) ? "1":"0";
+            safetyLimitData.banCamera = "0".equals(jsonObject1.getString(Common.banCamera)) ? "1" : "0";
+            safetyLimitData.banWifi = "0".equals(jsonObject1.getString(Common.banWifi)) ? "1" : "0";
+            safetyLimitData.banMobileData = "0".equals(jsonObject1.getString(Common.banMobileData)) ? "1" : "0";
+            safetyLimitData.banBluetooth = "0".equals(jsonObject1.getString(Common.banBluetooth)) ? "1" : "0";
+            safetyLimitData.banLocation = "0".equals(jsonObject1.getString(Common.banLocation)) ? "1" : "0";
+            safetyLimitData.banMtp = "0".equals(jsonObject1.getString(Common.banMtp)) ? "1" : "0";
+            safetyLimitData.banSoundRecord = "0".equals(jsonObject1.getString(Common.banSoundRecord)) ? "1" : "0";
             //safetyLimitData.banTelephone = jsonObject1.getString( Common.banTelephone );
-            safetyLimitData.banExitSecurityDomain = "0".equals(jsonObject1.getString( Common.banExitSecurityDomain )) ? "1":"0";
+            safetyLimitData.banExitSecurityDomain = "0".equals(jsonObject1.getString(Common.banExitSecurityDomain)) ? "1" : "0";
 
-            safetyLimitData.banScreenshot = "0".equals( jsonObject1.getString( Common.banScreenshot ) ) ? "1":"0";
-            safetyLimitData.allowDropdown = "0".equals( jsonObject1.getString( Common.allowDropdown )) ? "1":"0";
-            safetyLimitData.allowReset = "0".equals( jsonObject1.getString( Common.allowReset )) ? "1":"0";
-            safetyLimitData.allowNFC = "0".equals( jsonObject1.getString( Common.allowNFC )) ? "1":"0";
-            safetyLimitData.allowModifySystemtime = "0".equals( jsonObject1.getString( Common.allowModifySystemtime )) ? "1":"0";
+            safetyLimitData.banScreenshot = "0".equals(jsonObject1.getString(Common.banScreenshot)) ? "1" : "0";
+            safetyLimitData.allowDropdown = "0".equals(jsonObject1.getString(Common.allowDropdown)) ? "1" : "0";
+            safetyLimitData.allowReset = "0".equals(jsonObject1.getString(Common.allowReset)) ? "1" : "0";
+            safetyLimitData.allowNFC = "0".equals(jsonObject1.getString(Common.allowNFC)) ? "1" : "0";
+            safetyLimitData.allowModifySystemtime = "0".equals(jsonObject1.getString(Common.allowModifySystemtime)) ? "1" : "0";
 
-            safetyLimitData.banTelephone = "0".equals( jsonObject1.getString( Common.banTelephone )) ? "1":"0";
-            safetyLimitData.banTelephoneWhiteList = "0".equals( jsonObject1.getString( Common.banTelephoneWhiteList )) ? "1":"0";
-            safetyLimitData.banMobileHotspot = "0".equals( jsonObject1.getString( Common.banMobileHotspot )) ? "1":"0";
-            safetyLimitData.banShortMessage = "0".equals( jsonObject1.getString( Common.banTelephone )) ? "1":"0";
+            safetyLimitData.banTelephone = "0".equals(jsonObject1.getString(Common.banTelephone)) ? "1" : "0";
+            safetyLimitData.banTelephoneWhiteList = "0".equals(jsonObject1.getString(Common.banTelephoneWhiteList)) ? "1" : "0";
+            safetyLimitData.banMobileHotspot = "0".equals(jsonObject1.getString(Common.banMobileHotspot)) ? "1" : "0";
+            safetyLimitData.banShortMessage = "0".equals(jsonObject1.getString(Common.banTelephone)) ? "1" : "0";
 
             //safetyLimitData.machineCardBind = jsonObject1.getString( Common.machineCardBind );
-            safetyLimitData.secureDesktop = jsonObject1.getString( Common.secureDesktop );
-
+            safetyLimitData.secureDesktop = jsonObject1.getString(Common.secureDesktop);
             String safetyLimitDesktops = null;
-            JSONArray jsonArray = jsonObject1.getJSONArray( Common.safetyLimitDesktops );
-
+            JSONArray jsonArray = jsonObject1.getJSONArray(Common.safetyLimitDesktops);
             if (jsonArray != null) {
                 for (int i = 0; i < jsonArray.length(); i++) {
-                    String packageName = jsonArray.getJSONObject( i ).getString( "packageName" );
+                    String packageName = jsonArray.getJSONObject(i).getString("packageName");
                     if (safetyLimitDesktops == null) {
                         safetyLimitDesktops = packageName;
                     } else {
                         safetyLimitDesktops += "," + packageName;
                     }
-
                 }
             }
-
-            String displayCall = jsonObject1.getString( Common.displayCall );
-
-            if (!TextUtils.isEmpty( displayCall ) && "1".equals( displayCall )) {
+            String displayCall = jsonObject1.getString(Common.displayCall);
+            if (!TextUtils.isEmpty(displayCall) && "1".equals(displayCall)) {
                 if (safetyLimitDesktops == null) {
                     safetyLimitDesktops = Common.callPackageName;
                 } else {
@@ -1313,9 +1251,8 @@ public class DataParseUtil {
                 }
             }
 
-            String displayContacts = jsonObject1.getString( Common.displayContacts );
-
-            if (!TextUtils.isEmpty( displayContacts ) && "1".equals( displayContacts )) {
+            String displayContacts = jsonObject1.getString(Common.displayContacts);
+            if (!TextUtils.isEmpty(displayContacts) && "1".equals(displayContacts)) {
                 if (safetyLimitDesktops == null) {
                     safetyLimitDesktops = Common.contactsPackageName;
                 } else {
@@ -1323,27 +1260,25 @@ public class DataParseUtil {
                 }
             }
 
-            String displayMessage = jsonObject1.getString( Common.displayMessage );
-
-            if (!TextUtils.isEmpty( displayMessage ) && "1".equals( displayMessage )) {
+            String displayMessage = jsonObject1.getString(Common.displayMessage);
+            if (!TextUtils.isEmpty(displayMessage) && "1".equals(displayMessage)) {
                 if (safetyLimitDesktops == null) {
                     safetyLimitDesktops = Common.messagePackageName;
                 } else {
                     safetyLimitDesktops += "," + Common.messagePackageName;
                 }
             }
-
             safetyLimitData.safetyLimitDesktops = safetyLimitDesktops;
-
         } catch (JSONException e) {
             e.printStackTrace();
-            Log.w(TAG,TheTang.getExceptionInfo(e));
+            Log.w(TAG, LogUtil.getExceptionInfo(e));
         }
         return safetyLimitData;
     }
 
     /**
      * 应用围栏解析
+     *
      * @param extra
      * @return
      */
@@ -1351,61 +1286,47 @@ public class DataParseUtil {
         AppFenceData appFenceData = new AppFenceData();
         JSONObject jsonObject = null;
         try {
-            jsonObject = new JSONObject( extra );
+            jsonObject = new JSONObject(extra);
             try {
-                appFenceData.id = jsonObject.getString( Common.appFenceId );
-
-            }catch (Exception e){
+                appFenceData.id = jsonObject.getString(Common.appFenceId);
+            } catch (Exception e) {
 
             }
+            JSONArray jsonArray1 = jsonObject.getJSONArray(Common.appFencePolicy);
+            JSONObject jsonObject1 = jsonArray1.getJSONObject(0);
+            JSONObject jsonObject2 = jsonObject1.getJSONObject(Common.applicationFence);
 
-            JSONArray jsonArray1 = jsonObject.getJSONArray( Common.appFencePolicy );
-
-            JSONObject jsonObject1 = jsonArray1.getJSONObject( 0 );
-
-            JSONObject jsonObject2  = jsonObject1.getJSONObject( Common.applicationFence );
-
-            appFenceData.name = jsonObject2.getString( Common.appFenceName );
-
-            appFenceData.coordinate = jsonObject2.getString( Common.appFenceCoordinate );
-
+            appFenceData.name = jsonObject2.getString(Common.appFenceName);
+            appFenceData.coordinate = jsonObject2.getString(Common.appFenceCoordinate);
             appFenceData.radius = jsonObject2.getString(Common.appFenceRadius);
+            appFenceData.startDateRange = jsonObject2.getString(Common.appFenceStartDateRange);
+            appFenceData.endDateRange = jsonObject2.getString(Common.appFenceEndDateRange);
+            appFenceData.noticeMessage = jsonObject2.getString(Common.appFenceNoticeMessage);
+            appFenceData.noticeMessageContent = jsonObject2.getString(Common.appFenceMessageContent);
+            appFenceData.noticeBell = jsonObject2.getString(Common.appFenceNoticeBell);
+            appFenceData.limitType = jsonObject2.getString(Common.appFenceLimitType);
 
-            appFenceData.startDateRange = jsonObject2.getString( Common.appFenceStartDateRange );
-
-            appFenceData.endDateRange = jsonObject2.getString( Common.appFenceEndDateRange );
-
-            appFenceData.noticeMessage = jsonObject2.getString( Common.appFenceNoticeMessage );
-
-            appFenceData.noticeMessageContent = jsonObject2.getString( Common.appFenceMessageContent );
-
-            appFenceData.noticeBell = jsonObject2.getString( Common.appFenceNoticeBell );
-
-            appFenceData.limitType = jsonObject2.getString( Common.appFenceLimitType );
-
-            JSONArray jsonArray2 = jsonObject1.getJSONArray( Common.appFenceTimeFenceUnit);
-
+            JSONArray jsonArray2 = jsonObject1.getJSONArray(Common.appFenceTimeFenceUnit);
             if (jsonArray2 != null) {
-                appFenceData.timeUnit = new ArrayList<>( );
+                appFenceData.timeUnit = new ArrayList<>();
                 for (int i = 0; i < jsonArray2.length(); i++) {
                     AppFenceData.TimeUnitBean timeUnitBean = new AppFenceData.TimeUnitBean();
-                    JSONObject jsonObject3 = jsonArray2.getJSONObject( i );
-                    timeUnitBean.startTime = jsonObject3.getString( Common.appFenceStartTime );
-                    timeUnitBean.endTime = jsonObject3.getString( Common.appFenceEndTime );
-                    timeUnitBean.typeDate = jsonObject3.getString( Common.appFenceTypeDate );
-                    timeUnitBean.unitType = jsonObject3.getString( Common.appFenceUnitType );
-                    appFenceData.timeUnit.add( timeUnitBean );
+                    JSONObject jsonObject3 = jsonArray2.getJSONObject(i);
+                    timeUnitBean.startTime = jsonObject3.getString(Common.appFenceStartTime);
+                    timeUnitBean.endTime = jsonObject3.getString(Common.appFenceEndTime);
+                    timeUnitBean.typeDate = jsonObject3.getString(Common.appFenceTypeDate);
+                    timeUnitBean.unitType = jsonObject3.getString(Common.appFenceUnitType);
+                    appFenceData.timeUnit.add(timeUnitBean);
                 }
             }
 
-            JSONArray jsonArray3 = jsonObject1.getJSONArray( Common.appFenceApplicationPrograms);
+            JSONArray jsonArray3 = jsonObject1.getJSONArray(Common.appFenceApplicationPrograms);
             if (jsonArray3 != null) {
-                appFenceData.packageNames = new ArrayList<>( );
+                appFenceData.packageNames = new ArrayList<>();
                 for (int i = 0; i < jsonArray3.length(); i++) {
-                    appFenceData.packageNames.add( jsonArray3.getJSONObject( i ).getString( Common.appFenceAppPageName ) );
+                    appFenceData.packageNames.add(jsonArray3.getJSONObject(i).getString(Common.appFenceAppPageName));
                 }
             }
-
         } catch (Exception e) {
 
         }
@@ -1414,68 +1335,65 @@ public class DataParseUtil {
 
     /**
      * 解析设置数据
+     *
      * @param extra
      */
-    public static void jsonSettingData( String extra ) {
+    public static void jsonSettingData(String extra) {
         try {
             JSONObject object = new JSONObject(extra);
-            String message = object.getString( "message" );
-            final JSONObject object1 = new JSONObject( message );
+            String message = object.getString("message");
+            final JSONObject object1 = new JSONObject(message);
 
             SettingAboutData settingAboutData = new SettingAboutData();
-            settingAboutData.messageForHelp = object1.getString( Common.setting_help );
-            settingAboutData.agreementLicense = object1.getString( Common.setting_agreement );
-            settingAboutData.supportContent = object1.getString( Common.setting_stand_by );
+            settingAboutData.messageForHelp = object1.getString(Common.setting_help);
+            settingAboutData.agreementLicense = object1.getString(Common.setting_agreement);
+            settingAboutData.supportContent = object1.getString(Common.setting_stand_by);
             TheTang.getSingleInstance().storageSettingAboutData(settingAboutData);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
     }
 
     /**
      * 解析电话白名单
+     *
      * @param extra
      */
     public static List<TelephoyWhiteUser> jsonTelePhoneWhite(String extra) {
-
         List<TelephoyWhiteUser> list = null;
         try {
-            JSONObject object = new JSONObject( extra );
-
+            JSONObject object = new JSONObject(extra);
             if (object != null) {
-
                 list = new ArrayList<>();
-
                 JSONArray jsonArray = object.getJSONArray("data");
                 if (jsonArray != null && jsonArray.length() > 0) {
                     for (int i = 0; i < jsonArray.length(); i++) {
                         TelephoyWhiteUser mTelephoyWhiteUser = new TelephoyWhiteUser();
                         JSONObject telephoywhiteuser = jsonArray.getJSONObject(i);
-                        if ("null".equals(telephoywhiteuser.getString("name").trim())){
+                        if ("null".equals(telephoywhiteuser.getString("name").trim())) {
                             mTelephoyWhiteUser.setUserName(" ");
-                        }else {
+                        } else {
                             mTelephoyWhiteUser.setUserName(telephoywhiteuser.getString("name").trim());
                         }
                         mTelephoyWhiteUser.setUserId(telephoywhiteuser.getString("id").trim());
-                        if ("null".equals(telephoywhiteuser.getString("teamName").trim())){
+                        if ("null".equals(telephoywhiteuser.getString("teamName").trim())) {
                             mTelephoyWhiteUser.setUserAddress("");
-                        }else {
+                        } else {
                             mTelephoyWhiteUser.setUserAddress(telephoywhiteuser.getString("teamName"));
                         }
-                        if ("null".equals(telephoywhiteuser.getString("phone").trim())){
+                        if ("null".equals(telephoywhiteuser.getString("phone").trim())) {
                             mTelephoyWhiteUser.setTelephonyNumber("");
-                        }else {
+                        } else {
                             mTelephoyWhiteUser.setTelephonyNumber(telephoywhiteuser.getString("phone").trim());
                         }
-                        if ("null".equals(telephoywhiteuser.getString("phone").trim())){
+                        if ("null".equals(telephoywhiteuser.getString("phone").trim())) {
                             mTelephoyWhiteUser.setLoginName("");
-                        }else{
+                        } else {
                             mTelephoyWhiteUser.setLoginName(telephoywhiteuser.getString("loginName").trim());
                         }
-                        if ("null".equals( telephoywhiteuser.getString("shortPhoneNum").trim())){
+                        if ("null".equals(telephoywhiteuser.getString("shortPhoneNum").trim())) {
                             mTelephoyWhiteUser.setShortPhoneNum("");
-                        }else {
+                        } else {
                             mTelephoyWhiteUser.setShortPhoneNum(telephoywhiteuser.getString("shortPhoneNum").trim());
                         }
                         list.add(mTelephoyWhiteUser);
@@ -1490,6 +1408,7 @@ public class DataParseUtil {
 
     /**
      * parse sensitive_word_strategy info from json
+     *
      * @param jsonString
      * @return
      */
@@ -1509,6 +1428,7 @@ public class DataParseUtil {
 
     /**
      * parse sensitive_word_strategy id from json
+     *
      * @param jsonString
      * @return
      */
@@ -1527,13 +1447,14 @@ public class DataParseUtil {
     //    {"code":169,"id":15,"name":"testqq","sendId":"1000001237882237","sensitiveStrategy":"123,456,qwe"}
     static String json = "{\"id\":\"176\",\"name\":\"aaa\",\"startDateRange\":\"2018-8-7\",\"endDateRange\":\"2018-8-8\"," +
             "\"timeUnit\":[" +
-        "{unitType: 1, typeDate: \"\", startTime: \"00:00\", endTime: \"23:59\"}," +
+            "{unitType: 1, typeDate: \"\", startTime: \"00:00\", endTime: \"23:59\"}," +
             "{unitType: 2, typeDate: \"1\", startTime: \"00:00\", endTime: \"13:59\"}," +
             "{unitType: 3, typeDate: \"\", startTime: \"00:00\", endTime: \"23:59\"}," +
             "{unitType: \"4\", typeDate: \"2018-8-2\", startTime: \"00:00\", endTime: \"13:59\"}" +
             "]}";
-//    json {"code":176,"sendId":"1000000878428069","id":5,
-// "strategy":{"startDateRange":"2018/8/8","useNumber":0,"timeDescribe":"","createTime":1533720774000,"issuedNumber":0,"adminId":1,"name":"aaa","id":5,"saveDays":7,"endDateRange":"2018/8/17","timeFenceUnits":[{"typeDate":"","unitType":1,"startTime":"00:00","endTime":"11:59"},{"typeDate":"","unitType":3,"startTime":"14:00","endTime":"23:59"}],"timeUnit":"[{\"endTime\":\"11:59\",\"startTime\":\"00:00\",\"typeDate\":\"\",\"unitType\":1},{\"endTime\":\"23:59\",\"startTime\":\"14:00\",\"typeDate\":\"\",\"unitType\":3}]"}}
+
+    //    json {"code":176,"sendId":"1000000878428069","id":5,
+    // "strategy":{"startDateRange":"2018/8/8","useNumber":0,"timeDescribe":"","createTime":1533720774000,"issuedNumber":0,"adminId":1,"name":"aaa","id":5,"saveDays":7,"endDateRange":"2018/8/17","timeFenceUnits":[{"typeDate":"","unitType":1,"startTime":"00:00","endTime":"11:59"},{"typeDate":"","unitType":3,"startTime":"14:00","endTime":"23:59"}],"timeUnit":"[{\"endTime\":\"11:59\",\"startTime\":\"00:00\",\"typeDate\":\"\",\"unitType\":1},{\"endTime\":\"23:59\",\"startTime\":\"14:00\",\"typeDate\":\"\",\"unitType\":3}]"}}
     public static SmsPolicyInfo getSmsPolicyInfo(String jsonString) {
 //        jsonString = json;    //todo baii to delete
         SmsPolicyInfo info = new SmsPolicyInfo();
@@ -1603,5 +1524,4 @@ public class DataParseUtil {
         }
         return info;
     }
-
 }

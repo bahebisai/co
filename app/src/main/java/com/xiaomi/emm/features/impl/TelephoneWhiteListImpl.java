@@ -20,9 +20,8 @@ import com.xiaomi.emm.features.resend.MessageResendManager;
 import com.xiaomi.emm.model.TelephoyWhiteUser;
 import com.xiaomi.emm.utils.DataParseUtil;
 import com.xiaomi.emm.utils.HttpHelper;
-import com.xiaomi.emm.utils.MDM;
-import com.xiaomi.emm.utils.PreferencesManager;
-import com.xiaomi.emm.utils.TheTang;
+import com.xiaomi.emm.features.presenter.MDM;
+import com.xiaomi.emm.features.manager.PreferencesManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;

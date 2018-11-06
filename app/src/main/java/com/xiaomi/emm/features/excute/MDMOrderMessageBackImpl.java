@@ -3,10 +3,10 @@ package com.xiaomi.emm.features.excute;
 import android.content.Context;
 
 import com.xiaomi.emm.definition.OrderConfig;
-import com.xiaomi.emm.features.complete.CompleteMessageManager;
+import com.xiaomi.emm.features.manager.CompleteMessageManager;
 import com.xiaomi.emm.utils.DataParseUtil;
 import com.xiaomi.emm.utils.LogUtil;
-import com.xiaomi.emm.utils.PreferencesManager;
+import com.xiaomi.emm.features.manager.PreferencesManager;
 
 /**
  * Created by lenovo on 2018/1/2.

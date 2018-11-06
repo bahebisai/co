@@ -7,7 +7,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewStub;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -15,19 +14,17 @@ import android.widget.Toast;
 import com.xiaomi.emm.R;
 import com.xiaomi.emm.features.db.DatabaseOperate;
 import com.xiaomi.emm.features.event.MessageEvent;
-import com.xiaomi.emm.utils.TheTang;
+import com.xiaomi.emm.features.presenter.TheTang;
 import com.xiaomi.emm.view.activity.MessageDetailActivity;
-import com.xiaomi.emm.view.adapter.FileAdapter;
 import com.xiaomi.emm.view.adapter.MessageAdapter;
 import com.xiaomi.emm.model.MessageInfo;
-import com.xiaomi.emm.view.viewutils.ViewLoaddingInterface;
+import com.xiaomi.emm.view.viewutils.ViewLoadingInterface;
 import com.xiaomi.emm.view.viewutils.ViewLoadingLayout;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -104,7 +101,7 @@ public class MessageFragment extends BaseFragment implements ListView.OnItemClic
         mListView.setOnItemClickListener(this);
         viewloading = (ViewLoadingLayout) mViewHolder.get(R.id.viewloading);
 
-        viewloading.setInit(new ViewLoaddingInterface() {
+        viewloading.setInit(new ViewLoadingInterface() {
             @Override
             public void Reload() {
                 //点击重新加载调用

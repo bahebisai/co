@@ -1,23 +1,18 @@
 package com.xiaomi.emm.features.impl;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.xiaomi.emm.definition.Common;
 import com.xiaomi.emm.definition.UrlConst;
 import com.xiaomi.emm.features.http.RequestService;
 import com.xiaomi.emm.features.luban.PhotoUploadListener;
-import com.xiaomi.emm.utils.DataParseUtil;
 import com.xiaomi.emm.utils.HttpHelper;
-import com.xiaomi.emm.utils.LogUtil;
-import com.xiaomi.emm.utils.PreferencesManager;
-import com.xiaomi.emm.utils.TheTang;
+import com.xiaomi.emm.features.manager.PreferencesManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.IOException;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;

@@ -10,8 +10,8 @@ import com.xiaomi.emm.model.MessageSendData;
 import com.xiaomi.emm.utils.JsonGenerateUtil;
 import com.xiaomi.emm.utils.LogUtil;
 import com.xiaomi.emm.utils.PhoneUtils;
-import com.xiaomi.emm.utils.PreferencesManager;
-import com.xiaomi.emm.utils.TheTang;
+import com.xiaomi.emm.features.manager.PreferencesManager;
+
 import java.text.SimpleDateFormat;
 
 /**

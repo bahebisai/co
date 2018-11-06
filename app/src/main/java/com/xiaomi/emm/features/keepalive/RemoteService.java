@@ -11,7 +11,7 @@ import android.util.Log;
 
 import com.xiaomi.emm.ITwoProcessAidlInterface;
 import com.xiaomi.emm.features.excute.MDMOrderService;
-import com.xiaomi.emm.utils.TheTang;
+import com.xiaomi.emm.features.presenter.TheTang;
 
 /**
  * Created by Administrator on 2018/2/8.

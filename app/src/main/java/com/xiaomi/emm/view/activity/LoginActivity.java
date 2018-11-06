@@ -29,12 +29,12 @@ import com.xiaomi.emm.features.event.LoginEvent;
 import com.xiaomi.emm.features.excute.XiaomiMDMController;
 import com.xiaomi.emm.model.LoginBackData;
 import com.xiaomi.emm.utils.AppUtils;
-import com.xiaomi.emm.utils.KeyboardUtils;
+import com.xiaomi.emm.utils.viewUtils.KeyboardUtils;
 import com.xiaomi.emm.utils.LogUtil;
-import com.xiaomi.emm.utils.MDM;
+import com.xiaomi.emm.features.presenter.MDM;
 import com.xiaomi.emm.utils.PhoneUtils;
-import com.xiaomi.emm.utils.PreferencesManager;
-import com.xiaomi.emm.utils.TheTang;
+import com.xiaomi.emm.features.manager.PreferencesManager;
+import com.xiaomi.emm.features.presenter.TheTang;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -103,7 +103,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                 return false;
             }
         } );
-
         registerKeyBoardListener();
     }
 
@@ -132,7 +131,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
 
     @Override
     protected void initView() {
-
         activeDeviceAdmin(XiaomiMDMController.mDevicePolicyManager, XiaomiMDMController.mComponentName);
 
         mUserName = mViewHolder.get( R.id.username );
@@ -166,7 +164,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                 return false;
             }
         } );
-
         mLogin.setOnClickListener( this );
         mQRcode.setOnClickListener( this );
     }
@@ -178,19 +175,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
      * @param passWord
      */
     public void login(final String userName, final String passWord) {
-
         if (!PhoneUtils.isNetworkConnected(this)) {
             toastDialogs( this, getResources().getString(R.string.net_not_allow) );
             return;
         }
-
         final String baseUrl = preferencesManager.getData( "baseUrl" );
-
         preferencesManager.setData( Common.userName, userName );
         preferencesManager.setData( Common.passWord, passWord );
-
         if (!TextUtils.isEmpty( baseUrl )) {
-
             HttpUrl httpUrl = HttpUrl.parse( baseUrl );
             if (httpUrl == null) {
                 PreferencesManager.getSingleInstance().removeData( "baseUrl" );
@@ -201,7 +193,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
             loadDialog(this, R.string.login_loading);
             theTang.login( userName, passWord );
             /*else {
-
                 if (Patterns.WEB_URL.matcher( baseUrl ).matches()) {
                     loadDialog(this, R.string.login_loading);
                     //符合标准
@@ -210,11 +201,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                     //不符合标准
                     TheTang.getSingleInstance().showToastByRunnable( TheTang.getSingleInstance().getContext(), getResources().getString(R.string.net_not_allow), Toast.LENGTH_SHORT );
                 }
-
-
             }*/
         } else {
-            TheTang.getSingleInstance().showToastByRunnable( TheTang.getSingleInstance().getContext(), getResources().getString(R.string.ip_or_port_error), Toast.LENGTH_SHORT );
+            TheTang.getSingleInstance().showToastByRunnable(this, getResources().getString(R.string.ip_or_port_error), Toast.LENGTH_SHORT );
         }
     }
 
@@ -267,7 +256,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                 preferencesManager.setData( Common.alias, ((LoginBackData) event.getBean()).getToken().getUser_alias() );
 
                 //保存应用版本号
-                preferencesManager.setData(Common.appVersion, AppUtils.getAppVersion(this, Common.packageName));
+                preferencesManager.setData(Common.appVersion, AppUtils.getAppVersionName(this, Common.packageName));
 
                 preferencesManager.setData( Common.keepAliveHost, ((LoginBackData) event.getBean()).getToken().getKeepAliveHost() );
                 preferencesManager.setData( Common.keepAlivePort, ((LoginBackData) event.getBean()).getToken().getKeepAlivePort() );//preferencesManager.setData( Common.userName, userName );

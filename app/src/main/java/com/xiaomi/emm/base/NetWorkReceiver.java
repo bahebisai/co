@@ -20,9 +20,9 @@ import com.xiaomi.emm.socket.service.ConnTask;
 import com.xiaomi.emm.socket.service.TVBoxService;
 import com.xiaomi.emm.utils.LogUtil;
 import com.xiaomi.emm.utils.PhoneUtils;
-import com.xiaomi.emm.utils.PreferencesManager;
-import com.xiaomi.emm.utils.TheTang;
-import com.xiaomi.emm.utils.WifyManager;
+import com.xiaomi.emm.features.manager.PreferencesManager;
+import com.xiaomi.emm.features.presenter.TheTang;
+import com.xiaomi.emm.utils.WifiHelper;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -100,13 +100,13 @@ public class NetWorkReceiver extends BroadcastReceiver {
                     if (wifiConfigureData != null) {
                         for (ConfigureStrategyData.ConfigureStrategyBean.WifiListBean bean : wifiConfigureData) {
 
-                            WifiConfiguration configuration = WifyManager.IsExsits( bean.getSsid(), bean.getMacAddress() );
+                            WifiConfiguration configuration = WifiHelper.IsExsits( bean.getSsid(), bean.getMacAddress() );
                             if (configuration != null) {
                                 isExit = true;
-                                Log.w( TAG, "WifyManager.getSSID()=" + WifyManager.getSSID() + "configuration.SSID)" + configuration.SSID );
-                                //  Log.w(TAG," WifyManager.getBSSID()="+WifyManager.getBSSID()+"configuration.SSID)"+configuration.BSSID);
-                                //&& WifyManager.getBSSID().equals(configuration.BSSID)
-                                if (WifyManager.getSSID().equals( configuration.SSID )) {
+                                Log.w( TAG, "WifiHelper.getSSID()=" + WifiHelper.getSSID() + "configuration.SSID)" + configuration.SSID );
+                                //  Log.w(TAG," WifiHelper.getBSSID()="+WifiHelper.getBSSID()+"configuration.SSID)"+configuration.BSSID);
+                                //&& WifiHelper.getBSSID().equals(configuration.BSSID)
+                                if (WifiHelper.getSSID().equals( configuration.SSID )) {
                                     flag = true;
                                     break;
                                 } else {
@@ -117,12 +117,12 @@ public class NetWorkReceiver extends BroadcastReceiver {
 
                         if (!TextUtils.isEmpty( preferencesManager.getFenceData( Common.configureWifi ) )) {
 
-                            WifiConfiguration configuration = WifyManager.IsExsits( preferencesManager.getFenceData( Common.configureWifi ) );
+                            WifiConfiguration configuration = WifiHelper.IsExsits( preferencesManager.getFenceData( Common.configureWifi ) );
                             if (configuration != null) {
                                 isExit = true;
-                                Log.w( TAG, "getFenceData--WifyManager.getSSID()=" + WifyManager.getSSID() + "configuration.SSID)" + configuration.SSID );
-                                //&& WifyManager.getBSSID().equals(configuration.BSSID)
-                                if (WifyManager.getSSID().equals( configuration.SSID )) {
+                                Log.w( TAG, "getFenceData--WifiHelper.getSSID()=" + WifiHelper.getSSID() + "configuration.SSID)" + configuration.SSID );
+                                //&& WifiHelper.getBSSID().equals(configuration.BSSID)
+                                if (WifiHelper.getSSID().equals( configuration.SSID )) {
                                     flag = true;
                                 } else {
                                     isExit = false;
@@ -132,11 +132,11 @@ public class NetWorkReceiver extends BroadcastReceiver {
 
                         //如果不在此策略的wifi就断开  || 还有一种可能就是没有配置成功(所以wifi配置列表没有该wifi存在)
                         if (!flag /*&& isExit*/) {
-                            Log.w( TAG, "如果不在此策略的wifi就断开====" + WifyManager.getSSID() );
-                            WifyManager.disconnectWifi( WifyManager.getNetworkId() );
+                            Log.w( TAG, "如果不在此策略的wifi就断开====" + WifiHelper.getSSID() );
+                            WifiHelper.disconnectWifi( WifiHelper.getNetworkId() );
                             flag = false;
                         } else {
-                            Log.w( TAG, flag + "如果在此策略的wifi就不断开====" + WifyManager.getSSID() + " ,isExit=" + isExit );
+                            Log.w( TAG, flag + "如果在此策略的wifi就不断开====" + WifiHelper.getSSID() + " ,isExit=" + isExit );
                             downloadPic();
                         }
                     }
@@ -186,9 +186,9 @@ public class NetWorkReceiver extends BroadcastReceiver {
 
 
                 //有围栏内有wifi设置的情况下配置
-                if (WifyManager.isWifiEnabled()){
+                if (WifiHelper.isWifiEnabled()){
 
-                    Log.w(TAG,"有围栏内有wifi设置的情况下配置"+WifyManager.getSSID());
+                    Log.w(TAG,"有围栏内有wifi设置的情况下配置"+ WifiHelper.getSSID());
                     if (! TextUtils.isEmpty(preferencesManager.getFenceData( Common.insideAndOutside)) &&
                             "true".equals(preferencesManager.getFenceData( Common.insideAndOutside)) ){
 
@@ -200,12 +200,12 @@ public class NetWorkReceiver extends BroadcastReceiver {
                             if ( !TextUtils.isEmpty(preferencesManager.getFenceData("conect")) ){
                                 //!TextUtils.isEmpty(preferencesManager.getFenceData(Common.passWord)) &&
                                 //    if(!TextUtils.isEmpty(preferencesManager.getFenceData(Common.safeType))){
-                                Log.w(TAG,"有围栏内有wifi设置的配置----"+WifyManager.isWifiEnabled());
-                                WifiConfiguration wifiConfiguration = WifyManager.CreateWifiInfo(preferencesManager.getFenceData(Common.configureWifi), preferencesManager.getFenceData(Common.wifi_password), Integer.parseInt(preferencesManager.getFenceData(Common.safeType)));
+                                Log.w(TAG,"有围栏内有wifi设置的配置----"+ WifiHelper.isWifiEnabled());
+                                WifiConfiguration wifiConfiguration = WifiHelper.CreateWifiInfo(preferencesManager.getFenceData(Common.configureWifi), preferencesManager.getFenceData(Common.wifi_password), Integer.parseInt(preferencesManager.getFenceData(Common.safeType)));
 
-                                if (!TextUtils.isEmpty(WifyManager.getSSID()) && wifiConfiguration != null && !WifyManager.getSSID().equals(wifiConfiguration.SSID)) {
+                                if (!TextUtils.isEmpty(WifiHelper.getSSID()) && wifiConfiguration != null && !WifiHelper.getSSID().equals(wifiConfiguration.SSID)) {
 
-                                    boolean network_connect = WifyManager.addNetwork_Connect(wifiConfiguration);
+                                    boolean network_connect = WifiHelper.addNetwork_Connect(wifiConfiguration);
 
 
                                     Log.w(TAG,wifiConfiguration.SSID+"network_connect==="+network_connect+"netid="+preferencesManager.getFenceData(Common.wifi_password));

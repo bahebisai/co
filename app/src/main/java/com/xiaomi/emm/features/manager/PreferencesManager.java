@@ -1,7 +1,9 @@
-package com.xiaomi.emm.utils;
+package com.xiaomi.emm.features.manager;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+
+import com.xiaomi.emm.utils.LogUtil;
 
 import static android.content.Context.MODE_PRIVATE;
 

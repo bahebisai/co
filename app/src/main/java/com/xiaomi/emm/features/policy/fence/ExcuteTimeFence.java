@@ -9,11 +9,11 @@ import com.xiaomi.emm.definition.OrderConfig;
 import com.xiaomi.emm.features.event.NotifyEvent;
 import com.xiaomi.emm.model.TimeFenceData;
 import com.xiaomi.emm.utils.LogUtil;
-import com.xiaomi.emm.utils.MDM;
-import com.xiaomi.emm.utils.PreferencesManager;
-import com.xiaomi.emm.utils.TheTang;
+import com.xiaomi.emm.features.presenter.MDM;
+import com.xiaomi.emm.features.manager.PreferencesManager;
+import com.xiaomi.emm.features.presenter.TheTang;
 import org.greenrobot.eventbus.EventBus;
-import static com.xiaomi.emm.utils.MDM.mMDMController;
+import static com.xiaomi.emm.features.presenter.MDM.mMDMController;
 
 /**
  * Created by lenovo on 2017/8/17.

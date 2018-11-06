@@ -1,7 +1,5 @@
-package com.xiaomi.emm.utils;
+package com.xiaomi.emm.features.presenter;
 
-import android.app.Activity;
-import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.AppOpsManager;
@@ -10,97 +8,48 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.app.usage.NetworkStatsManager;
-import android.app.usage.StorageStats;
-import android.app.usage.StorageStatsManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
-import android.content.pm.IPackageStatsObserver;
-import android.content.pm.LauncherActivityInfo;
-import android.content.pm.LauncherApps;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.PackageStats;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Build;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.RemoteException;
-import android.os.StatFs;
-import android.os.UserHandle;
-import android.os.UserManager;
-import android.os.storage.StorageManager;
-import android.os.storage.StorageVolume;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
-import android.telephony.SubscriptionManager;
-import android.telephony.TelephonyManager;
 import android.text.TextUtils;
-import android.text.format.Formatter;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.xiaomi.emm.R;
-import com.xiaomi.emm.base.BaseApplication;
 import com.xiaomi.emm.definition.Common;
 import com.xiaomi.emm.definition.OrderConfig;
-import com.xiaomi.emm.features.complete.CompleteMessageManager;
 import com.xiaomi.emm.features.db.DatabaseOperate;
 import com.xiaomi.emm.features.event.MessageEvent;
 import com.xiaomi.emm.features.event.StrategeEvent;
 import com.xiaomi.emm.features.impl.LoginImpl;
 import com.xiaomi.emm.features.impl.SendMessageManager;
-import com.xiaomi.emm.features.location.LocationService;
-import com.xiaomi.emm.features.lockscreen.Lock2Activity;
+import com.xiaomi.emm.features.manager.PreferencesManager;
 import com.xiaomi.emm.features.policy.compliance.ExcuteCompliance;
-import com.xiaomi.emm.features.policy.container.ContainerStratege;
-import com.xiaomi.emm.features.policy.device.ConfigurationPolicy;
-import com.xiaomi.emm.features.service.NetWorkChangeService;
 import com.xiaomi.emm.model.APPInfo;
 import com.xiaomi.emm.model.AppBlackWhiteData;
-import com.xiaomi.emm.model.DownLoadEntity;
 import com.xiaomi.emm.model.MessageInfo;
 import com.xiaomi.emm.model.MessageSendData;
 import com.xiaomi.emm.model.SecurityChromeData;
 import com.xiaomi.emm.model.SettingAboutData;
 import com.xiaomi.emm.model.StrategeInfo;
-import com.xiaomi.emm.view.activity.InitActivity;
+import com.xiaomi.emm.utils.ConvertUtils;
+import com.xiaomi.emm.utils.DeviceUtils;
+import com.xiaomi.emm.utils.LogUtil;
 import com.xiaomi.emm.view.activity.MainActivity;
 import com.xiaomi.emm.view.activity.MessageActivity;
+import com.xiaomi.emm.utils.viewUtils.MagicToast;
 
 import org.greenrobot.eventbus.EventBus;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.io.Reader;
-import java.io.StringWriter;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -111,21 +60,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
-import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
-import retrofit2.Response;
 
 import static android.content.Context.ALARM_SERVICE;
-import static android.content.Context.NETWORK_STATS_SERVICE;
-import static android.content.Context.TELEPHONY_SERVICE;
 
 //import android.app.usage.StorageStats;
 //import android.app.usage.StorageStatsManager;
@@ -136,12 +77,11 @@ import static android.content.Context.TELEPHONY_SERVICE;
  */
 
 public class TheTang {
-
     public static final String TAG = "TheTang";
 
     protected static LoginImpl mLoginImpl;
-/*    protected static FeedBackImpl mFeedBackImpl;
-    public ExcuteCompleteImpl mExcuteCompleteImpl;*/
+    /*    protected static FeedBackImpl mFeedBackImpl;
+        public ExcuteCompleteImpl mExcuteCompleteImpl;*/
     static PreferencesManager preferencesManager = PreferencesManager.getSingleInstance();
     //单例
     private volatile static TheTang mTheTang;
@@ -149,7 +89,6 @@ public class TheTang {
     private AlertDialog.Builder builder;
 
     static ExecutorService mExecutorService;
-
     static ExecutorService mExecutorServiceForDownload;
 
     private TheTang() {
@@ -187,8 +126,7 @@ public class TheTang {
      * Impl初始化
      */
     private static void initImpl() {
-        mExecutorService = Executors.newFixedThreadPool(ToolUtils.getNumCores() + 1);
-
+        mExecutorService = Executors.newFixedThreadPool(DeviceUtils.getNumCores() + 1);
         //用于下载
         mExecutorServiceForDownload = Executors.newFixedThreadPool(1);
     }
@@ -259,7 +197,6 @@ public class TheTang {
         return mSimpleDateFormat.format(date);
     }
 
-
     /**
      * 获取已安装App信息
      *
@@ -286,6 +223,7 @@ public class TheTang {
     public ExecutorService getThreadPoolObjectForDownload() {//todo baii util thread
         return mExecutorServiceForDownload;
     }
+
     /**
      * 存储后台传递过来的命令通知
      *
@@ -425,7 +363,6 @@ public class TheTang {
         //int id = 1001;
 
         if (Build.VERSION.SDK_INT >= 26) {
-
             NotificationChannel channel = new NotificationChannel("notification", "notification", NotificationManager.IMPORTANCE_HIGH);
             channel.enableLights(true);
             channel.setLightColor(Color.RED);
@@ -438,9 +375,7 @@ public class TheTang {
                     .setContentText(content)
                     .build();
             ((NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE)).notify(id, notification);
-
         } else {
-
             NotificationManager notifyManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
             //实例化NotificationCompat.Builde并设置相关属性
             NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext)
@@ -452,15 +387,12 @@ public class TheTang {
                     .setDefaults(Notification.DEFAULT_SOUND)
                     //设置通知内容
                     .setContentText(content);
-
             notifyManager.notify(id, builder.build());
         }
         //通过builder.build()方法生成Notification对象,并发送通知,id=1*/
-
     }
 
     public void cancelNotification(int id) {//todo baii util ???
-
         ((NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE)).cancel(id);
     }
 
@@ -538,9 +470,9 @@ public class TheTang {
 
     /**
      * 删除策略
-     *for sensitive word
-     * @param code
+     * for sensitive word
      *
+     * @param code
      */
     public void deleteStrategeInfo(String code, String strategyName) {//todo baii util ???
         DatabaseOperate.getSingleInstance()
@@ -548,8 +480,6 @@ public class TheTang {
         EventBus.getDefault()
                 .post(new StrategeEvent());
     }
-
-
 
     /**
      * 获取Application上下文
@@ -560,7 +490,6 @@ public class TheTang {
         return mContext;
     }
 
-
     /**
      * 应用违规处理
      *
@@ -569,7 +498,6 @@ public class TheTang {
      */
     public void appViolationExcute(Context context, List<String> names) {//todo baii util ???
         Map<String, String> deny_apps = new HashMap<>();
-
         /**
          * 存入数据库
          */
@@ -580,7 +508,6 @@ public class TheTang {
             } catch (PackageManager.NameNotFoundException e) {
                 e.printStackTrace();
             }
-
         }
 
         DatabaseOperate.getSingleInstance().addAppDenyList(deny_apps);
@@ -609,9 +536,7 @@ public class TheTang {
      */
     public void appComplianceExcute(Context context, String packageName) {//todo baii util ???
         DatabaseOperate.getSingleInstance().updateDenyApp(packageName, "1");
-
         List<String> list = DatabaseOperate.getSingleInstance().queryDenyAppByType("0");
-
         if (list == null || list.size() == 0) {
             //List<String> denyApps = DatabaseOperate.getSingleInstance().queryAllDenyApp();
             sendAppUnDeny(context, "1");
@@ -621,6 +546,7 @@ public class TheTang {
 
     /**
      * 应用违规反馈
+     *
      * @param context
      * @param type
      * @param names
@@ -632,6 +558,7 @@ public class TheTang {
 
     /**
      * 应用合规反馈
+     *
      * @param context
      * @param type
      */
@@ -642,8 +569,8 @@ public class TheTang {
 
     private void sendAppPolicyFeedback(Context context, String type, String names) {//todo baii util ???
         SendMessageManager manager = new SendMessageManager(context);
-        String alias = PreferencesManager.getSingleInstance().getData( Common.alias );
-        String appComplianceId = PreferencesManager.getSingleInstance().getComplianceData( Common.app_compliance_id );
+        String alias = PreferencesManager.getSingleInstance().getData(Common.alias);
+        String appComplianceId = PreferencesManager.getSingleInstance().getComplianceData(Common.app_compliance_id);
         final JSONObject appObject = new JSONObject();
         try {
             appObject.put("alias", alias);
@@ -663,47 +590,22 @@ public class TheTang {
      * @param appBlackWhiteData
      */
     public void storageBlackWhiteList(AppBlackWhiteData appBlackWhiteData) {//todo baii util ???
-
         if (preferencesManager.getOtherData(Common.appManagerType) != null) {
             ExcuteCompliance.deleteAppCompliance();
         }
-
         if ("0".equals(appBlackWhiteData.type)) {
             preferencesManager.setOtherData(Common.appManagerType, "0");
         } else {
             preferencesManager.setOtherData(Common.appManagerType, "1");
         }
-
         preferencesManager.setComplianceData(Common.app_compliance_id, appBlackWhiteData.id);
 
         if ("0".equals(appBlackWhiteData.type)) {
             preferencesManager.setComplianceData(Common.app_compliance_name, appBlackWhiteData.name);
-
         } else {
             preferencesManager.setComplianceData(Common.app_compliance_name, appBlackWhiteData.name);
         }
-
         DatabaseOperate.getSingleInstance().addAppWhiteList(appBlackWhiteData.appList);
-    }
-
-
-
-    /**
-     * 解决List重复
-     *
-     * @param list
-     * @return
-     */
-    public List<LauncherActivityInfo> removeDuplicateWithOrder(List<LauncherActivityInfo> list) {//todo baii util ???
-        Set set = new HashSet();
-        List<LauncherActivityInfo> newList = new ArrayList();
-        for (Iterator iter = list.iterator(); iter.hasNext(); ) {
-            LauncherActivityInfo element = (LauncherActivityInfo) iter.next();
-            if (set.add(element.getApplicationInfo().packageName)) {
-                newList.add(element);
-            }
-        }
-        return newList;
     }
 
     /**
@@ -716,7 +618,6 @@ public class TheTang {
         Set set = new HashSet();
         List<ApplicationInfo> newList = new ArrayList();
         for (Iterator iter = list.iterator(); iter.hasNext(); ) {
-
             ApplicationInfo element = (ApplicationInfo) iter.next();
             if (set.add(element.packageName)) {
                 newList.add(element);
@@ -732,10 +633,7 @@ public class TheTang {
      * @param launcherNoSystemApps
      */
     public void appBlackListCompliance(List<String> appBlackWhiteDataList, List<String> launcherNoSystemApps) {//todo baii util ???
-
         List<APPInfo> appInfos = DatabaseOperate.getSingleInstance().queryInstallAppInfo();
-
-
         if (appInfos != null && appInfos.size() > 0) {
             for (APPInfo appInfo : appInfos) {
                 if (appBlackWhiteDataList.contains(appInfo.getPackageName())) {
@@ -743,19 +641,15 @@ public class TheTang {
                 }
             }
         }
-
         //EMM不违规
         appBlackWhiteDataList.remove(getContext().getPackageName());
-
         List<String> names = new ArrayList<>();
-
         //判断系统中的应用是否在黑名单中
         for (String packageName : launcherNoSystemApps) {
             if (appBlackWhiteDataList.contains(packageName)) {
                 names.add(packageName);
             }
         }
-
         if (names != null && names.size() > 0) {
             appViolationExcute(getContext(), names);
         }
@@ -768,9 +662,7 @@ public class TheTang {
      * @param launcherNoSystemApps
      */
     public void appWhiteListCompliance(List<String> appBlackWhiteDataList, List<String> launcherNoSystemApps) {//todo baii util ???
-
         List<APPInfo> appInfos = DatabaseOperate.getSingleInstance().queryInstallAppInfo();
-
         //将下发应用添加到白名单中
         if (appInfos != null && appInfos.size() > 0) {
             for (APPInfo appInfo : appInfos) {
@@ -780,15 +672,12 @@ public class TheTang {
 
         //EMM不违规
         appBlackWhiteDataList.add(getContext().getPackageName());
-
         List<String> names = new ArrayList<>();
-
         for (String packageName : launcherNoSystemApps) {
             if (!appBlackWhiteDataList.contains(packageName)) {
                 names.add(packageName);
             }
         }
-
         if (names != null && names.size() > 0) {
             appViolationExcute(getContext(), names);
         }
@@ -801,7 +690,6 @@ public class TheTang {
      * @return
      */
     public boolean getUsageStats() {//todo baii util permission
-
         AppOpsManager appOps = (AppOpsManager) getContext().getSystemService(Context.APP_OPS_SERVICE);
         int mode = appOps.checkOpNoThrow("android:get_usage_stats", android.os.Process.myUid(), getContext().getPackageName());
         boolean granted = mode == AppOpsManager.MODE_ALLOWED;
@@ -827,7 +715,7 @@ public class TheTang {
         preferencesManager.setComplianceData(Common.securityChrome, "true");
         preferencesManager.setComplianceData(Common.securityChrome_name, securityChromeData.sec_name);
         preferencesManager.setComplianceData(Common.securityChrome_id, securityChromeData.sec_id);
-        preferencesManager.setComplianceData(Common.securityChrome_list, ConvertUtils.formatStringFromMap(securityChromeData.sec_white_list));
+        preferencesManager.setComplianceData(Common.securityChrome_list, ConvertUtils.mapToString(securityChromeData.sec_white_list));
     }
 
     /**
@@ -839,21 +727,6 @@ public class TheTang {
         preferencesManager.setSettingData(Common.setting_help, settingAboutData.messageForHelp);
         preferencesManager.setSettingData(Common.setting_agreement, settingAboutData.agreementLicense);
         preferencesManager.setSettingData(Common.setting_stand_by, settingAboutData.supportContent);
-    }
-
-    /**
-     * 获取异常的详细信息
-     *
-     * @param e
-     * @return
-     */
-    public static String getExceptionInfo(Exception e) {//todo baii util log
-        StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw, true);
-        e.printStackTrace(pw);
-        pw.flush();
-        sw.flush();
-        return sw.toString();
     }
 
     /**
@@ -885,7 +758,6 @@ public class TheTang {
         });
     }
 
-
     /**
      * 获得状态栏高度
      *
@@ -908,34 +780,12 @@ public class TheTang {
         return mStatusHeight;
     }
 
-
-    /**
-     * 获取文件中的数据，转字符，并添加到String
-     *
-     * @param filePath
-     * @return
-     */
-    public String getFileData(String filePath) {//todo baii util file or fileio
-        StringBuilder stringBuilder = new StringBuilder();
-        try {
-            BufferedReader bf = new BufferedReader(new InputStreamReader(new FileInputStream(new File(filePath))));
-            String line;
-            while ((line = bf.readLine()) != null) {
-                stringBuilder.append(line);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return stringBuilder.toString();
-    }
-
     /**
      * 启动服务
      *
      * @param intent
      */
     public void startService(Intent intent) {//todo baii util ???
-
         if (Build.VERSION.SDK_INT >= 26) {
             mContext.startForegroundService(intent);
         } else {
@@ -945,15 +795,11 @@ public class TheTang {
 
     public void startForeground(Service service, String content, String title, int id) {//todo baii util ???
         try {
-
             Intent intent1 = new Intent(mContext, MainActivity.class);
             PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 1, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
             Notification notification = null;
-
             if (Build.VERSION.SDK_INT >= 26) {
-
                 NotificationChannel channel = new NotificationChannel("notification1", "notification1", NotificationManager.IMPORTANCE_HIGH);
-
                 ((NotificationManager) service.getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel(channel);
                 notification = new Notification.Builder(service, "notification1")
                         .setContentIntent(pendingIntent)
@@ -961,9 +807,7 @@ public class TheTang {
                         .setSmallIcon(R.mipmap.mi8sesplit8split1)
                         .setContentText(content)
                         .build();
-
             } else {
-
                 notification = new Notification.Builder(service)
                         .setContentTitle(title)
                         .setContentText(content)
@@ -971,7 +815,6 @@ public class TheTang {
                         .setContentIntent(pendingIntent)
                         .build();
             }
-
             notification.flags |= Notification.FLAG_FOREGROUND_SERVICE;
             notification.flags |= Notification.FLAG_NO_CLEAR;
             notification.flags |= Notification.FLAG_ONGOING_EVENT;
@@ -991,13 +834,11 @@ public class TheTang {
     public static void whetherCancelLock(int lockType) {//todo baii util ???
         int hadLockTypes = 0;
         String lockTypeState = preferencesManager.getData(Common.lockTypes[lockType]);
-
         for (String type : Common.lockTypes) {
             if ("true".equals(preferencesManager.getData(type))) {
                 ++hadLockTypes;
             }
         }
-
         if (hadLockTypes == 1) {
             if ("true".equals(lockTypeState)) {
                 MDM.setPasswordNone();
@@ -1027,6 +868,7 @@ public class TheTang {
 
     /**
      * 用于判断离线与在线时是否失联
+     *
      * @param isLink
      */
     public synchronized void isLostCompliance(boolean isLink) {//todo baii util ???
@@ -1034,56 +876,47 @@ public class TheTang {
         String classNames = Thread.currentThread().getStackTrace()[3].getClassName();
         String methodNames = Thread.currentThread().getStackTrace()[3].getMethodName();
         int lineNumbers = Thread.currentThread().getStackTrace()[3].getLineNumber();
-        Log.w(TAG, "---classNames= " + classNames + "---methodNames= " + methodNames + "---lineNumbers= " + lineNumbers );
-        LogUtil.writeToFile(TAG, "---classNames= " + classNames + "---methodNames= " + methodNames + "---lineNumbers= " + lineNumbers );
-
+        Log.w(TAG, "---classNames= " + classNames + "---methodNames= " + methodNames + "---lineNumbers= " + lineNumbers);
+        LogUtil.writeToFile(TAG, "---classNames= " + classNames + "---methodNames= " + methodNames + "---lineNumbers= " + lineNumbers);
         if ("true".equals(preferencesManager.getComplianceData(Common.lost_compliance))) {
-
             //已失联时间
             String lost_time_frame = preferencesManager.getComplianceData(Common.lost_time_frame);
             //运行失联最长时间
             String lost_time = preferencesManager.getComplianceData(Common.lost_time);
-
             //在线
             if (isLink) {
-               if (!TextUtils.isEmpty(lost_time_frame)) {
+                if (!TextUtils.isEmpty(lost_time_frame)) {
                     if ((System.currentTimeMillis() - Double.valueOf(lost_time_frame)) > (Double.valueOf(lost_time))) {
                         excuteLostCompliance();
-                        LogUtil.writeToFile(TAG,"isLostCompliance2");
-
+                        LogUtil.writeToFile(TAG, "isLostCompliance2");
                         preferencesManager.removeComplianceData(Common.lost_time_frame);
                         cancelLostAlarm();
                     } else {
-                        LogUtil.writeToFile(TAG,"isLostCompliance3");
-                        Log.w(TAG,"isLostCompliance3");
+                        LogUtil.writeToFile(TAG, "isLostCompliance3");
+                        Log.w(TAG, "isLostCompliance3");
                         preferencesManager.removeComplianceData(Common.lost_time_frame);
                         cancelLostAlarm();
                     }
                 }
-            //离线
+                //离线
             } else {
                 if (!TextUtils.isEmpty(lost_time_frame)) {
-                    if ((System.currentTimeMillis() - Double.valueOf(lost_time_frame)) > (Double.valueOf(lost_time) )) {
+                    if ((System.currentTimeMillis() - Double.valueOf(lost_time_frame)) > (Double.valueOf(lost_time))) {
                         excuteLostCompliance();
-                        LogUtil.writeToFile(TAG,"isLostCompliance4");
-
+                        LogUtil.writeToFile(TAG, "isLostCompliance4");
                         preferencesManager.removeComplianceData(Common.lost_time_frame);
                         cancelLostAlarm();
                     } else {
-                        LogUtil.writeToFile(TAG,"isLostCompliance5");
-
+                        LogUtil.writeToFile(TAG, "isLostCompliance5");
                         startLostAlarm();
                     }
-
                 } else {
-                    LogUtil.writeToFile(TAG,"isLostCompliance6");
-
+                    LogUtil.writeToFile(TAG, "isLostCompliance6");
                     preferencesManager.setComplianceData(Common.lost_time_frame, System.currentTimeMillis() + "");
                     startLostAlarm();
                 }
             }
         }
-
     }
 
     /**
@@ -1091,7 +924,7 @@ public class TheTang {
      */
     public static void excuteLostCompliance() {//todo baii util ???
         String pwd = PreferencesManager.getSingleInstance().getComplianceData(Common.lost_password);
-        if (TextUtils.isEmpty( pwd )) {
+        if (TextUtils.isEmpty(pwd)) {
             MDM.setFactoryReset();
         } else {
             MDM.forceLockScreen(Common.lockTypes[5], pwd);
@@ -1102,62 +935,28 @@ public class TheTang {
      * 取消失联闹钟
      */
     private void cancelLostAlarm() {//todo baii util ???
-        Intent intent_cancleReceiver = new Intent( );
-        intent_cancleReceiver.setAction( "lost_compliance" );
-        PendingIntent pendingIntent = PendingIntent.getBroadcast( mContext, 11, intent_cancleReceiver, PendingIntent.FLAG_UPDATE_CURRENT );
-        AlarmManager alarmManager = (AlarmManager) mContext.getSystemService( ALARM_SERVICE );
-        alarmManager.cancel( pendingIntent );
+        Intent intent_cancleReceiver = new Intent();
+        intent_cancleReceiver.setAction("lost_compliance");
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 11, intent_cancleReceiver, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
     }
 
     /**
      * 启动失联闹钟
      */
     private void startLostAlarm() {//todo baii util ???
-        AlarmManager alarmManager = (AlarmManager) mContext.getSystemService( ALARM_SERVICE );
-        Intent intent = new Intent(  );
-        intent.setAction( "lost_compliance" );
-        PendingIntent pi = PendingIntent.getBroadcast( mContext, 11, intent, PendingIntent.FLAG_UPDATE_CURRENT );
-        alarmManager.setExact( AlarmManager.RTC_WAKEUP, /*24 * 3600 **/System.currentTimeMillis() + 60 * 1000, pi ); //执行一次
-    }
-
-    public String getSDCardId() {//todo baii util device
-
-        String sdCardId = null;
-
-        StorageManager mStorageManager = (StorageManager) TheTang.getSingleInstance().getContext().getSystemService(Context.STORAGE_SERVICE);
-
-        List<StorageVolume> mList = mStorageManager.getStorageVolumes();
-
-        for (StorageVolume mStorageVolume : mList) {
-
-            try {
-                Method getPath = mStorageVolume.getClass().getDeclaredMethod("getPath");
-                Method isRemovable = mStorageVolume.getClass().getDeclaredMethod("isRemovable");
-                getPath.setAccessible(true);
-                isRemovable.setAccessible(true);
-                String path = (String)getPath.invoke(mStorageVolume);
-                boolean removable = (boolean) isRemovable.invoke(mStorageVolume);
-
-                if (removable) {
-                    String[] paths = path.split("/");
-                    sdCardId  = paths[paths.length - 1];
-                    break;
-                }
-            } catch (NoSuchMethodException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            }
-
-        }
-        return sdCardId;
+        AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(ALARM_SERVICE);
+        Intent intent = new Intent();
+        intent.setAction("lost_compliance");
+        PendingIntent pi = PendingIntent.getBroadcast(mContext, 11, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, /*24 * 3600 **/System.currentTimeMillis() + 60 * 1000, pi); //执行一次
     }
 
     /**
      * 信息加密
      * {MD2、MD5、SHA-1、SHA-256、SHA-384、SHA-512}
+     *
      * @param encryptResouce
      * @param encryptAlgorithm
      * @return

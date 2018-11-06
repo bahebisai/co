@@ -7,7 +7,6 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -23,8 +22,8 @@ import com.xiaomi.emm.model.ConfigureStrategyData;
 import com.xiaomi.emm.model.TimeFenceData;
 import com.xiaomi.emm.utils.ConvertUtils;
 import com.xiaomi.emm.utils.LogUtil;
-import com.xiaomi.emm.utils.PreferencesManager;
-import com.xiaomi.emm.utils.TheTang;
+import com.xiaomi.emm.features.manager.PreferencesManager;
+import com.xiaomi.emm.features.presenter.TheTang;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -286,7 +285,7 @@ public class StrategeDetailActivity extends BaseActivity {
                         }
 
                         Map<String, String> sec_white_list = new HashMap<>();
-                        sec_white_list = ConvertUtils.formatMapFromString( list );
+                        sec_white_list = ConvertUtils.jsonStringToMap( list );
 
                         List<String> url_list = new ArrayList<>();
                         Iterator<Map.Entry<String, String>> iterator = sec_white_list.entrySet().iterator();

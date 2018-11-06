@@ -10,18 +10,12 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.xiaomi.emm.base.BaseApplication;
-import com.xiaomi.emm.definition.Common;
 import com.xiaomi.emm.utils.LogUtil;
-import com.xiaomi.emm.utils.MDM;
-import com.xiaomi.emm.utils.PreferencesManager;
-import com.xiaomi.emm.utils.TheTang;
-import com.xiaomi.emm.view.activity.InitActivity;
-import com.xiaomi.emm.view.activity.LoginActivity;
+import com.xiaomi.emm.features.manager.PreferencesManager;
+import com.xiaomi.emm.features.presenter.TheTang;
 import com.xiaomi.emm.view.activity.SafeDeskActivity;
 
 import java.util.List;

@@ -8,8 +8,8 @@ import android.support.annotation.Nullable;
 
 import com.xiaomi.emm.R;
 import com.xiaomi.emm.utils.LogUtil;
-import com.xiaomi.emm.utils.MDM;
-import com.xiaomi.emm.utils.TheTang;
+import com.xiaomi.emm.features.presenter.MDM;
+import com.xiaomi.emm.features.presenter.TheTang;
 
 /**
  * Created by Administrator on 2017/8/8.

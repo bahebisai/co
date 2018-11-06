@@ -49,15 +49,13 @@ import com.xiaomi.emm.socket.bean.UserMgr;
 import com.xiaomi.emm.socket.service.TVBoxService;
 import com.xiaomi.emm.utils.ConvertUtils;
 import com.xiaomi.emm.utils.LogUtil;
-import com.xiaomi.emm.utils.MDM;
-import com.xiaomi.emm.utils.PreferencesManager;
-import com.xiaomi.emm.utils.TheTang;
+import com.xiaomi.emm.features.presenter.MDM;
+import com.xiaomi.emm.features.manager.PreferencesManager;
+import com.xiaomi.emm.features.presenter.TheTang;
 import com.xiaomi.emm.view.activity.MainActivity;
 import com.xiaomi.emm.view.activity.SafeDeskActivity;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.text.ParseException;
@@ -222,7 +220,7 @@ public class MDMOrderService extends Service{
                 //如果有网络白名单，在关机后需重新设置
                 if (!TextUtils.isEmpty( preferencesManager.getComplianceData( Common.securityChrome ) )) {
                     Map<String, String> sec_white_list = new HashMap<>();
-                    sec_white_list = ConvertUtils.formatMapFromString( preferencesManager.getComplianceData( Common.securityChrome_list ) );
+                    sec_white_list = ConvertUtils.jsonStringToMap( preferencesManager.getComplianceData( Common.securityChrome_list ) );
                     MDM.excuteChrome( sec_white_list );
                 }
 

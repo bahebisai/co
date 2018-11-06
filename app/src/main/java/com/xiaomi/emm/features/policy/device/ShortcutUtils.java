@@ -16,7 +16,7 @@ import android.widget.Toast;
 import com.xiaomi.emm.R;
 import com.xiaomi.emm.base.BaseApplication;
 import com.xiaomi.emm.utils.LogUtil;
-import com.xiaomi.emm.utils.TheTang;
+import com.xiaomi.emm.features.presenter.TheTang;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;

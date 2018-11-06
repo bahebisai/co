@@ -17,6 +17,9 @@ import java.util.regex.Pattern;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 
+/**
+ * http相关工具类
+ */
 public class HttpHelper {
     public static final String TAG = HttpHelper.class.getName();
 
@@ -42,9 +45,11 @@ public class HttpHelper {
         return content;
     }
 
+
     /**
      * 判断发送是否成功
      *
+     * @param content 通过ResponseBody拿到的返回内容
      * @return
      */
     public static boolean whetherSendSuccess(String content) {
@@ -52,7 +57,6 @@ public class HttpHelper {
         if (TextUtils.isEmpty(content)) {
             return false;
         }
-
         JSONObject object = null;
         int resultCode = 0;
         try {
@@ -66,7 +70,6 @@ public class HttpHelper {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
         if (resultCode == 200) {
             return true;
         }
@@ -89,7 +92,7 @@ public class HttpHelper {
      * @param url
      * @return
      */
-    public static String getHost(String url) {//todo baii util http
+    public static String getHost(String url) {
         Pattern p = Pattern.compile("(http://|https://)?([^/]*)", Pattern.CASE_INSENSITIVE);
         Matcher m = p.matcher(url);
         return m.find() ? m.group(2) : url;
@@ -101,7 +104,7 @@ public class HttpHelper {
      * @param url
      * @return
      */
-    public static String getUrlForWebClip(String url) {//todo baii util http
+    public static String getUrlForWebClip(String url) {
         Document doc = null;
         String web_url = null;
         if (url.contains("www")) {

@@ -3,11 +3,7 @@ package com.xiaomi.emm.features.lockscreen;
 import android.app.AlarmManager;
 import android.app.IntentService;
 import android.app.PendingIntent;
-import android.app.Service;
 import android.content.Intent;
-import android.os.Bundle;
-import android.os.IBinder;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -15,18 +11,12 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.xiaomi.emm.R;
 import com.xiaomi.emm.definition.Common;
-import com.xiaomi.emm.features.policy.fence.AlarmReceiver1;
-import com.xiaomi.emm.features.policy.fence.ExcuteTimeFence;
 import com.xiaomi.emm.features.policy.fence.FenceExcute;
-import com.xiaomi.emm.features.policy.fence.FenceManager;
 import com.xiaomi.emm.features.policy.fence.TimeFenceReceiver;
-import com.xiaomi.emm.model.ClearDeskData;
 import com.xiaomi.emm.model.TimeFenceData;
 import com.xiaomi.emm.utils.LogUtil;
-import com.xiaomi.emm.utils.PreferencesManager;
-import com.xiaomi.emm.utils.TheTang;
-
-import org.greenrobot.eventbus.EventBus;
+import com.xiaomi.emm.features.manager.PreferencesManager;
+import com.xiaomi.emm.features.presenter.TheTang;
 
 import java.lang.reflect.Type;
 import java.text.ParseException;

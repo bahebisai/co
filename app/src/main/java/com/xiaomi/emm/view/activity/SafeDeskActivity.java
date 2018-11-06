@@ -21,9 +21,9 @@ import com.xiaomi.emm.model.ConfigureStrategyData;
 import com.xiaomi.emm.utils.AppUtils;
 import com.xiaomi.emm.utils.ConvertUtils;
 import com.xiaomi.emm.utils.LogUtil;
-import com.xiaomi.emm.utils.MDM;
-import com.xiaomi.emm.utils.PreferencesManager;
-import com.xiaomi.emm.utils.TheTang;
+import com.xiaomi.emm.features.presenter.MDM;
+import com.xiaomi.emm.features.manager.PreferencesManager;
+import com.xiaomi.emm.features.presenter.TheTang;
 import com.xiaomi.emm.view.adapter.AppsLauncherAdapter;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -441,7 +441,7 @@ public class SafeDeskActivity extends BaseActivity {
 
 
             Map<String, String> sec_white_list = new HashMap<>();
-            sec_white_list = ConvertUtils.formatMapFromString(preferencesManager.getComplianceData(Common.securityChrome_list));
+            sec_white_list = ConvertUtils.jsonStringToMap(preferencesManager.getComplianceData(Common.securityChrome_list));
 
             List<String> url_list = new ArrayList<>();
             List<String> name_list = new ArrayList<>();

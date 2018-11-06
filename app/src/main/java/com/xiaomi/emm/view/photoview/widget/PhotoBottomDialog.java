@@ -18,7 +18,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 
 import com.xiaomi.emm.R;
-import com.xiaomi.emm.utils.PreferencesManager;
+import com.xiaomi.emm.features.manager.PreferencesManager;
 import com.xiaomi.emm.view.photoview.ImagePickerActivity;
 import com.xiaomi.emm.view.photoview.constants.Constant;
 

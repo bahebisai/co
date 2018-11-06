@@ -1,8 +1,6 @@
 package com.xiaomi.emm.view.photoview.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,11 +12,9 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.xiaomi.emm.R;
-import com.xiaomi.emm.utils.TheTang;
+import com.xiaomi.emm.features.presenter.TheTang;
 import com.xiaomi.emm.view.photoview.bens.MediaPhoto;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 

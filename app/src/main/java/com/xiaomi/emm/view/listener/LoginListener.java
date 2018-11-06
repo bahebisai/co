@@ -6,7 +6,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import com.xiaomi.emm.features.QR.utils.CommonUtil;
 import com.xiaomi.emm.features.QR.zxing.activity.CaptureActivity;
-import com.xiaomi.emm.utils.PreferencesManager;
+import com.xiaomi.emm.features.manager.PreferencesManager;
 import com.xiaomi.emm.view.activity.LoginActivity;
 import com.xiaomi.emm.R;
 

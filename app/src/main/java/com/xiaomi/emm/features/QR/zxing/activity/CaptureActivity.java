@@ -1,7 +1,6 @@
 package com.xiaomi.emm.features.QR.zxing.activity;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
@@ -16,7 +15,6 @@ import android.os.Message;
 import android.os.Vibrator;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -41,8 +39,7 @@ import com.xiaomi.emm.features.QR.zxing.decoding.InactivityTimer;
 import com.xiaomi.emm.features.QR.zxing.decoding.RGBLuminanceSource;
 import com.xiaomi.emm.features.QR.zxing.view.ViewfinderView;
 import com.xiaomi.emm.R;
-import com.xiaomi.emm.utils.TheTang;
-import com.xiaomi.emm.view.ViewHolder;
+import com.xiaomi.emm.features.presenter.TheTang;
 import com.xiaomi.emm.view.activity.BaseActivity;
 
 import java.io.IOException;

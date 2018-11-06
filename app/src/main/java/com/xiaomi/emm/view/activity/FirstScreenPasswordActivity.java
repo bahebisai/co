@@ -9,8 +9,8 @@ import android.view.WindowManager;
 
 import com.xiaomi.emm.R;
 import com.xiaomi.emm.features.password.PasswordView;
-import com.xiaomi.emm.utils.PreferencesManager;
-import com.xiaomi.emm.utils.TheTang;
+import com.xiaomi.emm.features.manager.PreferencesManager;
+import com.xiaomi.emm.features.presenter.TheTang;
 
 /**
  * Created by Administrator on 2017/11/24.

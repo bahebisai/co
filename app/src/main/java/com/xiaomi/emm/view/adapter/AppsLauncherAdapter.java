@@ -22,8 +22,8 @@ import com.xiaomi.emm.features.lockscreen.NewsLifecycleHandler;
 import com.xiaomi.emm.features.policy.device.ShortcutActivity;
 import com.xiaomi.emm.model.ConfigureStrategyData;
 import com.xiaomi.emm.utils.AppUtils;
-import com.xiaomi.emm.utils.PreferencesManager;
-import com.xiaomi.emm.utils.TheTang;
+import com.xiaomi.emm.features.manager.PreferencesManager;
+import com.xiaomi.emm.features.presenter.TheTang;
 import com.xiaomi.emm.view.activity.MainActivity;
 
 import org.greenrobot.eventbus.EventBus;

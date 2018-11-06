@@ -1,4 +1,4 @@
-package com.xiaomi.emm.features.complete;
+package com.xiaomi.emm.features.manager;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -12,7 +12,7 @@ import com.xiaomi.emm.features.db.DatabaseOperate;
 import com.xiaomi.emm.features.excute.OrderFeedbackManager;
 import com.xiaomi.emm.model.CompleteMessageData;
 import com.xiaomi.emm.utils.LogUtil;
-import com.xiaomi.emm.utils.TheTang;
+import com.xiaomi.emm.features.presenter.TheTang;
 
 import java.util.List;
 
@@ -21,7 +21,6 @@ import java.util.List;
  */
 
 public class CompleteMessageManager {
-
     public final static String TAG = "CompleteMessageManager";
 
     //发送消息
@@ -30,7 +29,7 @@ public class CompleteMessageManager {
         if (type == null) {
             sendMessageByTime();
         } else {
-            sendMessageByResult( type, result, id );
+            sendMessageByResult(type, result, id);
         }
     }
 
@@ -38,22 +37,20 @@ public class CompleteMessageManager {
      * 通过定时器来发送执行失败或发送不成功的的消息（1分钟）
      */
     private void sendMessageByTime() {
-
         List<CompleteMessageData> mList = queryAllMessageResult();
-
         if (mList != null && mList.size() > 0) {
             for (CompleteMessageData mCompleteMessageData : mList) {
                 //状态为true（为发送失败的） 或者 超时都发送
-                if ("true".equals( mCompleteMessageData.result )) {
-                    sendMessage( mCompleteMessageData.type, mCompleteMessageData.result, mCompleteMessageData.id );
+                if ("true".equals(mCompleteMessageData.result)) {
+                    sendMessage(mCompleteMessageData.type, mCompleteMessageData.result, mCompleteMessageData.id);
                 } else {
                     //为-1时，不发送
-                    if ("-1".equals( mCompleteMessageData.time )) {
+                    if ("-1".equals(mCompleteMessageData.time)) {
                         return;
                     }
                     //超时1min
-                    if ((System.currentTimeMillis() - Double.valueOf( mCompleteMessageData.time )) > 1 * 60 * 1000) {
-                        sendMessage( mCompleteMessageData.type, mCompleteMessageData.result, mCompleteMessageData.id );
+                    if ((System.currentTimeMillis() - Double.valueOf(mCompleteMessageData.time)) > 1 * 60 * 1000) {
+                        sendMessage(mCompleteMessageData.type, mCompleteMessageData.result, mCompleteMessageData.id);
                     }
                 }
             }
@@ -66,36 +63,30 @@ public class CompleteMessageManager {
      * @param type
      */
     private void sendMessageByResult(String type, String result, String id) {
-
         //如果sendId为空，不能返回，因为命令也经不存在
-        if (TextUtils.isEmpty( id ))
+        if (TextUtils.isEmpty(id)) {
             return;
+        }
 
-        CompleteMessageData mCompleteMessageData = queryMessageResult( type, id );
-
+        CompleteMessageData mCompleteMessageData = queryMessageResult(type, id);
         //判断数据库中是否存在该命令
-        if (mCompleteMessageData == null || mCompleteMessageData.id == null)
+        if (mCompleteMessageData == null || mCompleteMessageData.id == null) {
             return;
-
-        if (String.valueOf( OrderConfig.SilentInstallAppication ).equals( type )) {
+        }
+        if (String.valueOf(OrderConfig.SilentInstallAppication).equals(type)) {
             //当下载参数或后台参数返回失败时，将结果直接返回
-            if ("-1".equals( mCompleteMessageData.time )) {
-
-                updateMessageResultAndTime( type, "false", String.valueOf( System.currentTimeMillis() ), mCompleteMessageData.id );
-
-                if ("true".equals( result )) {
+            if ("-1".equals(mCompleteMessageData.time)) {
+                updateMessageResultAndTime(type, "false", String.valueOf(System.currentTimeMillis()), mCompleteMessageData.id);
+                if ("true".equals(result)) {
                     return;
                 }
             }
         } else {
-
-            if ("true".equals( result )) {
-                updateMessageResult( mCompleteMessageData.type, "true", mCompleteMessageData.id );
+            if ("true".equals(result)) {
+                updateMessageResult(mCompleteMessageData.type, "true", mCompleteMessageData.id);
             }
-
         }
-
-        sendMessage( mCompleteMessageData.type, result, mCompleteMessageData.id );
+        sendMessage(mCompleteMessageData.type, result, mCompleteMessageData.id);
     }
 
     /**
@@ -116,7 +107,7 @@ public class CompleteMessageManager {
      * @param type
      */
     public void sendMessageSuccess(String type, String id) {
-        deleteMessageByType( type, id );
+        deleteMessageByType(type, id);
     }
 
     /**
@@ -126,7 +117,7 @@ public class CompleteMessageManager {
      * @return
      */
     private CompleteMessageData queryMessageResult(String type, String id) {
-        CompleteMessageData mCompleteMessageData = DatabaseOperate.getSingleInstance().queryCompleteResultSql( type, id );
+        CompleteMessageData mCompleteMessageData = DatabaseOperate.getSingleInstance().queryCompleteResultSql(type, id);
         return mCompleteMessageData;
     }
 
@@ -136,32 +127,32 @@ public class CompleteMessageManager {
     }
 
     public void addMessageResult(String type, String result, String time, String id) {
-        DatabaseOperate.getSingleInstance().addCompleteResult( type, result, time, id );
+        DatabaseOperate.getSingleInstance().addCompleteResult(type, result, time, id);
     }
 
     private void updateMessageResult(String type, String result, String id) {
-        DatabaseOperate.getSingleInstance().updateCompleteResult( type, result, id );
+        DatabaseOperate.getSingleInstance().updateCompleteResult(type, result, id);
     }
 
     private void updateMessageResultAndTime(String type, String result, String time, String id) {
-        DatabaseOperate.getSingleInstance().updateCompleteResultAndTime( type, result, time, id );
+        DatabaseOperate.getSingleInstance().updateCompleteResultAndTime(type, result, time, id);
     }
-    private void deleteMessageByType(String type, String id) {
-        DatabaseOperate.getSingleInstance().deleteCompleteResultSql( type, id );
 
+    private void deleteMessageByType(String type, String id) {
+        DatabaseOperate.getSingleInstance().deleteCompleteResultSql(type, id);
         checkWhetherHadOrder(0);
     }
 
     /**
      * type == 0 删除
      * type == 1 添加
+     *
      * @param type
      */
     public synchronized static void checkWhetherHadOrder(int type) {
         Context context = TheTang.getSingleInstance().getContext();
         if (type == 0) {//删除
             List<CompleteMessageData> mList = DatabaseOperate.getSingleInstance().queryAllCompleteResultSql();
-
             if (mList == null || mList.size() < 1) {
                 AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                 Intent intent1 = new Intent();
@@ -184,8 +175,9 @@ public class CompleteMessageManager {
                 }
             }
 
-            if (!time_out)
+            if (!time_out) {
                 return;
+            }
 
             AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             Intent intent1 = new Intent();
@@ -193,7 +185,6 @@ public class CompleteMessageManager {
             //第二个参数用于识别AlarmManager
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 4, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
             alarmManager.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2 * 60 * 1000, pendingIntent);
-
         }
     }
 
@@ -204,15 +195,15 @@ public class CompleteMessageManager {
 
         @Override
         public void sendSuccess(String type, String id) {
-            sendMessageSuccess( type, id );
-            Log.w( TAG, "执行完成消息发送成功 type = " + type );
-            LogUtil.writeToFile( TAG, "执行完成消息发送成功 type = " + type );
+            sendMessageSuccess(type, id);
+            Log.w(TAG, "执行完成消息发送成功 type = " + type);
+            LogUtil.writeToFile(TAG, "执行完成消息发送成功 type = " + type);
         }
 
         @Override
         public void sendFail(String type, String id) {
-            Log.w( TAG, "执行完成消息发送失败 type = " + type );
-            LogUtil.writeToFile( TAG, "执行完成消息发送失败 type = " + type );
+            Log.w(TAG, "执行完成消息发送失败 type = " + type);
+            LogUtil.writeToFile(TAG, "执行完成消息发送失败 type = " + type);
         }
     }
 

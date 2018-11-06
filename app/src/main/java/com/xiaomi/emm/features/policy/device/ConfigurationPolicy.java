@@ -14,13 +14,13 @@ import com.xiaomi.emm.features.event.NotifyEvent;
 import com.xiaomi.emm.model.ConfigureStrategyData;
 import com.xiaomi.emm.utils.DataParseUtil;
 import com.xiaomi.emm.utils.LogUtil;
-import com.xiaomi.emm.utils.MDM;
+import com.xiaomi.emm.features.presenter.MDM;
 import com.xiaomi.emm.utils.PhoneUtils;
-import com.xiaomi.emm.utils.PreferencesManager;
-import com.xiaomi.emm.utils.ShortCutManager;
-import com.xiaomi.emm.utils.TheTang;
-import com.xiaomi.emm.utils.VpnUtilss;
-import com.xiaomi.emm.utils.WifyManager;
+import com.xiaomi.emm.features.manager.PreferencesManager;
+import com.xiaomi.emm.features.manager.ShortCutManager;
+import com.xiaomi.emm.features.presenter.TheTang;
+import com.xiaomi.emm.utils.VpnUtils;
+import com.xiaomi.emm.utils.WifiHelper;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -34,7 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.content.Context.TELEPHONY_SERVICE;
-import static com.xiaomi.emm.utils.MDM.mMDMController;
+import static com.xiaomi.emm.features.presenter.MDM.mMDMController;
 
 /**
  * Created by lenovo on 2017/8/29.
@@ -291,7 +291,7 @@ public class ConfigurationPolicy {
             return;
         }
 
-        if (!WifyManager.isWifiEnabled()) {
+        if (!WifiHelper.isWifiEnabled()) {
             preferencesManager.setConfiguration( "conect", "true" );
         }
 
@@ -324,12 +324,12 @@ public class ConfigurationPolicy {
                     if (wifiConfigureData != null) {
                         for (ConfigureStrategyData.ConfigureStrategyBean.WifiListBean bean : wifiConfigureData) {
 
-                            WifiConfiguration configuration = WifyManager.IsExsits( bean.getSsid(), bean.getMacAddress() );
+                            WifiConfiguration configuration = WifiHelper.IsExsits( bean.getSsid(), bean.getMacAddress() );
                             if (configuration != null) {
                                 isExit = true;
-                                Log.w( TAG, "WifyManager.getSSID()=" + WifyManager.getSSID() + "configuration.SSID)" + configuration.SSID );
+                                Log.w( TAG, "WifiHelper.getSSID()=" + WifiHelper.getSSID() + "configuration.SSID)" + configuration.SSID );
 
-                                if (WifyManager.getSSID().equals( configuration.SSID )) {
+                                if (WifiHelper.getSSID().equals( configuration.SSID )) {
                                     flag = true;
                                     break;
                                 } else {
@@ -339,12 +339,12 @@ public class ConfigurationPolicy {
                         }
                         if (!TextUtils.isEmpty( preferencesManager.getFenceData( Common.configureWifi ) )) {
 
-                            WifiConfiguration configuration = WifyManager.IsExsits( preferencesManager.getFenceData( Common.configureWifi ) );
+                            WifiConfiguration configuration = WifiHelper.IsExsits( preferencesManager.getFenceData( Common.configureWifi ) );
                             if (configuration != null) {
                                 isExit = true;
-                                Log.w( TAG, "getFenceData--WifyManager.getSSID()=" + WifyManager.getSSID() + "configuration.SSID)" + configuration.SSID );
+                                Log.w( TAG, "getFenceData--WifiHelper.getSSID()=" + WifiHelper.getSSID() + "configuration.SSID)" + configuration.SSID );
 
-                                if (WifyManager.getSSID().equals( configuration.SSID )) {
+                                if (WifiHelper.getSSID().equals( configuration.SSID )) {
                                     flag = true;
                                 } else {
                                     isExit = false;
@@ -354,11 +354,11 @@ public class ConfigurationPolicy {
 
                         //如果不在此策略的wifi就断开  || 还有一种可能就是没有配置成功(所以wifi配置列表没有该wifi存在)
                         if (!flag /*&& isExit*/) {
-                            Log.w( TAG, "如果不在此策略的wifi就断开====" + WifyManager.getSSID() );
-                            WifyManager.disconnectWifi( WifyManager.getNetworkId() );
+                            Log.w( TAG, "如果不在此策略的wifi就断开====" + WifiHelper.getSSID() );
+                            WifiHelper.disconnectWifi( WifiHelper.getNetworkId() );
                             flag = false;
                         } else {
-                            Log.w( TAG, flag + "如果在此策略的wifi就不断开====" + WifyManager.getSSID() + " ,isExit=" + isExit );
+                            Log.w( TAG, flag + "如果在此策略的wifi就不断开====" + WifiHelper.getSSID() + " ,isExit=" + isExit );
 
                         }
                     }
@@ -374,7 +374,7 @@ public class ConfigurationPolicy {
         if (bean.getSecurityType() != null && !bean.getSecurityType().isEmpty()) {
             int typeId = Integer.parseInt( bean.getSecurityType() );
             //创建一个wifi
-            wifiConfiguration = WifyManager.CreateWifiInfo( bean.getSsid(), bean.getMacAddress(), bean.getPassword(), typeId );
+            wifiConfiguration = WifiHelper.CreateWifiInfo( bean.getSsid(), bean.getMacAddress(), bean.getPassword(), typeId );
         }
 
         //隐藏账户
@@ -385,13 +385,13 @@ public class ConfigurationPolicy {
         //添加wifi配置到网络
         int wifiId = -1; //表示失败
 
-        WifiConfiguration wifiConfiguration1 = WifyManager.IsExsits( bean.getSsid(), bean.getMacAddress() );
+        WifiConfiguration wifiConfiguration1 = WifiHelper.IsExsits( bean.getSsid(), bean.getMacAddress() );
         if (wifiConfiguration1 != null) {
             Log.w( TAG, "存在的wifiConfiguration1=" + wifiConfiguration1.SSID );
             //如果已经存在则先删除掉
-            WifyManager.removeNetwork( wifiConfiguration1.SSID );
+            WifiHelper.removeNetwork( wifiConfiguration1.SSID );
         }
-        wifiId = WifyManager.addNetwork( wifiConfiguration );
+        wifiId = WifiHelper.addNetwork( wifiConfiguration );
         Log.w( TAG, wifiConfiguration.SSID + "添加wifi状态==" + wifiId );
         if ("1".equals( bean.getIsAutoJoin() )) {
         }
@@ -427,7 +427,7 @@ public class ConfigurationPolicy {
         }
 
         for (ConfigureStrategyData.ConfigureStrategyBean.WifiListBean bean : wifiConfigureData) {
-            WifyManager.removeNetwork( bean.getSsid(), bean.getMacAddress() );
+            WifiHelper.removeNetwork( bean.getSsid(), bean.getMacAddress() );
         }
     }
 
@@ -610,22 +610,22 @@ public class ConfigurationPolicy {
     }
 
     private static  void  doAddVPN2(PreferencesManager preferencesManager,ConfigureStrategyData.ConfigureStrategyBean.VpnListBean bean) {
-        VpnUtilss.init(TheTang.getSingleInstance().getContext());
+        VpnUtils.init(TheTang.getSingleInstance().getContext());
 
-        Object vpnProfile = VpnUtilss.createVpnProfile(bean.getVpnConnectionName(), bean.getVpnServerAddress(), bean.getVpnAccount(), bean.getVpnPassword(), bean.getVpnConnectionType());
+        Object vpnProfile = VpnUtils.createVpnProfile(bean.getVpnConnectionName(), bean.getVpnServerAddress(), bean.getVpnAccount(), bean.getVpnPassword(), bean.getVpnConnectionType());
         String keyVpnProfiles = preferencesManager.getConfiguration("keyVpnProfile");
 
         if (TextUtils.isEmpty(keyVpnProfiles)){
             keyVpnProfiles="";
         }
         try {
-            Field key_type = VpnUtilss.vpnProfileClz.getDeclaredField("key");
+            Field key_type = VpnUtils.vpnProfileClz.getDeclaredField("key");
             keyVpnProfiles=keyVpnProfiles+key_type.get(vpnProfile)+",";
             preferencesManager.setConfiguration("keyVpnProfile",keyVpnProfiles);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        boolean connect = VpnUtilss.connect(TheTang.getSingleInstance().getContext(), vpnProfile);
+        boolean connect = VpnUtils.connect(TheTang.getSingleInstance().getContext(), vpnProfile);
 
         if (connect){
             Log.w( TAG, "vpn  连接成功" );
@@ -646,7 +646,7 @@ public class ConfigurationPolicy {
             Log.w(TAG,"keyVpnProfiles数据为="+keyVpnProfiles+"  所以不执行删除");
             return;
         }
-        VpnUtilss.init(TheTang.getSingleInstance().getContext());
+        VpnUtils.init(TheTang.getSingleInstance().getContext());
         if (keyVpnProfiles.contains(",")){
             Log.w(TAG,"keyVpnProfiles数据为=1"+keyVpnProfiles+"  所以执行删除");
             String[] split = keyVpnProfiles.split(",");
@@ -654,10 +654,10 @@ public class ConfigurationPolicy {
              * 如果有","去掉最后一个","
              */
             for (int i = 0; i < split.length; i++) {
-                VpnUtilss.delete(split[i]);
+                VpnUtils.delete(split[i]);
             }
         }else {
-            VpnUtilss.delete(keyVpnProfiles);
+            VpnUtils.delete(keyVpnProfiles);
         }
         preferencesManager.removeConfiguration("keyVpnProfile");
     }

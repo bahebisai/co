@@ -20,11 +20,10 @@ import com.xiaomi.emm.features.event.NotifySafedesk;
 import com.xiaomi.emm.model.APPInfo;
 import com.xiaomi.emm.model.CompleteMessageData;
 import com.xiaomi.emm.model.DownLoadEntity;
-import com.xiaomi.emm.utils.AppUtils;
 import com.xiaomi.emm.utils.LogUtil;
-import com.xiaomi.emm.utils.MDM;
-import com.xiaomi.emm.utils.PreferencesManager;
-import com.xiaomi.emm.utils.TheTang;
+import com.xiaomi.emm.features.presenter.MDM;
+import com.xiaomi.emm.features.manager.PreferencesManager;
+import com.xiaomi.emm.features.presenter.TheTang;
 import com.xiaomi.emm.view.activity.SafeDeskActivity;
 
 import org.greenrobot.eventbus.EventBus;

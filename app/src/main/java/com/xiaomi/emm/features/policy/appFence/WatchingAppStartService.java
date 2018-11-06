@@ -2,7 +2,6 @@ package com.xiaomi.emm.features.policy.appFence;
 
 import android.app.ActivityManager;
 import android.app.AlarmManager;
-import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.app.usage.UsageStats;
@@ -16,13 +15,12 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import com.xiaomi.emm.R;
 import com.xiaomi.emm.definition.Common;
-import com.xiaomi.emm.utils.MDM;
-import com.xiaomi.emm.utils.PreferencesManager;
-import com.xiaomi.emm.utils.TheTang;
+import com.xiaomi.emm.features.presenter.MDM;
+import com.xiaomi.emm.features.manager.PreferencesManager;
+import com.xiaomi.emm.features.presenter.TheTang;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedMap;
-import java.util.Timer;
 import java.util.TreeMap;
 
 /**

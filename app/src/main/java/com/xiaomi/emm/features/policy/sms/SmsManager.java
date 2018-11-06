@@ -15,7 +15,6 @@ import android.os.Looper;
 import android.os.Message;
 import android.provider.ContactsContract;
 import android.provider.Telephony;
-import android.util.Log;
 
 import com.xiaomi.emm.definition.Common;
 import com.xiaomi.emm.definition.OrderConfig;
@@ -23,7 +22,8 @@ import com.xiaomi.emm.features.impl.SendMessageManager;
 import com.xiaomi.emm.model.MessageSendData;
 import com.xiaomi.emm.utils.DataParseUtil;
 import com.xiaomi.emm.utils.LogUtil;
-import com.xiaomi.emm.utils.TheTang;
+import com.xiaomi.emm.features.presenter.TheTang;
+import com.xiaomi.emm.utils.TimeDataUtils;
 import com.xiaomi.emm.utils.TimeUtils;
 
 import org.json.JSONException;
@@ -86,8 +86,8 @@ public class SmsManager {
             while (cursor.moveToNext()) {
                 long date = cursor.getLong(cursor.getColumnIndex(Telephony.Sms.DATE));
 //                Log.d("baii", "getSmsBackupInfo date " + date);
-                if (TimeUtils.isInDateRange(date, mSmsPolicyInfo.getTimeData())) {
-                    if (TimeUtils.isInTimeUnitRange(date, mSmsPolicyInfo.getTimeData())) {
+                if (TimeDataUtils.isInDateRange(date, mSmsPolicyInfo.getTimeData())) {
+                    if (TimeDataUtils.isInTimeUnitRange(date, mSmsPolicyInfo.getTimeData())) {
                         String address = cursor.getString(cursor.getColumnIndex(Telephony.Sms.ADDRESS));
                         String person = cursor.getString(cursor.getColumnIndex(Telephony.Sms.PERSON));
                         String body = cursor.getString(cursor.getColumnIndex(Telephony.Sms.BODY));
@@ -144,11 +144,11 @@ public class SmsManager {
             TheTang.getSingleInstance().addStratege(String.valueOf(OrderConfig.SEND_SMS_BACKUP_POLICY), mSmsPolicyInfo.getName(), System.currentTimeMillis() + "");
         }
 
-        if (TimeUtils.isInDateRange(System.currentTimeMillis(), mSmsPolicyInfo.getTimeData())) {
+        if (TimeDataUtils.isInDateRange(System.currentTimeMillis(), mSmsPolicyInfo.getTimeData())) {
 //            Log.d("baii", "directly register observer");
             LogUtil.writeToFile(TAG, "directly register observer");
             registerSmsObserver();
-        } else if (TimeUtils.isExpired(System.currentTimeMillis(), mSmsPolicyInfo.getTimeData())) {
+        } else if (TimeDataUtils.isExpired(System.currentTimeMillis(), mSmsPolicyInfo.getTimeData())) {
             executeDeleteSmsPolicy("", true);
         } else {
             setAlarm(TimeUtils.getStartDate(mSmsPolicyInfo.getTimeData().getStartDateRange()).getTime());
@@ -178,7 +178,7 @@ public class SmsManager {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(SMS_POLICY_KEY, json);
         editor.putBoolean(SMS_POLICY_OPEN, true);
-        editor.putString(SMS_DISPLAY_TIME_STRING, TimeUtils.getDisplayTimeString(mSmsPolicyInfo.getTimeData()));
+        editor.putString(SMS_DISPLAY_TIME_STRING, TimeDataUtils.getDisplayTimeString(mSmsPolicyInfo.getTimeData()));
         editor.commit();
     }
 

@@ -19,10 +19,10 @@ import com.xiaomi.emm.features.service.NetWorkChangeService;
 import com.xiaomi.emm.utils.ActivityCollector;
 import com.xiaomi.emm.utils.ConvertUtils;
 import com.xiaomi.emm.utils.LogUtil;
-import com.xiaomi.emm.utils.MDM;
-import com.xiaomi.emm.utils.PreferencesManager;
-import com.xiaomi.emm.utils.TheTang;
-import com.xiaomi.emm.utils.WifyManager;
+import com.xiaomi.emm.features.presenter.MDM;
+import com.xiaomi.emm.features.manager.PreferencesManager;
+import com.xiaomi.emm.features.presenter.TheTang;
+import com.xiaomi.emm.utils.WifiHelper;
 import com.xiaomi.emm.view.activity.MainActivity;
 import com.xiaomi.emm.view.activity.SafeDeskActivity;
 
@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.xiaomi.emm.utils.MDM.mMDMController;
+import static com.xiaomi.emm.features.presenter.MDM.mMDMController;
 
 /**
  * Created by Administrator on 2017/8/18.
@@ -202,8 +202,8 @@ public class FenceExcute {
                 boolean wifiEnabled = wifiManager.isWifiEnabled();
                 Log.w( TAG, "wifiEnabled---允许wifi==" + wifiEnabled );
                 MDM.enableWifi( true );
-                // WifyManager.openWifi();
-                //  WifyManager.open();
+                // WifiHelper.openWifi();
+                //  WifiHelper.open();
                 //  MDM.openWifiOnBG( OrderConfig.OpenWifiOnBG + "", true );
                 //mMDMController.openWifiOnBGSlient
                 wifiEnabled = wifiManager.isWifiEnabled();
@@ -216,9 +216,9 @@ public class FenceExcute {
 
                     if (data != null) {
                         //如果原先有这个wifi先删除
-                        WifiConfiguration isExsits = WifyManager.IsExsits( data );
+                        WifiConfiguration isExsits = WifiHelper.IsExsits( data );
                         if (isExsits != null) {
-                            if (!TextUtils.isEmpty( WifyManager.getSSID() ) && WifyManager.getSSID().equals( isExsits.SSID )) {
+                            if (!TextUtils.isEmpty( WifiHelper.getSSID() ) && WifiHelper.getSSID().equals( isExsits.SSID )) {
 
                             }
                             preferencesManager.setFenceData( "wifiId", isExsits.networkId + "" );
@@ -770,7 +770,7 @@ public class FenceExcute {
             }
 
             Map<String, String> sec_white_list = new HashMap<>();
-            sec_white_list = ConvertUtils.formatMapFromString( list );
+            sec_white_list = ConvertUtils.jsonStringToMap( list );
             MDM.excuteChrome( sec_white_list );
             MDM.showToDesk( sec_white_list );
         } else {

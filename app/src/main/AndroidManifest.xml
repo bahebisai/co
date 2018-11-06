@@ -488,7 +488,7 @@
             android:enabled="true"
             android:process=":remote" />
         <service
-            android:name=".utils.JobCastielService"
+            android:name=".features.service.JobCastielService"
             android:permission="android.permission.BIND_JOB_SERVICE" />
         <!-- ===== -->
         <service

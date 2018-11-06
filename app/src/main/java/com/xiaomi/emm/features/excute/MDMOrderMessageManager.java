@@ -3,7 +3,7 @@ package com.xiaomi.emm.features.excute;
 import android.text.TextUtils;
 import android.util.Log;
 import com.xiaomi.emm.utils.LogUtil;
-import com.xiaomi.emm.utils.TheTang;
+import com.xiaomi.emm.features.presenter.TheTang;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 

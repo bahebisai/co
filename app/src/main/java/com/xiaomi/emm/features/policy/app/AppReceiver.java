@@ -3,10 +3,9 @@ package com.xiaomi.emm.features.policy.app;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import com.xiaomi.emm.utils.LogUtil;
-import com.xiaomi.emm.utils.TheTang;
+import com.xiaomi.emm.features.presenter.TheTang;
 
 /**
  * Created by Administrator on 2017/6/20.

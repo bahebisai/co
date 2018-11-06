@@ -15,7 +15,6 @@ import android.view.View;
 
 import com.xiaomi.emm.R;
 
-
 /**
  *
  */
@@ -29,7 +28,7 @@ public class ShapeLoadingView extends View {
     private final int PAINT_TEXT_BASEIINE = PAINT_TEXTSIZE;//BASELINE的高度
     private String mResText;//画出来的文字
     private int mTextWidth;//文字的宽度
-    private String mDefaultText ;
+    private String mDefaultText;
     private final int DEFAULT_RECF_SPACE = 6;//默认的画弧形的时候的间距,值越大速度越快，不能超过最大值
     private final int MAX_RECF_SPACE = 36;//最大的画弧形的时候的间距
     private final int MIN_RECF_SPACE = -12;//最大的画弧形的时候的间距
@@ -44,21 +43,21 @@ public class ShapeLoadingView extends View {
     public ShapeLoadingView(Context context) {
         super(context);
         this.mContext = context;
-        PAINT_TEXTSIZE = sp2px(mContext , 16);
+        PAINT_TEXTSIZE = sp2px(mContext, 16);
         initPaint();
     }
 
     public ShapeLoadingView(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.mContext = context;
-        PAINT_TEXTSIZE = sp2px(mContext , 16);
+        PAINT_TEXTSIZE = sp2px(mContext, 16);
         initPaint();
     }
 
     public ShapeLoadingView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         this.mContext = context;
-        PAINT_TEXTSIZE = sp2px(mContext , 16);
+        PAINT_TEXTSIZE = sp2px(mContext, 16);
         initPaint();
     }
 
@@ -71,13 +70,12 @@ public class ShapeLoadingView extends View {
         mTextPaint.setStyle(Paint.Style.STROKE);
         mTextPaint.setTextAlign(Paint.Align.LEFT);
         mTextWidth = (int) mTextPaint.measureText(mResText);
-
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int baseLineSpace = 20;
-        setMeasuredDimension(mTextWidth, PAINT_TEXTSIZE+baseLineSpace);
+        setMeasuredDimension(mTextWidth, PAINT_TEXTSIZE + baseLineSpace);
     }
 
     public void setTextColor(int color) {
@@ -91,10 +89,6 @@ public class ShapeLoadingView extends View {
         invalidate();
     }
 
-
-
-
-
     public void setText(@StringRes int res) {
         mResText = mContext.getString(res);
     }
@@ -103,8 +97,6 @@ public class ShapeLoadingView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         drawLinePathAndText(canvas);
-
-
     }
 
     /**
@@ -119,27 +111,25 @@ public class ShapeLoadingView extends View {
         } else {
             drawArcPath();
             mRecfSpace = getRecfSpace();
-            if (mRecfSpace >= MAX_RECF_SPACE){
+            if (mRecfSpace >= MAX_RECF_SPACE) {
                 mCurveStatus = STATUS_UP_CURVE;
-            }else if (mRecfSpace <= MIN_RECF_SPACE){
+            } else if (mRecfSpace <= MIN_RECF_SPACE) {
                 mCurveStatus = STATUS_DOWN_CURVE;
             }
-
         }
-        if (mSringCount<MAX_SPRING_COUNT){
+        if (mSringCount < MAX_SPRING_COUNT) {
             mSringCount++;
             invalidate();
-        }else {
+        } else {
             reset(canvas);
         }
         canvas.drawTextOnPath(mResText, mPath, 0, 0, mTextPaint);
     }
 
-    void reset(Canvas canvas){
+    void reset(Canvas canvas) {
         mRecfSpace = 0;
         drawArcPath();
         mCurveStatus = STATUS_FLAT_CURVE;
-
     }
 
     Handler handler = new Handler() {
@@ -162,7 +152,7 @@ public class ShapeLoadingView extends View {
         } else if (mCurveStatus == STATUS_UP_CURVE) {
             return mRecfSpace - DEFAULT_RECF_SPACE;
         } else {
-            Log.v("huyamin","return 0");
+            Log.v("huyamin", "return 0");
             return 0;
         }
     }
@@ -185,9 +175,9 @@ public class ShapeLoadingView extends View {
 //        mPath.addOval(rectF, Path.Direction.CCW);
         mPath.moveTo(0, PAINT_TEXT_BASEIINE); //设定起始点
 //        mPath.lineTo(mTextWidth/5,PAINT_TEXT_BASEIINE);
-        mPath.quadTo(0,PAINT_TEXT_BASEIINE,5,PAINT_TEXT_BASEIINE);
-        mPath.quadTo(mTextWidth/2,PAINT_TEXT_BASEIINE + mRecfSpace,mTextWidth-5,PAINT_TEXT_BASEIINE);
-        mPath.quadTo(mTextWidth*5/6,PAINT_TEXT_BASEIINE,mTextWidth,PAINT_TEXT_BASEIINE);
+        mPath.quadTo(0, PAINT_TEXT_BASEIINE, 5, PAINT_TEXT_BASEIINE);
+        mPath.quadTo(mTextWidth / 2, PAINT_TEXT_BASEIINE + mRecfSpace, mTextWidth - 5, PAINT_TEXT_BASEIINE);
+        mPath.quadTo(mTextWidth * 5 / 6, PAINT_TEXT_BASEIINE, mTextWidth, PAINT_TEXT_BASEIINE);
         mPath.close();
     }
 

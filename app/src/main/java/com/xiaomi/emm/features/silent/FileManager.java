@@ -9,10 +9,8 @@ import com.xiaomi.emm.features.event.CompleteEvent;
 import com.xiaomi.emm.features.event.NotifyEvent;
 import com.xiaomi.emm.model.DownLoadEntity;
 import com.xiaomi.emm.utils.FileUtils;
-import com.xiaomi.emm.utils.TheTang;
+import com.xiaomi.emm.features.presenter.TheTang;
 import org.greenrobot.eventbus.EventBus;
-
-import java.io.File;
 
 /**
  * Created by Administrator on 2017/8/3.

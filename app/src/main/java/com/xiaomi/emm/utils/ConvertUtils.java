@@ -14,15 +14,15 @@ public class ConvertUtils {
     private static final String TAG = ConvertUtils.class.getName();
 
     /**
-     * 将Map转String
+     * 将Map转json格式的String，用于@GET指令
      *
-     * @param data
+     * @param data map数据，对应json的key value
+     * @return json string
      */
-    public static String formatStringFromMap(Map<String, String> data) {
+    public static String mapToString(Map<String, String> data) {
         if (data == null) {
             return null;
         }
-
         JSONArray jsonArray = new JSONArray();
         Iterator<Map.Entry<String, String>> iterator = data.entrySet().iterator();
 
@@ -40,18 +40,19 @@ public class ConvertUtils {
     }
 
     /**
-     * String转Map
+     * json格式的String转Map
      *
-     * @param result
-     * @return
+     * @param jsonString
+     * @return map
      */
-    public static Map<String, String> formatMapFromString(String result) {
-        if (result == null)
+    public static Map<String, String> jsonStringToMap(String jsonString) {
+        if (jsonString == null) {
             return null;
+        }
 
         Map<String, String> data = new HashMap<String, String>();
         try {
-            JSONArray array = new JSONArray(result);
+            JSONArray array = new JSONArray(jsonString);
             for (int i = 0; i < array.length(); i++) {
                 JSONObject itemObject = array.getJSONObject(i);
                 JSONArray names = itemObject.names();
@@ -64,12 +65,17 @@ public class ConvertUtils {
                 }
             }
         } catch (JSONException e) {
-            LogUtil.writeToFile(TAG, " formatMapFromString: " + e.getCause().toString());
+            LogUtil.writeToFile(TAG, " jsonStringToMap: " + e.getCause().toString());
         }
         return data;
     }
 
-    // 流量转化
+    /**
+     * 流量转化
+     *
+     * @param traffic
+     * @return string 带单位
+     */
     public static String convertTraffic(long traffic) {
         BigDecimal trafficKB;
         BigDecimal trafficMB;
@@ -92,12 +98,12 @@ public class ConvertUtils {
     }
 
     /**
-     * 将时间转为时长
+     * 将时间毫秒转为时长
      *
      * @param time
-     * @return
+     * @return 时长，*天*小时*分
      */
-    public static String formatTimeLength(long time) {//todo baii util time
+    public static String formatTimeLength(long time) {
         String date = null;
         String hour = null;
         String minute = null;
@@ -106,7 +112,6 @@ public class ConvertUtils {
         if (time > 24 * 3600 * 1000) {
             date = time / (24 * 3600 * 1000) + "天";
         }
-
         time = time % (24 * 3600 * 1000);
 
         if (time > 3600 * 1000) {
@@ -141,10 +146,10 @@ public class ConvertUtils {
     }
 
     /**
-     * 带单位的数据格式转换
+     * 带单位的数据格式转换，byte转为KB、MB或GB
      *
      * @param fileS 文件大小  单位为byte
-     * @return
+     * @return 文件大小，带单位
      */
     public static String formatFileSize(long fileS) {//todo baii util file
         DecimalFormat df = new DecimalFormat("#.00");
@@ -166,10 +171,10 @@ public class ConvertUtils {
     }
 
     /**
-     * 数据单位转换
+     * 数据单位转换，byte转为KB、MB或GB
      *
      * @param fileS 文件大小  单位为byte
-     * @return
+     * @return 文件大小，不带单位
      */
     public static String formatFile(long fileS) {
         DecimalFormat df = new DecimalFormat("#.00");
@@ -191,10 +196,10 @@ public class ConvertUtils {
     }
 
     /**
-     * 获取数据单位
+     * 获取数据转换后的单位
      *
      * @param size 文件大小  单位为byte
-     * @return
+     * @return *B
      */
     public static String getUnit(float size) {
         String unit = "";

@@ -4,22 +4,19 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.Message;
-import android.support.design.widget.TabLayout;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.ViewStub;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.xiaomi.emm.R;
 import com.xiaomi.emm.utils.AppUtils;
-import com.xiaomi.emm.utils.LogUtil;
 import com.xiaomi.emm.view.adapter.AppStoreAdapter;
 import com.xiaomi.emm.features.db.DatabaseOperate;
 import com.xiaomi.emm.features.event.NotifyEvent;
 import com.xiaomi.emm.model.APPInfo;
-import com.xiaomi.emm.utils.TheTang;
-import com.xiaomi.emm.view.viewutils.ViewLoaddingInterface;
+import com.xiaomi.emm.features.presenter.TheTang;
+import com.xiaomi.emm.view.viewutils.ViewLoadingInterface;
 import com.xiaomi.emm.view.viewutils.ViewLoadingLayout;
 
 import org.greenrobot.eventbus.EventBus;
@@ -143,7 +140,7 @@ public class AppUpdateActivity extends BaseActivity {
         listView.setAdapter(mAppStoreAdapter);
         viewloading = (ViewLoadingLayout) mViewHolder.get(R.id.viewloading);
 
-        viewloading.setInit(new ViewLoaddingInterface() {
+        viewloading.setInit(new ViewLoadingInterface() {
             @Override
             public void Reload() {
                 //点击重新加载调用

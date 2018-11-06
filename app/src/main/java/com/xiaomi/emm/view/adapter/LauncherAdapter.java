@@ -19,7 +19,7 @@ import com.xiaomi.emm.definition.Common;
 import com.xiaomi.emm.features.event.NotifyEvent;
 import com.xiaomi.emm.features.lockscreen.NewsLifecycleHandler;
 import com.xiaomi.emm.utils.AppUtils;
-import com.xiaomi.emm.utils.PreferencesManager;
+import com.xiaomi.emm.features.manager.PreferencesManager;
 import com.xiaomi.emm.view.activity.AppUpdateActivity;
 import com.xiaomi.emm.view.activity.SafeDeskActivity;
 

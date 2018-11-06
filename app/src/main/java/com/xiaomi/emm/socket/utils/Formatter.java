@@ -24,7 +24,6 @@ public class Formatter {
     public static String FormatToString(byte[] buffer) {
         StringBuffer sb = new StringBuffer(buffer.length * 2);
 
-        int j = 0;
         for (int i = 0; i < buffer.length; i++) {
             sb.append("");
             sb.append(Character.forDigit((buffer[i] & 240) >> 4, 16));

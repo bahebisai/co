@@ -1,7 +1,7 @@
 package com.xiaomi.emm.definition;
 
 import com.xiaomi.emm.R;
-import com.xiaomi.emm.utils.TheTang;
+import com.xiaomi.emm.features.presenter.TheTang;
 
 /**
  * Created by Administrator on 2017/6/6.

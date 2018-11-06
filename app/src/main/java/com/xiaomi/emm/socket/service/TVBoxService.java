@@ -7,7 +7,7 @@ import android.util.Log;
 
 import com.xiaomi.emm.R;
 import com.xiaomi.emm.utils.PhoneUtils;
-import com.xiaomi.emm.utils.TheTang;
+import com.xiaomi.emm.features.presenter.TheTang;
 
 
 /**

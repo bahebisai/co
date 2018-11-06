@@ -3,7 +3,7 @@ package com.xiaomi.emm.socket.threadtaskpool;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.xiaomi.emm.utils.TheTang;
+import com.xiaomi.emm.utils.LogUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +60,7 @@ class ThreadTask implements Comparable<ThreadTask> {
 						ThreadTask.this.onUncaughtExceptionThrownListener.onUncaughtExceptionThrown(e);
 					}
 					Log.w(TAG, e.toString());
-					Log.w(TAG, TheTang.getExceptionInfo(e));
+					Log.w(TAG, LogUtil.getExceptionInfo(e));
 				}
 				return new Result(resultType, ThreadTask.this);
 			}

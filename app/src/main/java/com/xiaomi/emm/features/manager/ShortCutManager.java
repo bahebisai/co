@@ -1,10 +1,10 @@
-package com.xiaomi.emm.utils;
+package com.xiaomi.emm.features.manager;
 
 import android.text.TextUtils;
 import android.util.Log;
 import com.xiaomi.emm.features.impl.WebclipImageImpl;
 import com.xiaomi.emm.features.policy.device.ShortcutUtils;
-import com.xiaomi.emm.utils.TheTang;
+import com.xiaomi.emm.features.presenter.TheTang;
 import java.io.File;
 
 

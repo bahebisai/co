@@ -7,18 +7,13 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
-import android.util.Log;
 
-import com.miui.enterprise.sdk.ApplicationManager;
 import com.xiaomi.emm.definition.Common;
 import com.xiaomi.emm.features.excute.MDMOrderService;
 import com.xiaomi.emm.features.excute.XiaomiMDMController;
 import com.xiaomi.emm.utils.LogUtil;
-import com.xiaomi.emm.utils.MDM;
-import com.xiaomi.emm.utils.PreferencesManager;
-import com.xiaomi.emm.utils.TheTang;
-import com.xiaomi.emm.view.activity.MainActivity;
-import com.xiaomi.emm.view.activity.SafeDeskActivity;
+import com.xiaomi.emm.features.manager.PreferencesManager;
+import com.xiaomi.emm.features.presenter.TheTang;
 
 /**
  * Created by Administrator on 2017/8/16.

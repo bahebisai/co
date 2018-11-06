@@ -12,7 +12,7 @@ import com.xiaomi.emm.features.lockscreen.util.Consts;
 import com.xiaomi.emm.features.lockscreen.widget.NumericKeyboard;
 import com.xiaomi.emm.features.lockscreen.widget.PasswordTextView;
 import com.xiaomi.emm.utils.LogUtil;
-import com.xiaomi.emm.utils.PreferencesManager;
+import com.xiaomi.emm.features.manager.PreferencesManager;
 import com.xiaomi.emm.view.activity.BaseActivity;
 
 

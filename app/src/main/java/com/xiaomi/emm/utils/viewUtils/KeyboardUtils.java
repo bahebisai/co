@@ -1,8 +1,4 @@
-package com.xiaomi.emm.utils;
-
-/**
- * Created by lenovo on 2017/10/27.
- */
+package com.xiaomi.emm.utils.viewUtils;
 
 import android.app.Activity;
 import android.content.Context;
@@ -14,10 +10,11 @@ import android.view.inputmethod.InputMethodManager;
 import java.lang.reflect.Method;
 
 /**
- * Created by Iven on 2016/12/25.
+ * 键盘view相关工具类
  */
 public class KeyboardUtils {
     private static final String TAG = KeyboardUtils.class.getSimpleName();
+
     /**
      * 关闭键盘
      *
@@ -38,7 +35,7 @@ public class KeyboardUtils {
      *
      * @return
      */
-    public static boolean checkDeviceHasNavigationBar(Context context) {//todo bai belongs to view or window
+    public static boolean checkDeviceHasNavigationBar(Context context) {
         boolean hasNavigationBar = false;
         Resources rs = context.getResources();
         int id = rs.getIdentifier("config_showNavigationBar", "bool", "android");
@@ -65,7 +62,7 @@ public class KeyboardUtils {
      *
      * @return
      */
-    public static int getNavigationBarHeight(Context context) {//todo bai belongs to view or window
+    public static int getNavigationBarHeight(Context context) {
         int navigationBarHeight = 0;
         Resources rs = context.getResources();
         int id = rs.getIdentifier("navigation_bar_height", "dimen", "android");

@@ -3,7 +3,6 @@ package com.xiaomi.emm.view.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.FileProvider;
@@ -21,8 +20,8 @@ import com.xiaomi.emm.base.BaseApplication;
 import com.xiaomi.emm.features.event.NotifyEvent;
 import com.xiaomi.emm.model.FileInfo;
 import com.xiaomi.emm.utils.LogUtil;
-import com.xiaomi.emm.utils.TheTang;
-import com.xiaomi.emm.view.viewutils.ViewLoaddingInterface;
+import com.xiaomi.emm.features.presenter.TheTang;
+import com.xiaomi.emm.view.viewutils.ViewLoadingInterface;
 import com.xiaomi.emm.view.viewutils.ViewLoadingLayout;
 
 import org.greenrobot.eventbus.EventBus;
@@ -191,7 +190,7 @@ public class FileUpdateActivity extends BaseActivity {
 
         viewloading = (ViewLoadingLayout) mViewHolder.get(R.id.viewloading);
 
-        viewloading.setInit(new ViewLoaddingInterface() {
+        viewloading.setInit(new ViewLoadingInterface() {
             @Override
             public void Reload() {
                 //点击重新加载调用

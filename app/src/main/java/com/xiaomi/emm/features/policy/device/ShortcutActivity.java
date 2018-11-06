@@ -1,6 +1,5 @@
 package com.xiaomi.emm.features.policy.device;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,7 +12,7 @@ import android.widget.Toast;
 import com.xiaomi.emm.R;
 import com.xiaomi.emm.utils.ActivityCollector;
 import com.xiaomi.emm.utils.LogUtil;
-import com.xiaomi.emm.utils.PreferencesManager;
+import com.xiaomi.emm.features.manager.PreferencesManager;
 import java.util.regex.Pattern;
 
 /**

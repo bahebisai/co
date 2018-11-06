@@ -15,11 +15,10 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 /**
- *Created by lenovo on 2017/10/19.
+ * Created by lenovo on 2017/10/19.
  * Description:管理所有的栈中的Activity
  */
 public class ActivityCollector {
-
     /**
      * 存放activity的列表
      */
@@ -36,14 +35,12 @@ public class ActivityCollector {
 
     /**
      * 返回所有的Acitivty
+     *
      * @return
      */
     public static HashMap<Class<?>, Activity> getActivity() {
-
-        return  activities;
+        return activities;
     }
-
-
 
     /**
      * 判断一个Activity 是否存在
@@ -64,7 +61,6 @@ public class ActivityCollector {
                 res = true;
             }
         }
-
         return res;
     }
 
@@ -103,25 +99,22 @@ public class ActivityCollector {
         }
         activities.clear();
     }
+
     /**
      * 移除所有的Lock2Activity
      */
-    public static void removeAllLock2Activity() {//todo baii
+    public static void removeAllLock2Activity() {
         if (activities != null && activities.size() > 0) {
             Set<Entry<Class<?>, Activity>> sets = activities.entrySet();
             Iterator<Entry<Class<?>, Activity>> iterator = sets.iterator();
-
-
             while (iterator.hasNext()) {
                 Entry<Class<?>, Activity> next = iterator.next();
-                if ( Lock2Activity.class.getSimpleName().equals(next.getValue().getClass().getSimpleName()) && isActivityExist(next.getValue().getClass())) {
+                if (Lock2Activity.class.getSimpleName().equals(next.getValue().getClass().getSimpleName()) && isActivityExist(next.getValue().getClass())) {
                     next.getValue().finish();
                     iterator.remove();
-                    Log.w("ActivityCollector ","移除所有的"+next.getValue().getClass().getSimpleName());
+                    Log.w("ActivityCollector ", "移除所有的" + next.getValue().getClass().getSimpleName());
                 }
             }
-
         }
-
     }
 }

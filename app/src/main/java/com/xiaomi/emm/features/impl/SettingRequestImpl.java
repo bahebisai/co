@@ -6,7 +6,7 @@ import com.xiaomi.emm.definition.UrlConst;
 import com.xiaomi.emm.features.http.RequestService;
 import com.xiaomi.emm.utils.DataParseUtil;
 import com.xiaomi.emm.utils.HttpHelper;
-import com.xiaomi.emm.utils.TheTang;
+import com.xiaomi.emm.features.presenter.TheTang;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;

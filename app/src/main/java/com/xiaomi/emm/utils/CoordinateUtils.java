@@ -9,7 +9,7 @@ public class CoordinateUtils {
      * @param lat
      * @param lon
      */
-    public static double[] gcj02_To_Bd09(double lat, double lon) {//todo baii util coor
+    public static double[] gcj02_To_Bd09(double lat, double lon) {
         double x = lon, y = lat;
         //DecimalFormat df = new DecimalFormat("######.000000");
         double z = Math.sqrt(x * x + y * y) + 0.00002 * Math.sin(y * x_pi);
@@ -24,7 +24,7 @@ public class CoordinateUtils {
      * * 火星坐标系 (GCJ-02) 与百度坐标系 (BD-09) 的转换算法 * * 将 BD-09 坐标转换成GCJ-02 坐标 * * @param
      * bd_lat * @param bd_lon * @return
      */
-    public static double[] bd09_To_Gcj02(double lat, double lon) {//todo baii util coor
+    public static double[] bd09_To_Gcj02(double lat, double lon) {
         //DecimalFormat df = new DecimalFormat("######.000000");
         double x = lon - 0.0065, y = lat - 0.006;
         double z = Math.sqrt(x * x + y * y) - 0.00002 * Math.sin(y * x_pi);

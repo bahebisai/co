@@ -1,17 +1,15 @@
 package com.xiaomi.emm.features.impl;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.xiaomi.emm.definition.Common;
 import com.xiaomi.emm.definition.UrlConst;
 import com.xiaomi.emm.features.db.DatabaseOperate;
 import com.xiaomi.emm.features.http.RequestService;
-import com.xiaomi.emm.features.resend.MessageResendManager;
 import com.xiaomi.emm.model.MessageSendData;
 import com.xiaomi.emm.utils.HttpHelper;
-import com.xiaomi.emm.utils.TheTang;
+import com.xiaomi.emm.features.presenter.TheTang;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -110,8 +108,6 @@ public class SendMessageManager extends BaseImpl<RequestService> {
                 break;
         }
 
-//        SendListener sendListener = data.getSendListener();
-//        MessageResendManager.ResendListener resendListener = data.getResendListener();
         if (responseBodyCall != null) {
             responseBodyCall.enqueue(new Callback<ResponseBody>() {
                 @Override
@@ -127,13 +123,7 @@ public class SendMessageManager extends BaseImpl<RequestService> {
                         if (mSendListener != null) {
                             mSendListener.onSuccess();
                         }
-/*                        if (sendCode == Common.CALL_RECORDER_BACKUP) {
-                            if (file != null && file.exists()) {//todo impl bai 1111111111111111111111
-                                file.delete();
-                            }
-                        }*/
                     }
-
                 }
 
                 @Override
