@@ -24,7 +24,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"/>
 
-        <com.xiaomi.emm.features.QR.zxing.view.ViewfinderView
+        <com.zoomtech.emm.features.QR.zxing.view.ViewfinderView
             android:id="@+id/viewfinder_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

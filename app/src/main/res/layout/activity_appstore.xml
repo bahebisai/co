@@ -13,7 +13,7 @@
         android:background="#1487fb"
         app:title="@string/app_store"
         app:titleTextColor="#fff"/>
-    <com.xiaomi.emm.view.viewutils.ViewLoadingLayout
+    <com.zoomtech.emm.view.viewutils.ViewLoadingLayout
         android:id="@+id/viewloading"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

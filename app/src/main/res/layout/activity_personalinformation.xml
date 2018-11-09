@@ -30,7 +30,7 @@
         >
         <!--android:background="@color/light"  @mipmap/work_fragment-->
 
-        <com.xiaomi.emm.view.photoview.CircleImageView
+        <com.zoomtech.emm.view.photoview.CircleImageView
             android:id="@+id/iv_personpoto"
             android:layout_width="100dp"
             android:layout_height="100dp"

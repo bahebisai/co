@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.xiaomi.emm"
+    package="com.zoomtech.emm"
     android:versionName="3.2.3">
 
     <!-- android:sharedUserId="android.uid.system" -->
     <!-- Required -->
     <permission
-        android:name="com.xiaomi.emm.permission.JPUSH_MESSAGE"
+        android:name="com.zoomtech.emm.permission.JPUSH_MESSAGE"
         android:protectionLevel="signature" />
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETE" />
@@ -370,7 +370,7 @@
 
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.xiaomi.emm.fileprovider"
+            android:authorities="com.zoomtech.emm.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

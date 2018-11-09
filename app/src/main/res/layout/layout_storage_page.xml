@@ -15,7 +15,7 @@
         android:layout_marginRight="10dp"
         android:src="@mipmap/arrow_r"/>
 
-    <com.xiaomi.emm.features.progress.CircleProgress
+    <com.zoomtech.emm.features.progress.CircleProgress
         android:id="@+id/storage_progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

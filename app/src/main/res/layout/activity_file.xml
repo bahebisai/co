@@ -15,7 +15,7 @@
         app:titleTextColor="#fff"/>
 <!--android:background="@mipmap/nagative_bar"-->
     <!-- android:background="#f5f5f5"-->
-    <com.xiaomi.emm.view.viewutils.ViewLoadingLayout
+    <com.zoomtech.emm.view.viewutils.ViewLoadingLayout
         android:id="@+id/viewloading"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

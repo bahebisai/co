@@ -26,35 +26,35 @@
         android:gravity="center_horizontal"
         android:orientation="horizontal">
 
-        <com.xiaomi.emm.features.lockscreen.widget.MyPasswordTextView
+        <com.zoomtech.emm.features.lockscreen.widget.MyPasswordTextView
             android:id="@+id/et_pwd1"
             style="@style/style_edit2" />
 
-        <com.xiaomi.emm.features.lockscreen.widget.MyPasswordTextView
+        <com.zoomtech.emm.features.lockscreen.widget.MyPasswordTextView
             android:id="@+id/et_pwd2"
             style="@style/style_edit2"
             android:layout_marginLeft="15dp" />
 
-        <com.xiaomi.emm.features.lockscreen.widget.MyPasswordTextView
+        <com.zoomtech.emm.features.lockscreen.widget.MyPasswordTextView
             android:id="@+id/et_pwd3"
             style="@style/style_edit2"
             android:layout_marginLeft="15dp" />
 
-        <com.xiaomi.emm.features.lockscreen.widget.MyPasswordTextView
+        <com.zoomtech.emm.features.lockscreen.widget.MyPasswordTextView
             android:id="@+id/et_pwd4"
             style="@style/style_edit2"
             android:layout_marginLeft="15dp" />
-        <com.xiaomi.emm.features.lockscreen.widget.MyPasswordTextView
+        <com.zoomtech.emm.features.lockscreen.widget.MyPasswordTextView
             android:id="@+id/et_pwd5"
             style="@style/style_edit2"
             android:layout_marginLeft="15dp" />
-        <com.xiaomi.emm.features.lockscreen.widget.MyPasswordTextView
+        <com.zoomtech.emm.features.lockscreen.widget.MyPasswordTextView
             android:id="@+id/et_pwd6"
             style="@style/style_edit2"
             android:layout_marginLeft="15dp" />
     </LinearLayout>
     <!-- 数字键盘 -->
-    <com.xiaomi.emm.features.lockscreen.widget.NumericKeyboard
+    <com.zoomtech.emm.features.lockscreen.widget.NumericKeyboard
         android:id="@+id/nk"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

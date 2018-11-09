@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#1487fb">
 
-    <com.xiaomi.emm.features.progress.CircleProgress
+    <com.zoomtech.emm.features.progress.CircleProgress
         android:id="@+id/app_progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

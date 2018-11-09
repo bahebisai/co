@@ -40,7 +40,7 @@
                 android:layout_marginBottom="15px"
                 android:layout_width="match_parent"
                 android:layout_height="3px"/>
-            <com.xiaomi.emm.features.password.PasswordView
+            <com.zoomtech.emm.features.password.PasswordView
                 android:id="@+id/new_password"
                 android:layout_marginTop="60px"
                 android:layout_width="match_parent"

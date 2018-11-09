@@ -7,7 +7,7 @@
     android:background="@color/bg_gray"
     android:layout_height="match_parent">
 
-    <com.xiaomi.emm.view.viewutils.LoadingView
+    <com.zoomtech.emm.view.viewutils.LoadingView
         android:background="@color/bg_gray"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -12,7 +12,7 @@
         android:layout_height="200dp"
         android:background="@mipmap/header"/>-->
 
-    <com.xiaomi.emm.view.photoview.CircleImageView
+    <com.zoomtech.emm.view.photoview.CircleImageView
         android:id="@+id/person_photo"
         android:layout_width="100dp"
         android:layout_height="100dp"
