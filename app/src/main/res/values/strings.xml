@@ -171,6 +171,8 @@
     <string name="send_time_Frence_msg">时间围栏策略</string>
     <string name="delete_time_Frence">删除时间围栏策略</string>
     <string name="revocation_time_Frence">撤销时间围栏策略</string>
+    <string name="send_wifi_fence">下发WiFi围栏</string>
+    <string name="delete_wifi_fence">删除WiFi围栏</string>
     <string name="send_security_chrome">安全浏览器</string>
     <string name="send_security_chrome_msg">安全浏览器</string>
     <string name="delete_security_chrome">删除安全浏览器</string>

@@ -4,8 +4,6 @@ package com.xiaomi.emm.model;
  * Created by Administrator on 2017/8/9.
  */
 
-import com.xiaomi.emm.definition.Common;
-
 import java.util.List;
 
 /**
@@ -19,13 +17,14 @@ public class TimeFenceData {
      * alias : 20170817084941725
      * code : 136
      * policy : [{"allowAutomaticJoin":1,"allowBluetooth":1,"allowCamera":1,"allowCloseWifi":1,"allowDomainSwitching":1,"allowMobileData":0,"allowOpenWifi":0,"applicationProgram":[{"appName":"fgfggf","appPageName":"1232233243"}],"configureWifi":1,"displayCall":1,"displayContacts":1,"displayMessage":1,"endTimeRage":"2017-08-22T00:11:00.000Z","hiddenNetwork":1,"lockScreen":1,"name":"xxx1","safeType":2,"startTimeRage":"2017-08-21T00:11:00.000Z","timeUnit":[{"endTime":"23:59","startTime":"00:00","typeDate":"","unitType":1},{"endTime":"23:59","startTime":"02:00","typeDate":"1","unitType":2},{"endTime":"21:01","startTime":"02:02","typeDate":"","unitType":3},{"endTime":"06:02","startTime":"03:02","typeDate":"2017-08-22T00:11:00.000Z","unitType":4}],"twoDomainControl":1,"webpageList":1}]
-     *"sendId":"a74a0a53-7b06-4060-9dc6-3ab27345b6b7"
+     * "sendId":"a74a0a53-7b06-4060-9dc6-3ab27345b6b7"
      */
 
     private String alias;
-    private String  code;
+    private String code;
     private String id;
     private List<PolicyBean> policy;
+
     //  private String sendId;
     public String getAlias() {
         return alias;
@@ -119,13 +118,13 @@ public class TimeFenceData {
         private String setToSecureDesktop;
         private String allowConfigureWifi;
         private String type;
-        private String mobileHotspot ;//移动热点 围栏内停用
+        private String mobileHotspot;//移动热点 围栏内停用
 
-        private String locationService ;//定位服务围栏内停用
+        private String locationService;//定位服务围栏内停用
 
-        private String matTransmission  ;//USB传输MTP数据围栏内停用
+        private String matTransmission;//USB传输MTP数据围栏内停用
 
-        private String  shortMessage  ;//短信围栏内停用
+        private String shortMessage;//短信围栏内停用
 
         private String allowDropdown;
 
@@ -237,7 +236,7 @@ public class TimeFenceData {
             this.soundRecording = soundRecording;
         }
 
-        private String soundRecording ; //录音围栏内停用
+        private String soundRecording; //录音围栏内停用
 
         public String getType() {
             return type;
@@ -331,11 +330,12 @@ public class TimeFenceData {
             this.configureWifi = configureWifi;
         }
 
-        public String getSsid(){
+        public String getSsid() {
             return ssid;
         }
-        public void setSsid(String ssid){
-            this.ssid=ssid;
+
+        public void setSsid(String ssid) {
+            this.ssid = ssid;
         }
 
         public String getDisplayCall() {
@@ -394,11 +394,12 @@ public class TimeFenceData {
             this.lockPwd = lockPwd;
         }
 
-        public void setWifiPassword(String wifiPassword){
-            this.wifiPassword=wifiPassword;
+        public void setWifiPassword(String wifiPassword) {
+            this.wifiPassword = wifiPassword;
         }
-        public  String getWifiPassword(){
-            return  wifiPassword;
+
+        public String getWifiPassword() {
+            return wifiPassword;
         }
 
         public String getName() {

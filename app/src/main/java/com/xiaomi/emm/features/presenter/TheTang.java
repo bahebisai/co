@@ -323,6 +323,10 @@ public class TheTang {
                 break;
             case OrderConfig.delete_trajectory_Strategy:  //删除下发轨迹
                 break;
+            case OrderConfig.SEND_WIFI_FENCE: //下发WiFi围栏
+                break;
+            case OrderConfig.DELETE_WIFI_FENCE: //删除WiFi围栏
+                break;
             default:
                 addMessage(orderCode, "");
                 break;

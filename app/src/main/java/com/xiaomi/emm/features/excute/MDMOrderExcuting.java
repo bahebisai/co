@@ -8,14 +8,18 @@ import com.xiaomi.emm.definition.Common;
 import com.xiaomi.emm.definition.OrderConfig;
 import com.xiaomi.emm.features.event.CompleteEvent;
 import com.xiaomi.emm.features.event.NotifyEvent;
+import com.xiaomi.emm.features.manager.PreferencesManager;
 import com.xiaomi.emm.features.policy.appFence.AppFenceExcute;
 import com.xiaomi.emm.features.policy.compliance.ExcuteCompliance;
 import com.xiaomi.emm.features.policy.device.ExcuteLimitPolicy;
 import com.xiaomi.emm.features.policy.fence.FenceManager;
+import com.xiaomi.emm.features.policy.fence.WifiFenceManager;
 import com.xiaomi.emm.features.policy.phoneCall.CallRecorderManager;
 import com.xiaomi.emm.features.policy.sensitiveWords.SensiWordManager;
 import com.xiaomi.emm.features.policy.sms.SmsManager;
 import com.xiaomi.emm.features.policy.trajectory.TrajectoryPolice;
+import com.xiaomi.emm.features.presenter.MDM;
+import com.xiaomi.emm.features.presenter.TheTang;
 import com.xiaomi.emm.model.AppBlackWhiteData;
 import com.xiaomi.emm.model.AppFenceData;
 import com.xiaomi.emm.model.DeleteAppData;
@@ -30,9 +34,6 @@ import com.xiaomi.emm.model.SensitiveStrategyInfo;
 import com.xiaomi.emm.model.SystemComplianceData;
 import com.xiaomi.emm.utils.DataParseUtil;
 import com.xiaomi.emm.utils.LogUtil;
-import com.xiaomi.emm.features.presenter.MDM;
-import com.xiaomi.emm.features.manager.PreferencesManager;
-import com.xiaomi.emm.features.presenter.TheTang;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -521,6 +522,14 @@ public class MDMOrderExcuting {
                 break;
             case OrderConfig.revocation_time_Frence: //卸载时间围栏
                 FenceManager.excute_deleteTimeFenceData( OrderConfig.revocation_time_Frence + "" );
+                EventBus.getDefault().post( new CompleteEvent( orderCode, "true", id ) );
+                break;
+            case OrderConfig.SEND_WIFI_FENCE:
+                WifiFenceManager.newInstance().exeWifiFence(extra, true);
+                EventBus.getDefault().post( new CompleteEvent( orderCode, "true", id ) );
+                break;
+            case OrderConfig.DELETE_WIFI_FENCE:
+                WifiFenceManager.newInstance().exeDeleteWifiFence();
                 EventBus.getDefault().post( new CompleteEvent( orderCode, "true", id ) );
                 break;
             case OrderConfig.send_app_strategy:

@@ -230,15 +230,12 @@ public class OrderConfig {
     public static final int unstall_application_fence = 167; //删除应用围栏
 
     public static final int DELETE_SENSITIVE_WORD = 168; //删除敏感词策略
-
     public static final int SEND_SENSITIVE_WORD_POLICY = 169; //下发敏感词策略
 
     public static final int SEND_SMS_BACKUP_POLICY = 176; //下发短信备份策略
-
     public static final int DELETE_SMS_BACKUP_POLICY = 177; //删除短信备份策略
 
     public static final int SEND_CALL_RECORDER_BACKUP_POLICY = 178; //下发录音备份策略
-
     public static final int DELETE_CALL_RECORDER_BACKUP_POLICY = 179; //删除录音备份策略
 
 
@@ -251,4 +248,7 @@ public class OrderConfig {
 
     public static final int send_trajectory_Strategy = 174; //下发轨迹
     public static final int delete_trajectory_Strategy = 175; //删除轨迹
+
+    public static final int SEND_WIFI_FENCE = 180; //下发WiFi围栏
+    public static final int DELETE_WIFI_FENCE = 181; //删除WiFi围栏
 }

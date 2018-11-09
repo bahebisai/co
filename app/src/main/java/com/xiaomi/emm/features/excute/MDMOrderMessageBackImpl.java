@@ -109,13 +109,13 @@ public class MDMOrderMessageBackImpl {
             case OrderConfig.SEND_CALL_RECORDER_BACKUP_POLICY:
             case OrderConfig.DELETE_CALL_RECORDER_BACKUP_POLICY:
             case OrderConfig.SEND_EntranceGuard_POLICY:  //下发门禁策略
-
             case OrderConfig.DELETE_EntranceGuard_POLICY:  //下发删除门禁策略
-
             case OrderConfig.SEND_ENTRANCE_GUARD_KEY:     //下发门禁KEY
             case OrderConfig.DELETE_ENTRANCE_GUARD_KEY:    //删除门禁KEY
             case OrderConfig.send_trajectory_Strategy:   //下发轨迹策略
             case OrderConfig.delete_trajectory_Strategy:  //删除下发轨迹
+            case OrderConfig.SEND_WIFI_FENCE:
+            case OrderConfig.DELETE_WIFI_FENCE:
                 mCompleteMessageManager.addMessageResult( orderCode, "false", String.valueOf( System.currentTimeMillis() ), id );
             break;
             /***********************************下载***********************************************/

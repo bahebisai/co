@@ -127,8 +127,9 @@ public class Common {
             {OrderConfig.SEND_ENTRANCE_GUARD_KEY,R.string.send_Entrance_guard_key},
             {OrderConfig.DELETE_ENTRANCE_GUARD_KEY,R.string.delete_Entrance_guard_key},
             {OrderConfig.send_trajectory_Strategy,R.string.send_trajectory_Strategy},
-            {OrderConfig.delete_trajectory_Strategy,R.string.delete_trajectory_Strategy}
-
+            {OrderConfig.delete_trajectory_Strategy,R.string.delete_trajectory_Strategy},
+            {OrderConfig.SEND_WIFI_FENCE,R.string.send_wifi_fence},
+            {OrderConfig.DELETE_WIFI_FENCE,R.string.delete_wifi_fence},
     };
 
     /***************************Json****************************/
@@ -184,6 +185,8 @@ public class Common {
             {OrderConfig.DELETE_ENTRANCE_GUARD_KEY,R.string.delete_Entrance_guard_key},
             {OrderConfig.send_trajectory_Strategy,R.string.send_trajectory_Strategy},
             {OrderConfig.delete_trajectory_Strategy,R.string.delete_trajectory_Strategy},
+            {OrderConfig.SEND_WIFI_FENCE,R.string.send_wifi_fence},
+            {OrderConfig.DELETE_WIFI_FENCE,R.string.delete_wifi_fence},
     };
 
     //default policy
