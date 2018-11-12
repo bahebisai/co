@@ -78,7 +78,7 @@ public class MDMOrderExcuting {
             /***********************************电话白名单*********************************************/
             case OrderConfig.AddTelephonyWhiteList:  //**更新电话白名单
                 TheTang.getSingleInstance().addMessage( OrderConfig.AddTelephonyWhiteList + "", "");
-                MDM.updateTelepfohonyWhiteList();
+                MDM.getSingleInstance().updateTelepfohonyWhiteList();
                 EventBus.getDefault().post( new CompleteEvent( orderCode, "true", id ) );
                 break;
             /*case OrderConfig.DeleteTelephonyWhiteList:  //删除电话白名单
@@ -114,11 +114,11 @@ public class MDMOrderExcuting {
             /***********************************应用管理***********************************************/
             case OrderConfig.SilentInstallAppication:  //应用静默安装Name
                 List<DownLoadEntity> entityList = DataParseUtil.jSonInstallApplicationList( orderCode, extra );
-                MDM.downloadFile( entityList );
+                MDM.getSingleInstance().downloadFile( entityList );
                 break;
             case OrderConfig.SilentUninstallAppication:
                 List<DownLoadEntity> entityList1 = DataParseUtil.jSonUninstallApplicationList( orderCode, extra );
-                MDM.silentUninstallApp( entityList1 );
+                MDM.getSingleInstance().silentUninstallApp( entityList1 );
                 break;
             /*case OrderConfig.QueryPkgNameFromUninstallList:
                 String packageNameQueryUn = DataParseUtil.jSonString("package_name",extra);
@@ -307,7 +307,7 @@ public class MDMOrderExcuting {
             /**********************************************系统安全管理************************************/
             case OrderConfig.SetScreenLock:
                 String pwd = DataParseUtil.jSonString( "pwd", extra );
-                MDM.forceLockScreen(Common.lockTypes[0], pwd );
+                MDM.getSingleInstance().forceLockScreen(Common.lockTypes[0], pwd );
                 EventBus.getDefault().post( new CompleteEvent( orderCode, "true", id ) );
                 break;
             /*case OrderConfig.SetPassword:
@@ -367,12 +367,12 @@ public class MDMOrderExcuting {
                 TheTang.getSingleInstance().startNetWorkService();
                 break;*/
             case OrderConfig.GetLocationData:
-                MDM.getLocationData( orderCode );
+                MDM.getSingleInstance().getLocationData( orderCode );
                 EventBus.getDefault().post( new CompleteEvent( orderCode, "true", id ) );
                 break;
             case OrderConfig.SetPasswordNone:
                 TheTang.clearLockState();
-                MDM.setPasswordNone();
+                MDM.getSingleInstance().setPasswordNone();
                 EventBus.getDefault().post( new CompleteEvent( orderCode, "true", id ) );
                 break;
             case OrderConfig.TOLifeContainer:
@@ -385,16 +385,16 @@ public class MDMOrderExcuting {
                 EventBus.getDefault().post( new CompleteEvent( orderCode, "true", id ) );
                 break;
             case OrderConfig.PlayRingtones:
-                MDM.playRingtones( );
+                MDM.getSingleInstance().playRingtones( );
                 EventBus.getDefault().post( new CompleteEvent( orderCode, "true", id ) );
                 break;
             case OrderConfig.IssuedFile:
                 List<DownLoadEntity> fileList = DataParseUtil.jSonFileNameList( orderCode, extra );
-                MDM.downloadFile( fileList );
+                MDM.getSingleInstance().downloadFile( fileList );
                 break;
             case OrderConfig.download_avatar:
                 List<DownLoadEntity> pictureList = DataParseUtil.jSonPictureNameList( orderCode, extra );
-                MDM.downloadFile( pictureList );
+                MDM.getSingleInstance().downloadFile( pictureList );
                 break;
             /*case OrderConfig.System_Compliance:
             /*case OrderConfig.System_Compliance:
@@ -423,20 +423,20 @@ public class MDMOrderExcuting {
                 EventBus.getDefault().post( new CompleteEvent( orderCode, "true", id ) );
                 break;
             case OrderConfig.get_device_info:
-                MDM.sendAllDeviceInfo();
+                MDM.getSingleInstance().sendAllDeviceInfo();
                 EventBus.getDefault().post( new CompleteEvent( orderCode, "true", id ) );
                 break;
             case OrderConfig.start_phone_white:
-                MDM.startPhoneWhite(  );
+                MDM.getSingleInstance().startPhoneWhite(  );
                 EventBus.getDefault().post( new CompleteEvent( orderCode, "true", id ) );
                 break;
             case OrderConfig.stop_phone_white:
-                MDM.stopPhoneWhite(  );
+                MDM.getSingleInstance().stopPhoneWhite(  );
                 EventBus.getDefault().post( new CompleteEvent( orderCode, "true", id ) );
                 break;
             case OrderConfig.upload_debug_log:
                 ExceptionLogData exceptionLogData = DataParseUtil.jsonExceptionLog( extra );
-                MDM.uploadDebugLog( exceptionLogData );
+                MDM.getSingleInstance().uploadDebugLog( exceptionLogData );
                 EventBus.getDefault().post( new CompleteEvent( orderCode, "true", id ) );
                 break;
             /*case OrderConfig.ForceLockScreen:
@@ -445,11 +445,11 @@ public class MDMOrderExcuting {
                 break;*/
             case OrderConfig.device_update:
                 List<DownLoadEntity> entityListDevice = DataParseUtil.jSonDeviceUpdate( orderCode, extra );
-                MDM.deviceUpdate( entityListDevice );
+                MDM.getSingleInstance().deviceUpdate( entityListDevice );
                 break;
             case OrderConfig.delete_app:
                 DeleteAppData deleteAppData = DataParseUtil.jsonDeleteAppData( orderCode, extra );
-                MDM.deleteApp( deleteAppData );
+                MDM.getSingleInstance().deleteApp( deleteAppData );
                 EventBus.getDefault().post( new CompleteEvent( orderCode, "true", id ) );
                 break;
             /*case OrderConfig.get_setting_about:
@@ -460,7 +460,7 @@ public class MDMOrderExcuting {
             case OrderConfig.enter_sercurity_stratege:
                 //preferencesManager.setSecurityData(Common.safetyTosecureFlag,"true");
                 SafetyLimitData safetyLimitData = DataParseUtil.jsonSafetyLimitData( extra );
-                MDM.storageSafetyLimitData( safetyLimitData );
+                MDM.getSingleInstance().storageSafetyLimitData( safetyLimitData );
                 //ContainerStratege.excuteSecurityContainerStratege(safetyLimitData);
                 EventBus.getDefault().post( new CompleteEvent( orderCode, "true", id ) );
                 break;
@@ -473,7 +473,7 @@ public class MDMOrderExcuting {
             //执行完成后需要返回的命令
             case OrderConfig.DeleteIssuedFile:
                 List<DownLoadEntity> fileList1 = DataParseUtil.jSonFileNameList( orderCode, extra );
-                MDM.deleteIssuedFile( fileList1 );
+                MDM.getSingleInstance().deleteIssuedFile( fileList1 );
                 EventBus.getDefault().post( new CompleteEvent( orderCode, "true", id ) );
                 break;
             case OrderConfig.send_limit_strategy:
@@ -544,11 +544,11 @@ public class MDMOrderExcuting {
                 break;
             case OrderConfig.send_black_White_list:  //黑白名单
                 AppBlackWhiteData appBlackWhiteData1 = DataParseUtil.jsonBlackWhiteList( extra );
-                MDM.appBlackWhiteList( appBlackWhiteData1 );
+                MDM.getSingleInstance().appBlackWhiteList( appBlackWhiteData1 );
                 EventBus.getDefault().post( new CompleteEvent( orderCode, "true", id ) );
                 break;
             case OrderConfig.delete_black_White_list:  //删除黑白名单
-                MDM.appBlackWhiteList( null );
+                MDM.getSingleInstance().appBlackWhiteList( null );
                 EventBus.getDefault().post( new CompleteEvent( orderCode, "true", id ) );
                 break;
             case OrderConfig.send_safe_desk:  //下发安全桌面
@@ -574,11 +574,11 @@ public class MDMOrderExcuting {
                 break;*/
             case OrderConfig.security_chrome:
                 SecurityChromeData securityChromeData = DataParseUtil.jsonSecurityData( extra );
-                MDM.excuteSecurityChrome( orderCode, securityChromeData );
+                MDM.getSingleInstance().excuteSecurityChrome( orderCode, securityChromeData );
                 EventBus.getDefault().post( new CompleteEvent( orderCode, "true", id ) );
                 break;
             case OrderConfig.delete_security_chrome:
-                MDM.excuteSecurityChrome( orderCode, null );
+                MDM.getSingleInstance().excuteSecurityChrome( orderCode, null );
                 EventBus.getDefault().post( new CompleteEvent( orderCode, "true", id ) );
                 break;
             case OrderConfig.send_configure_Strategy:  // 下发配置策略

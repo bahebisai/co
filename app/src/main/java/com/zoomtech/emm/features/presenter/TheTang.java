@@ -526,9 +526,9 @@ public class TheTang {
     public void excuteAppCompliance() {//todo baii util ???
         String pwd = preferencesManager.getComplianceData(Common.app_compliance_pwd);
         if (TextUtils.isEmpty(pwd)) {
-            MDM.setFactoryReset();
+            MDM.getSingleInstance().setFactoryReset();
         } else {
-            MDM.forceLockScreen(Common.lockTypes[1], pwd);
+            MDM.getSingleInstance().forceLockScreen(Common.lockTypes[1], pwd);
         }
     }
 
@@ -845,7 +845,7 @@ public class TheTang {
         }
         if (hadLockTypes == 1) {
             if ("true".equals(lockTypeState)) {
-                MDM.setPasswordNone();
+                MDM.getSingleInstance().setPasswordNone();
             }
         }
         preferencesManager.removeData(Common.lockTypes[lockType]);
@@ -929,9 +929,9 @@ public class TheTang {
     public static void excuteLostCompliance() {//todo baii util ???
         String pwd = PreferencesManager.getSingleInstance().getComplianceData(Common.lost_password);
         if (TextUtils.isEmpty(pwd)) {
-            MDM.setFactoryReset();
+            MDM.getSingleInstance().setFactoryReset();
         } else {
-            MDM.forceLockScreen(Common.lockTypes[5], pwd);
+            MDM.getSingleInstance().forceLockScreen(Common.lockTypes[5], pwd);
         }
     }
 

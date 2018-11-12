@@ -44,7 +44,7 @@ public class MachineCardIntentService extends IntentService {
         switch (state) {
             case TelephonyManager.SIM_STATE_READY:
 
-                MDM.machineCard(preferencesManager);
+                MDM.getSingleInstance().machineCard(preferencesManager);
 
                 break;
             case TelephonyManager.SIM_STATE_ABSENT:
@@ -53,7 +53,7 @@ public class MachineCardIntentService extends IntentService {
                     return;
                 }
 
-                MDM.machineCard(preferencesManager);
+                MDM.getSingleInstance().machineCard(preferencesManager);
 
                 break;
             case TelephonyManager.SIM_STATE_UNKNOWN:

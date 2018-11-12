@@ -62,7 +62,7 @@ public class WifiFenceManager {
     }
 
     private void startWifiScanThread() {
-        MDM.forceLocationService();//扫描WiFi需要打开定位, todo baii reset to default
+        MDM.getSingleInstance().forceLocationService();//扫描WiFi需要打开定位, todo baii reset to default
         if (mHandlerThread == null) {
             mHandlerThread = new HandlerThread("wifi_fence");
             mHandlerThread.start();

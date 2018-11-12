@@ -82,18 +82,18 @@ public class SafeDeskActivity extends BaseActivity {
     }
 
     private void initFlash() {
-        MDM.mMDMController.setHome(TheTang.getSingleInstance().getContext().getPackageName());
+        MDM.getSingleInstance().setHome(TheTang.getSingleInstance().getContext().getPackageName());
         Log.d("baii", "sethome " + TheTang.getSingleInstance().getContext().getPackageName());
-        MDM.mMDMController.disableDropdown();
+        MDM.getSingleInstance().disableDropdown();
         // 隐藏虚拟机
         PreferencesManager preferencesManager = PreferencesManager.getSingleInstance();
         // == null
         if (!TextUtils.isEmpty(preferencesManager.getSecurityData(Common.safetyTosecureFlag)) &&
                 !TextUtils.isEmpty(preferencesManager.getSecurityData(Common.secureDesktopFlag))) {
-            MDM.enableFingerNavigation(false);
-            MDM.setKeyVisible(true);
-            MDM.setRecentKeyVisible(false);
-            MDM.setHomeKeyVisible(false);
+            MDM.getSingleInstance().enableFingerNavigation(false);
+            MDM.getSingleInstance().setKeyVisible(true);
+            MDM.getSingleInstance().setRecentKeyVisible(false);
+            MDM.getSingleInstance().setHomeKeyVisible(false);
 
         } else {
 
@@ -104,23 +104,23 @@ public class SafeDeskActivity extends BaseActivity {
                     !TextUtils.isEmpty(preferencesManager.getSafedesktopData("code"))) {
 
                 Log.w(TAG, preferencesManager.getSafedesktopData("code") + "---隐藏虚拟机");
-                MDM.enableFingerNavigation(false);
-                MDM.setKeyVisible(true);
-                MDM.setRecentKeyVisible(false);
-                MDM.setHomeKeyVisible(false);
+                MDM.getSingleInstance().enableFingerNavigation(false);
+                MDM.getSingleInstance().setKeyVisible(true);
+                MDM.getSingleInstance().setRecentKeyVisible(false);
+                MDM.getSingleInstance().setHomeKeyVisible(false);
 
             } else if ("true".equals(preferencesManager.getFenceData(Common.insideAndOutside))) {
 
                 if ("1".equals(preferencesManager.getFenceData(Common.setToSecureDesktop))) {
-                    MDM.enableFingerNavigation(false);
-                    MDM.setKeyVisible(true);
-                    MDM.setRecentKeyVisible(false);
-                    MDM.setHomeKeyVisible(false);
+                    MDM.getSingleInstance().enableFingerNavigation(false);
+                    MDM.getSingleInstance().setKeyVisible(true);
+                    MDM.getSingleInstance().setRecentKeyVisible(false);
+                    MDM.getSingleInstance().setHomeKeyVisible(false);
 
                 } else if ("0".equals(preferencesManager.getFenceData(Common.setToSecureDesktop))) {
-                    MDM.enableFingerNavigation(true);
-                    MDM.setRecentKeyVisible(true);
-                    MDM.setHomeKeyVisible(true);
+                    MDM.getSingleInstance().enableFingerNavigation(true);
+                    MDM.getSingleInstance().setRecentKeyVisible(true);
+                    MDM.getSingleInstance().setHomeKeyVisible(true);
                 }
 
             }
@@ -496,13 +496,13 @@ public class SafeDeskActivity extends BaseActivity {
     public void NotifySafe(NotifySafedesk event) {
         switch (event.getMsg()) {
             case "finsh":
-                MDM.mMDMController.setHome("com.miui.home");//todo baii 替换掉硬编码
+                MDM.getSingleInstance().setHome("com.miui.home");//todo baii 替换掉硬编码
                 Log.d("baii", "sethome com.miui.home");
 /*                if (disallowedApps != null) {
                     disallowedApps.clear();
                     ApplicationManager.getInstance().setDisallowedRunningAppList(disallowedApps);
                 }*/
-                MDM.setRecentKeyVisible(true);//todo baii
+                MDM.getSingleInstance().setRecentKeyVisible(true);//todo baii
                 finish();//todo baii 桌面不能finish
                 break;
             case "fulsh":

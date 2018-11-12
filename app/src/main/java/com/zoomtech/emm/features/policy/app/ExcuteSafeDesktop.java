@@ -44,7 +44,7 @@ public class ExcuteSafeDesktop {
 
         //默认安全桌面--工作台--把三个虚拟机隐藏掉
         if (!TextUtils.isEmpty(preferencesManager.getSafedesktopData("code"))) {
-            MDM.mMDMController.disableDropdown();
+            MDM.getSingleInstance().disableDropdown();
             //不锁屏的标志
             PreferencesManager.getSingleInstance().setLockFlag( "unLockScreen", true );
             Context context = TheTang.getSingleInstance().getContext();
@@ -65,7 +65,7 @@ public class ExcuteSafeDesktop {
         /**允许通知*/
         if (TextUtils.isEmpty(preferencesManager.getSafedesktopData("allowNotice")) || "0".equals(preferencesManager.getSafedesktopData("allowNotice"))) {
             Log.w(TAG, "=====允许下拉通知栏");
-            MDM.mMDMController.enableDropdown();
+            MDM.getSingleInstance().enableDropdown();
         }
 
         //转到工作台

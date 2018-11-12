@@ -112,7 +112,7 @@ public class ExcuteCompliance {
             }
 
             if ("true".equals(system_sim)) {
-                MDM.excuteMachineCard(true);
+                MDM.getSingleInstance().excuteMachineCard(true);
             }
 
             deleteSystemCompliance();
@@ -139,10 +139,10 @@ public class ExcuteCompliance {
 
             //执行SIM卡违规
             if ("true".equals(systemComplianceData.systemSim)) {
-                MDM.excuteMachineCard(false);
+                MDM.getSingleInstance().excuteMachineCard(false);
             } else {
                 if ("true".equals(system_sim)) {
-                    MDM.excuteMachineCard(true);
+                    MDM.getSingleInstance().excuteMachineCard(true);
                 }
             }
 

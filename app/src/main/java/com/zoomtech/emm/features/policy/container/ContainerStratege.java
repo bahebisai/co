@@ -26,8 +26,6 @@ import com.zoomtech.emm.view.activity.SafeDeskActivity;
 
 import org.greenrobot.eventbus.EventBus;
 
-import static com.zoomtech.emm.features.presenter.MDM.mMDMController;
-
 /**
  * Created by Administrator on 2017/11/7.
  */
@@ -61,122 +59,120 @@ public class ContainerStratege {
             //初始化之前的一般状态
             FenceExcute.excuteGeographicalFence( false, true );
         }
-
         preferencesManager.setSecurityData( Common.securityContainer, "true" );
-
         String banExitSecurityDomain = preferencesManager.getSecurityData( Common.banExitSecurityDomain );
 
+        MDM mdm = MDM.getSingleInstance();
         if (!TextUtils.isEmpty( banExitSecurityDomain ) && "0".equals( banExitSecurityDomain )) {
-
             //用于完成域的切换与禁止
-            if (mMDMController.isInFgContainer()) {
-                MDM.disableSwitching();
+            if (mdm.isInFgContainer()) {
+                mdm.disableSwitching();
             } else {
                 try {
-                    MDM.enableSwitching();
+                    mdm.enableSwitching();
                     Thread.sleep( 1000 );
-                    MDM.toSecurityContainer();
+                    mdm.toSecurityContainer();
                     Thread.sleep( 1100 );
-                    MDM.disableSwitching();
+                    mdm.disableSwitching();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
 
         } else {
-            MDM.toSecurityContainer();//切换到安全域
+            mdm.toSecurityContainer();//切换到安全域
         }
 
         threadStart();
 
         if ("0".equals( preferencesManager.getSecurityData( Common.banCamera ) )) {
-            MDM.enableCamera( false );
+            mdm.enableCamera( false );
         } else {
-            MDM.enableCamera( true );
+            mdm.enableCamera( true );
         }
 
         if ("0".equals( preferencesManager.getSecurityData( Common.banWifi ) )) {
-            MDM.enableWifi( false );
+            mdm.enableWifi( false );
         } else {
-            MDM.enableWifi( true );
+            mdm.enableWifi( true );
         }
 
         if ("0".equals( preferencesManager.getSecurityData( Common.banBluetooth ) )) {
-            MDM.enableBluetooth( false );
+            mdm.enableBluetooth( false );
         } else {
-            MDM.enableBluetooth( true );
+            mdm.enableBluetooth( true );
         }
 
         if ("0".equals( preferencesManager.getSecurityData( Common.banLocation ) )) {
-            MDM.enableLocationService( false );
+            mdm.enableLocationService( false );
         } else {
-            MDM.enableLocationService( true );
+            mdm.enableLocationService( true );
         }
 
         if ("0".equals( preferencesManager.getSecurityData( Common.banMtp ) )) {
-            MDM.enableUsb( false );
+            mdm.enableUsb( false );
         } else {
-            MDM.enableUsb( true );
+            mdm.enableUsb( true );
         }
 
         if ("0".equals( preferencesManager.getSecurityData( Common.banSoundRecord ) )) {
-            MDM.enableSoundRecording( false );
+            mdm.enableSoundRecording( false );
         } else {
-            MDM.enableSoundRecording( true );
+            mdm.enableSoundRecording( true );
         }
 
         if ("0".equals( preferencesManager.getSecurityData( Common.banScreenshot ) )) {
-            MDM.disableScreenShot();
+            mdm.disableScreenShot();
         } else {
-            MDM.enableScreenShot();
+            mdm.enableScreenShot();
         }
 
         if ("0".equals( preferencesManager.getSecurityData( Common.allowDropdown ) )) {
-            MDM.disableDropdown();
+            mdm.disableDropdown();
         } else {
-            MDM.enableDropdown();
+            mdm.enableDropdown();
         }
 
         if ("0".equals( preferencesManager.getSecurityData( Common.allowReset ) )) {
-            MDM.disableReset();
+            mdm.disableReset();
         } else {
-            MDM.enableReset();
+            mdm.enableReset();
         }
 
         if ("0".equals( preferencesManager.getSecurityData( Common.allowNFC ) )) {
-            MDM.disableNfc(null);
+            mdm.disableNfc(null);
         } else {
-            MDM.enableNfc(null);
+            mdm.enableNfc(null);
         }
 
         if ("0".equals( preferencesManager.getSecurityData( Common.allowModifySystemtime ) )) {
-            MDM.disableModifySystemtime();
+            mdm.disableModifySystemtime();
         } else {
-            MDM.enableModifySystemtime();
+            mdm.enableModifySystemtime();
         }
 
         if ("0".equals( preferencesManager.getSecurityData( Common.banTelephone ) )) {
-            MDM.enableTelePhone(false);
+            mdm.enableTelePhone(false);
         } else {
-            MDM.enableTelePhone(true);
+            mdm.enableTelePhone(true);
         }
 
         if ("0".equals( preferencesManager.getSecurityData( Common.banTelephoneWhiteList ) )) {
-            MDM.startPhoneWhite();
+            mdm.startPhoneWhite();
         } else {
-            MDM.stopPhoneWhite();
+            mdm.stopPhoneWhite();
         }
 
         if ("0".equals( preferencesManager.getSecurityData( Common.banMobileHotspot ) )) {
-            MDM.enableWifiAP(false);
+            mdm.enableWifiAP(false);
         } else {
-            MDM.enableWifiAP(true);
+            mdm.enableWifiAP(true);
         }
 
         if ("0".equals( preferencesManager.getSecurityData( Common.banShortMessage ) )) {
-            MDM.enableSms(false);
+            mdm.enableSms(false);
         } else {
-            MDM.enableSms(true);
+            mdm.enableSms(true);
         }
 
         Log.w(TAG,"启用安全桌面==Common.secureDesktop=="+preferencesManager.getSecurityData( Common.secureDesktop ));
@@ -218,9 +214,9 @@ public class ContainerStratege {
                 TheTang.getSingleInstance().getContext().startActivity( intent );
 
             }
-            MDM.enableFingerNavigation(true);
-            MDM.setRecentKeyVisible( true );
-            MDM.setHomeKeyVisible( true );
+            mdm.enableFingerNavigation(true);
+            mdm.setRecentKeyVisible( true );
+            mdm.setHomeKeyVisible( true );
             EventBus.getDefault().post( new NotifySafedesk(Common.safeActicivty_finsh) ); //关闭安全桌面
 
         }
@@ -241,13 +237,13 @@ public class ContainerStratege {
                                 .getSecurityData( Common.securityContainer))) { //如果离开安全区域
                             break;
                         } else {
-                            if (!mMDMController.isInFgContainer()) {
+                            if (!MDM.getSingleInstance().isInFgContainer()) {
                                 //MDM.playMusic();
-                                MDM.enableSwitching();
+                                MDM.getSingleInstance().enableSwitching();
                                 Thread.sleep( 2000 );
-                                MDM.toSecurityContainer();
+                                MDM.getSingleInstance().toSecurityContainer();
                                 Thread.sleep( 1100 );
-                                MDM.disableSwitching();
+                                MDM.getSingleInstance().disableSwitching();
                                 NetWorkChangeService.sendFeedBackFalie();
                             } else {
                                 break;
@@ -272,9 +268,9 @@ public class ContainerStratege {
         PreferencesManager.getSingleInstance().setSecurityData( Common.securityContainer, "false" );
 
         try {
-            MDM.enableSwitching();
+            MDM.getSingleInstance().enableSwitching();
             Thread.sleep( 2000 );
-            MDM.toLifeContainer();
+            MDM.getSingleInstance().toLifeContainer();
             Thread.sleep( 1300 );
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -302,17 +298,17 @@ public class ContainerStratege {
             String secureDesktop = preferencesManager.getFenceData( Common.setToSecureDesktop );
 
             if (TextUtils.isEmpty( secureDesktop ) || "2".equals( secureDesktop )) {
-                MDM.enableFingerNavigation(true);
-                MDM.setRecentKeyVisible( true );
-                MDM.setHomeKeyVisible( true );
+                MDM.getSingleInstance().enableFingerNavigation(true);
+                MDM.getSingleInstance().setRecentKeyVisible( true );
+                MDM.getSingleInstance().setHomeKeyVisible( true );
                 EventBus.getDefault().post( new NotifySafedesk(Common.safeActicivty_finsh) ); //关闭安全桌面
             } else {
                 String inside = preferencesManager.getFenceData( Common.insideAndOutside );
 
                 if (TextUtils.isEmpty( inside ) || "false".equals( inside )) {
-                    MDM.enableFingerNavigation(true);
-                    MDM.setRecentKeyVisible( true );
-                    MDM.setHomeKeyVisible( true );
+                    MDM.getSingleInstance().enableFingerNavigation(true);
+                    MDM.getSingleInstance().setRecentKeyVisible( true );
+                    MDM.getSingleInstance().setHomeKeyVisible( true );
                     EventBus.getDefault().post( new NotifySafedesk(Common.safeActicivty_finsh) ); //关闭安全桌面
                 }
             }
@@ -339,7 +335,7 @@ public class ContainerStratege {
 
         //恢复地理围栏
         if (!TextUtils.isEmpty( preferencesManager.getFenceData( Common.latitude ) )) {
-            MDM.forceLocationService();
+            MDM.getSingleInstance().forceLocationService();
             Intent intent = new Intent( TheTang.getSingleInstance().getContext(), GaodeGeographicalFenceService.class );
             TheTang.getSingleInstance().startService( intent );
             //初始化之前的一般状态

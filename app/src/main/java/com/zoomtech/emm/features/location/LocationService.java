@@ -175,19 +175,19 @@ public class LocationService extends Service {
             //如果有地理围栏，则不关闭定位服务
             if (preferencesManager.getFenceData( Common.geographical_fence ) == null) {
 
-                MDM.closeForceLocation();
+                MDM.getSingleInstance().closeForceLocation();
 
                 if (preferencesManager.getPolicyData( Common.middle_policy ) != null) {
                     if ("0".equals( preferencesManager.getPolicyData( Common.middle_allowLocation ) )) {
-                        MDM.enableLocationService( false );
+                        MDM.getSingleInstance().enableLocationService( false );
                     } else {
-                        MDM.enableLocationService( true );
+                        MDM.getSingleInstance().enableLocationService( true );
                     }
                 } else {
                     if ("0".equals( preferencesManager.getPolicyData( Common.default_allowLocation ) )) {
-                        MDM.enableLocationService( false );
+                        MDM.getSingleInstance().enableLocationService( false );
                     } else {
-                        MDM.enableLocationService( true );
+                        MDM.getSingleInstance().enableLocationService( true );
                     }
                 }
             }

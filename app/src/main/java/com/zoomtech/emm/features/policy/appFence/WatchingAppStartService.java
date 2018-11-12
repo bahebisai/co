@@ -147,7 +147,7 @@ public class WatchingAppStartService extends Service {
                 if (mPackageNames != null) {
                     for (String packageName : mPackageNames) {
                         if (currentApp.equals( packageName )) {
-                            MDM.killProcess( currentApp );
+                            MDM.getSingleInstance().killProcess( currentApp );
                         }
                     }
                 }

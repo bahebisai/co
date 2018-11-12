@@ -73,37 +73,37 @@ public class OrderFeedbackManager {
     private void exeOnSendSuccess(String code, String id) {
         //关机
         if (String.valueOf(OrderConfig.SetShutDown).equals(code)) {
-            MDM.setShutDown();
+            MDM.getSingleInstance().setShutDown();
         }
 
         //重启
         if (String.valueOf(OrderConfig.SetReboot).equals(code)) {
-            MDM.setReboot(code);
+            MDM.getSingleInstance().setReboot(code);
         }
 
         //擦除
         if (String.valueOf(OrderConfig.WipeData).equals(code)) {
-            MDM.wipeData();
+            MDM.getSingleInstance().wipeData();
         }
 
         //恢复出厂
         if (String.valueOf(OrderConfig.SetFactoryReset).equals(code)) {
-            MDM.setFactoryReset(/*order*/);
+            MDM.getSingleInstance().setFactoryReset(/*order*/);
         }
 
         //删除用户
         if (String.valueOf(OrderConfig.login_out_and_delete_data).equals(code)) {
-            MDM.deleteAccount(/*order*/);
+            MDM.getSingleInstance().deleteAccount(/*order*/);
         }
 
         //切换到生活域
         if (String.valueOf(OrderConfig.TOLifeContainer).equals(code)) {
-            MDM.toLifeContainer();
+            MDM.getSingleInstance().toLifeContainer();
         }
 
         //切换到安全域
         if (String.valueOf(OrderConfig.TOSecurityContainer).equals(code)) {
-            MDM.toSecurityContainer();
+            MDM.getSingleInstance().toSecurityContainer();
         }
 
         //进入安全区域
@@ -124,7 +124,7 @@ public class OrderFeedbackManager {
             DownLoadEntity mDownLoadEntity = DatabaseOperate.getSingleInstance().queryDownLoadFileBySendId(id);
 
             if (mDownLoadEntity != null) {
-                MDM.deleteFile(new File(BaseApplication.baseAppsPath + File.separator + mDownLoadEntity.saveName));
+                MDM.getSingleInstance().deleteFile(new File(BaseApplication.baseAppsPath + File.separator + mDownLoadEntity.saveName));
                 DatabaseOperate.getSingleInstance().deleteDownLoadFile(mDownLoadEntity);
             }
         }

@@ -34,7 +34,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.content.Context.TELEPHONY_SERVICE;
-import static com.zoomtech.emm.features.presenter.MDM.mMDMController;
 
 /**
  * Created by lenovo on 2017/8/29.
@@ -295,7 +294,7 @@ public class ConfigurationPolicy {
             preferencesManager.setConfiguration( "conect", "true" );
         }
 
-        MDM.openWifiOnBG( OrderConfig.OpenWifiOnBG + "", true );
+        MDM.getSingleInstance().openWifiOnBG( OrderConfig.OpenWifiOnBG + "", true );
 
         Type type = new TypeToken<ArrayList<ConfigureStrategyData.ConfigureStrategyBean.WifiListBean>>() {
         }.getType();
@@ -461,10 +460,10 @@ public class ConfigurationPolicy {
 
         //存储apn 的id 和 name
 
-        List<APNConfig> apnList = mMDMController.getAPNList();
+        List<APNConfig> apnList = MDM.getSingleInstance().getApnList();
 //        Log.w( TAG, "---" + mMDMController.getApn( Integer.parseInt( apnList.get( apnList.size() - 1 ).split( ":" )[0] ) ).toString() + "    ,mMDMController==" + apnList.toString() );
 
-        Log.w(TAG,"getCurrentApn()="+mMDMController.getCurrentApn());
+//        Log.w(TAG,"getCurrentApn()="+MDM.getSingleInstance().getCurrentApn());
        /* if (apnList != null && apnList.size()>0 && !TextUtils.isEmpty(apnList.get(apnList.size()-1))){
             for (String s:apnList) {
                 if ( !TextUtils.isEmpty(s)){
@@ -542,7 +541,7 @@ public class ConfigurationPolicy {
                 apnConfig.mNumeric = subscriberId.substring( 0, 5 );
                 apnConfig.mServer = bean.getApnServerAddress();
                 apnConfig.mPort = bean.getApnPort();
-                mMDMController.addApn(apnConfig);
+                MDM.getSingleInstance().addApn(apnConfig);
 
                 Log.w( TAG, networkOperator.substring( 0, 3 ) + "APN---连接状态==" + networkOperator + "  ,bean.getApnName()=" + bean.getApnName() );
                 LogUtil.writeToFile(TAG, "apn = " + apnConfig.toString());
@@ -578,7 +577,7 @@ public class ConfigurationPolicy {
 
         for (ConfigureStrategyData.ConfigureStrategyBean.ApnListBean bean : list) {
             //根据名称 bean.getApnName()
-            MDM.deleteApn( preferencesManager.getConfiguration( "code" ), bean.getApnName() );
+            MDM.getSingleInstance().deleteApn( preferencesManager.getConfiguration( "code" ), bean.getApnName() );
         }
     }
 

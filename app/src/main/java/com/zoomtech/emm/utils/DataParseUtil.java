@@ -632,9 +632,9 @@ public class DataParseUtil {
                         try {
                             openWhiteList = object1.getString("openWhiteList");
                             if (openWhiteList != null && "1".equals(openWhiteList)) {
-                                MDM.startPhoneWhite();
+                                MDM.getSingleInstance().startPhoneWhite();
                             } else {
-                                MDM.stopPhoneWhite();
+                                MDM.getSingleInstance().stopPhoneWhite();
                             }
                             /*List<TelephoyWhiteUser> list = new ArrayList<>();
                             JSONArray jsonArray1 = object1.getJSONArray( "whiteList1" );

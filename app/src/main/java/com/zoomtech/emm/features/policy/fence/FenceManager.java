@@ -50,18 +50,18 @@ public class FenceManager {
             //如果没有应用围栏的定位服务，则关闭
             if (preferencesManager.getAppFenceData(Common.appFenceRadius) == null ||
                     "0".equals(preferencesManager.getAppFenceData(Common.appFenceRadius))) {
-                MDM.closeForceLocation();
+                MDM.getSingleInstance().closeForceLocation();
                 if (preferencesManager.getPolicyData(Common.middle_policy) != null) {
                     if ("0".equals(preferencesManager.getPolicyData(Common.middle_allowLocation))) {
-                        MDM.enableLocationService(false);
+                        MDM.getSingleInstance().enableLocationService(false);
                     } else {
-                        MDM.enableLocationService(true);
+                        MDM.getSingleInstance().enableLocationService(true);
                     }
                 } else {
                     if ("0".equals(preferencesManager.getPolicyData(Common.default_allowLocation))) {
-                        MDM.enableLocationService(false);
+                        MDM.getSingleInstance().enableLocationService(false);
                     } else {
-                        MDM.enableLocationService(true);
+                        MDM.getSingleInstance().enableLocationService(true);
                     }
                 }
             }
@@ -127,13 +127,13 @@ public class FenceManager {
             TheTang.getSingleInstance().addStratege(String.valueOf(OrderConfig.send_geographical_Fence),
                     geographicalFenceData.geographical_fence_name, System.currentTimeMillis() + "");
             if (TextUtils.isEmpty(preferencesManager.getSecurityData(Common.safetyTosecureFlag))) {
-                MDM.closeForceLocation();
+                MDM.getSingleInstance().closeForceLocation();
                 try {
                     Thread.sleep(2000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                MDM.forceLocationService();
+                MDM.getSingleInstance().forceLocationService();
                 TheTang.getSingleInstance().startService(intent);
             }
         }
@@ -364,18 +364,18 @@ public class FenceManager {
                     //如果有应用围栏的定位服务
                     if (preferencesManager.getAppFenceData(Common.appFenceRadius) == null ||
                             "0".equals(preferencesManager.getAppFenceData(Common.appFenceRadius))) {
-                        MDM.closeForceLocation();
+                        MDM.getSingleInstance().closeForceLocation();
                         if (preferencesManager.getPolicyData(Common.middle_policy) != null) {
                             if ("0".equals(preferencesManager.getPolicyData(Common.middle_allowLocation))) {
-                                MDM.enableLocationService(false);
+                                MDM.getSingleInstance().enableLocationService(false);
                             } else {
-                                MDM.enableLocationService(true);
+                                MDM.getSingleInstance().enableLocationService(true);
                             }
                         } else {
                             if ("0".equals(preferencesManager.getPolicyData(Common.default_allowLocation))) {
-                                MDM.enableLocationService(false);
+                                MDM.getSingleInstance().enableLocationService(false);
                             } else {
-                                MDM.enableLocationService(true);
+                                MDM.getSingleInstance().enableLocationService(true);
                             }
                         }
                     }

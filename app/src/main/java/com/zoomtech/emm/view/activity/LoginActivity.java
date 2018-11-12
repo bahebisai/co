@@ -274,7 +274,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                 @Override
                 public void run() {
                     //请求白名单
-                    MDM.updateTelepfohonyWhiteList();
+                    MDM.getSingleInstance().updateTelepfohonyWhiteList();
                 }
             }).start();
 

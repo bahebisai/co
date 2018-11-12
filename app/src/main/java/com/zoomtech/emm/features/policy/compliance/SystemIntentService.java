@@ -34,7 +34,7 @@ public class SystemIntentService extends IntentService {
 
         //挂载
         if (intent.getAction().equals( Intent.ACTION_MEDIA_MOUNTED ) ) {
-            MDM.mountSDCard();
+            MDM.getSingleInstance().mountSDCard();
         //弹出
         } else if (intent.getAction().equals( Intent.ACTION_MEDIA_EJECT)) {
 
@@ -42,7 +42,7 @@ public class SystemIntentService extends IntentService {
                 return;
             }
 
-            MDM.ejectSDCard();
+            MDM.getSingleInstance().ejectSDCard();
         }
     }
 

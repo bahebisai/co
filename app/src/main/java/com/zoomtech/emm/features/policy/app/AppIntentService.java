@@ -17,16 +17,17 @@ import com.zoomtech.emm.features.db.DatabaseOperate;
 import com.zoomtech.emm.features.event.CompleteEvent;
 import com.zoomtech.emm.features.event.NotifyEvent;
 import com.zoomtech.emm.features.event.NotifySafedesk;
+import com.zoomtech.emm.features.manager.PreferencesManager;
+import com.zoomtech.emm.features.presenter.MDM;
+import com.zoomtech.emm.features.presenter.TheTang;
 import com.zoomtech.emm.model.APPInfo;
 import com.zoomtech.emm.model.CompleteMessageData;
 import com.zoomtech.emm.model.DownLoadEntity;
 import com.zoomtech.emm.utils.LogUtil;
-import com.zoomtech.emm.features.presenter.MDM;
-import com.zoomtech.emm.features.manager.PreferencesManager;
-import com.zoomtech.emm.features.presenter.TheTang;
 import com.zoomtech.emm.view.activity.SafeDeskActivity;
 
 import org.greenrobot.eventbus.EventBus;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +53,7 @@ public class AppIntentService extends IntentService {
     };
 
     public AppIntentService() {
-        super( "AppIntentService" );
+        super("AppIntentService");
     }
 
     @Override
@@ -65,14 +66,14 @@ public class AppIntentService extends IntentService {
     @Override
     public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
 
-        action = intent.getStringExtra( "action" );
+        action = intent.getStringExtra("action");
 
-        if (action.equals( Intent.ACTION_PACKAGE_ADDED )) {
-            TheTang.getSingleInstance().startForeground(this,getResources().getString(R.string.app_install_package,intent.getStringExtra( "packageName" ))
-                    ,"EMM",13);
-        } else if (action.equals( Intent.ACTION_PACKAGE_REMOVED )) {
-            TheTang.getSingleInstance().startForeground(this,getResources().getString(R.string.app_uninstall_package, intent.getStringExtra( "packageName" ))
-                    ,"EMM",13);
+        if (action.equals(Intent.ACTION_PACKAGE_ADDED)) {
+            TheTang.getSingleInstance().startForeground(this, getResources().getString(R.string.app_install_package, intent.getStringExtra("packageName"))
+                    , "EMM", 13);
+        } else if (action.equals(Intent.ACTION_PACKAGE_REMOVED)) {
+            TheTang.getSingleInstance().startForeground(this, getResources().getString(R.string.app_uninstall_package, intent.getStringExtra("packageName"))
+                    , "EMM", 13);
         }
 
         return super.onStartCommand(intent, flags, startId);
@@ -82,18 +83,18 @@ public class AppIntentService extends IntentService {
     protected void onHandleIntent(Intent intent) {
 
         //安装应用
-        addApp( intent );
+        addApp(intent);
 
         //黑白名单与合规处理
-        blackWhiteListAndCompliance( intent );
+        blackWhiteListAndCompliance(intent);
 
         //后台推送应用删除
-        appDeleteByBackground( intent );
+        appDeleteByBackground(intent);
 
         //通知前台更新数据
-        EventBus.getDefault().post( new NotifyEvent() );
+        EventBus.getDefault().post(new NotifyEvent());
 
-        if (BaseApplication.getNewsLifecycleHandler().isSameClassName(SafeDeskActivity.class.getSimpleName())){
+        if (BaseApplication.getNewsLifecycleHandler().isSameClassName(SafeDeskActivity.class.getSimpleName())) {
             EventBus.getDefault().post(new NotifySafedesk(Common.safeActicivty_flush));
         }
     }
@@ -108,30 +109,30 @@ public class AppIntentService extends IntentService {
         //String action = intent.getStringExtra( "action" );
 
         //对新安装的应用进行应用合规处理
-        if (action.equals( Intent.ACTION_PACKAGE_ADDED )) {
+        if (action.equals(Intent.ACTION_PACKAGE_ADDED)) {
 
-            String packageName = intent.getStringExtra( "packageName" );
-            LogUtil.writeToFile( TAG,"addApp = " + packageName );
-            DownLoadEntity mDownLoadEntity = DatabaseOperate.getSingleInstance().queryDownLoadFileByPackageName( packageName );
+            String packageName = intent.getStringExtra("packageName");
+            LogUtil.writeToFile(TAG, "addApp = " + packageName);
+            DownLoadEntity mDownLoadEntity = DatabaseOperate.getSingleInstance().queryDownLoadFileByPackageName(packageName);
 
             if (mDownLoadEntity != null) {
 
-                installApp( mDownLoadEntity );
+                installApp(mDownLoadEntity);
 
                 //添加应用上网
-                if ("0".equals( mDownLoadEntity.internet )) {
-                    MDM.forbiddenAppNetwork( packageName );
+                if ("0".equals(mDownLoadEntity.internet)) {
+                    MDM.getSingleInstance().forbiddenAppNetwork(packageName);
                 }
 
                 //添加到防卸载白名单
-                if ("0".equals( mDownLoadEntity.uninstall )) {
-                    MDM.addAppTONoUninstallList( packageName );
+                if ("0".equals(mDownLoadEntity.uninstall)) {
+                    MDM.getSingleInstance().addAppTONoUninstallList(packageName);
                 }
 
                 //安装完成后，删除应用安装包
-                MDM.deleteFile( new File( BaseApplication.baseAppsPath + File.separator + mDownLoadEntity.saveName ) );
+                MDM.getSingleInstance().deleteFile(new File(BaseApplication.baseAppsPath + File.separator + mDownLoadEntity.saveName));
 
-                DatabaseOperate.getSingleInstance().deleteDownLoadFile( mDownLoadEntity );
+                DatabaseOperate.getSingleInstance().deleteDownLoadFile(mDownLoadEntity);
 
                 CompleteMessageData mCompleteMessageData = DatabaseOperate.getSingleInstance()
                         .queryCompleteResultSql(String.valueOf(OrderConfig.SilentInstallAppication), mDownLoadEntity.sendId);
@@ -140,8 +141,8 @@ public class AppIntentService extends IntentService {
                     return;
                 Log.w(TAG, "sendId = " + mCompleteMessageData.id);
 
-                EventBus.getDefault().post( new CompleteEvent( String.valueOf(OrderConfig.SilentInstallAppication),
-                        "true", mCompleteMessageData.id) );
+                EventBus.getDefault().post(new CompleteEvent(String.valueOf(OrderConfig.SilentInstallAppication),
+                        "true", mCompleteMessageData.id));
 
             }
         }
@@ -154,67 +155,67 @@ public class AppIntentService extends IntentService {
      */
     private void blackWhiteListAndCompliance(Intent intent) {
 
-        String type = PreferencesManager.getSingleInstance().getOtherData( Common.appManagerType );
+        String type = PreferencesManager.getSingleInstance().getOtherData(Common.appManagerType);
 
-        LogUtil.writeToFile( TAG, "type " + type );
+        LogUtil.writeToFile(TAG, "type " + type);
 
         if (type == null)
             return;
 
         //应用包名
-        String packageName = intent.getStringExtra( "packageName" );
-        String action = intent.getStringExtra( "action" );
+        String packageName = intent.getStringExtra("packageName");
+        String action = intent.getStringExtra("action");
 
         //对新安装的应用进行应用合规处理
-        if (action.equals( Intent.ACTION_PACKAGE_ADDED )) {
+        if (action.equals(Intent.ACTION_PACKAGE_ADDED)) {
 
-            LogUtil.writeToFile( TAG, "ACTION_PACKAGE_ADDED ：" + packageName );
+            LogUtil.writeToFile(TAG, "ACTION_PACKAGE_ADDED ：" + packageName);
 
             List<String> appList = DatabaseOperate.getSingleInstance().queryAllApp();
 
             List<APPInfo> appInfos = DatabaseOperate.getSingleInstance().queryInstallAppInfo();
 
-            switch (Integer.parseInt( type )) {
+            switch (Integer.parseInt(type)) {
                 case 0: //黑名单
-                    appList.remove( TheTang.getSingleInstance().getContext().getPackageName() );
+                    appList.remove(TheTang.getSingleInstance().getContext().getPackageName());
 
                     if (appInfos != null) {
                         for (APPInfo appInfo : appInfos) {
-                            appList.remove( appInfo.getPackageName() );
+                            appList.remove(appInfo.getPackageName());
                         }
                     }
 
-                    if (appList.contains( packageName )) {
-                        MDM.mMDMController.uninstallApplication( packageName );
+                    if (appList.contains(packageName)) {
+                        MDM.getSingleInstance().silentUninstall(packageName);
                     }
 
                     break;
                 case 1: //白名单
 
-                    appList.add( TheTang.getSingleInstance().getContext().getPackageName() );
+                    appList.add(TheTang.getSingleInstance().getContext().getPackageName());
 
                     if (appInfos != null) {
                         for (APPInfo appInfo : appInfos) {
-                            appList.add( appInfo.getPackageName() );
+                            appList.add(appInfo.getPackageName());
                         }
                     }
 
-                    if (!appList.contains( packageName )) {
-                        MDM.mMDMController.uninstallApplication( packageName );
+                    if (!appList.contains(packageName)) {
+                        MDM.getSingleInstance().silentUninstall(packageName);
                     }
                     break;
                 case 2: //应用合规
 
                     List<String> apps = new ArrayList<>();
-                    apps.add( packageName );
+                    apps.add(packageName);
 
-                    if ("1".equals( PreferencesManager.getSingleInstance().getComplianceData( Common.appType ) )) {
+                    if ("1".equals(PreferencesManager.getSingleInstance().getComplianceData(Common.appType))) {
 
-                        TheTang.getSingleInstance().appWhiteListCompliance( appList, apps );
+                        TheTang.getSingleInstance().appWhiteListCompliance(appList, apps);
 
                     } else {
 
-                        TheTang.getSingleInstance().appBlackListCompliance( appList, apps );
+                        TheTang.getSingleInstance().appBlackListCompliance(appList, apps);
 
                     }
                     break;
@@ -226,11 +227,11 @@ public class AppIntentService extends IntentService {
         }
 
 
-        if (action.equals( Intent.ACTION_PACKAGE_REMOVED )) {
+        if (action.equals(Intent.ACTION_PACKAGE_REMOVED)) {
 
             List<String> appList = DatabaseOperate.getSingleInstance().queryAllApp();
 
-            switch (Integer.parseInt( type )) {
+            switch (Integer.parseInt(type)) {
                 case 0: //白名单
                     /*不做处理*/
                     break;
@@ -238,8 +239,8 @@ public class AppIntentService extends IntentService {
                     /*不做处理*/
                     break;
                 case 2: //应用合规
-                    if (appList.contains( packageName )) {
-                        TheTang.getSingleInstance().appComplianceExcute( this, packageName );
+                    if (appList.contains(packageName)) {
+                        TheTang.getSingleInstance().appComplianceExcute(this, packageName);
                     }
                     break;
                 /*case 3: //安全桌面
@@ -257,12 +258,12 @@ public class AppIntentService extends IntentService {
      */
     private void appDeleteByBackground(Intent intent) {
 
-        if (intent.getStringExtra( "action" ).equals( Intent.ACTION_PACKAGE_REMOVED )) {
+        if (intent.getStringExtra("action").equals(Intent.ACTION_PACKAGE_REMOVED)) {
 
             //应用包名
-            String packageName = intent.getStringExtra( "packageName" );
-            LogUtil.writeToFile( TAG,"appDeleteByBackground = " + packageName );
-            EventBus.getDefault().post( new NotifyEvent() );
+            String packageName = intent.getStringExtra("packageName");
+            LogUtil.writeToFile(TAG, "appDeleteByBackground = " + packageName);
+            EventBus.getDefault().post(new NotifyEvent());
         }
     }
 
@@ -281,24 +282,24 @@ public class AppIntentService extends IntentService {
         }
 
         try {
-            PackageInfo info = packageManager.getPackageInfo( mDownLoadEntity.packageName, PackageManager.GET_ACTIVITIES );
-            appName = packageManager.getApplicationLabel( info.applicationInfo ).toString();
+            PackageInfo info = packageManager.getPackageInfo(mDownLoadEntity.packageName, PackageManager.GET_ACTIVITIES);
+            appName = packageManager.getApplicationLabel(info.applicationInfo).toString();
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
 
-        TheTang.getSingleInstance().addMessage( OrderConfig.SilentInstallAppication + "", appName + "--"
-                + TheTang.getSingleInstance().getNetworkInfo( mDownLoadEntity.internet ) + "," + TheTang.getSingleInstance().getUninstallInfo( mDownLoadEntity.uninstall ) );
+        TheTang.getSingleInstance().addMessage(OrderConfig.SilentInstallAppication + "", appName + "--"
+                + TheTang.getSingleInstance().getNetworkInfo(mDownLoadEntity.internet) + "," + TheTang.getSingleInstance().getUninstallInfo(mDownLoadEntity.uninstall));
 
         APPInfo installAPPInfo = new APPInfo();
 
-        installAPPInfo.setAppId( mDownLoadEntity.app_id );
-        installAPPInfo.setAppName( appName );
-        installAPPInfo.setPackageName( mDownLoadEntity.packageName );
+        installAPPInfo.setAppId(mDownLoadEntity.app_id);
+        installAPPInfo.setAppName(appName);
+        installAPPInfo.setPackageName(mDownLoadEntity.packageName);
 
-        LogUtil.writeToFile( TAG, "addInstallAppInfo" );
-        installAPPInfoLists.add( installAPPInfo );
-        DatabaseOperate.getSingleInstance().addInstallAppInfo( installAPPInfoLists );
+        LogUtil.writeToFile(TAG, "addInstallAppInfo");
+        installAPPInfoLists.add(installAPPInfo);
+        DatabaseOperate.getSingleInstance().addInstallAppInfo(installAPPInfoLists);
     }
 
     /**
@@ -309,15 +310,15 @@ public class AppIntentService extends IntentService {
     private void deleteAppInfo(String param) {
 
 
-        LogUtil.writeToFile( TAG, "deleteAppInfo" );
+        LogUtil.writeToFile(TAG, "deleteAppInfo");
         //如果不存在，表示卸载成功
-        DatabaseOperate.getSingleInstance().deleteInstallAppInfo( param );
-        LogUtil.writeToFile( TAG, "卸载成功：" + param );
+        DatabaseOperate.getSingleInstance().deleteInstallAppInfo(param);
+        LogUtil.writeToFile(TAG, "卸载成功：" + param);
 
         //删除时，将应用从防卸载名单中删除
         //TheTang.getSingleInstance().feedBack( (String) params[2], downLoadEntity.app_id, "true" );
         // }
-        EventBus.getDefault().post( new NotifyEvent() );  //通知前台更新数据
+        EventBus.getDefault().post(new NotifyEvent());  //通知前台更新数据
     }
 
 

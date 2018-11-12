@@ -107,7 +107,7 @@ public class TrajectoryPolice {
 
     public static void doTrajectoryPolice(PreferencesManager preferencesManager) {
         //强制定位打开
-        MDM.forceLocationService();
+        MDM.getSingleInstance().forceLocationService();
 
         String timeUnit = preferencesManager.getTrajectoryData(Common.timeUnit);
         Log.w(TAG, "timeUnit---" + timeUnit);
@@ -144,19 +144,19 @@ public class TrajectoryPolice {
                         Log.w(TAG, "---timeFlag-停止轨迹服务-");
                         if (preferencesManager.getAppFenceData(Common.appFenceRadius) == null || "0".equals(preferencesManager.getAppFenceData(Common.appFenceRadius)) || TextUtils.isEmpty(preferencesManager.getFenceData(Common.latitude))) {
 
-                            MDM.closeForceLocation();
+                            MDM.getSingleInstance().closeForceLocation();
 
                             if (preferencesManager.getPolicyData(Common.middle_policy) != null) {
                                 if ("0".equals(preferencesManager.getPolicyData(Common.middle_allowLocation))) {
-                                    MDM.enableLocationService(false);
+                                    MDM.getSingleInstance().enableLocationService(false);
                                 } else {
-                                    MDM.enableLocationService(true);
+                                    MDM.getSingleInstance().enableLocationService(true);
                                 }
                             } else {
                                 if ("0".equals(preferencesManager.getPolicyData(Common.default_allowLocation))) {
-                                    MDM.enableLocationService(false);
+                                    MDM.getSingleInstance().enableLocationService(false);
                                 } else {
-                                    MDM.enableLocationService(true);
+                                    MDM.getSingleInstance().enableLocationService(true);
                                 }
                             }
                         }
@@ -181,19 +181,19 @@ public class TrajectoryPolice {
                     //如果没有应用围栏的定位服务，则关闭
                     if (preferencesManager.getAppFenceData(Common.appFenceRadius) == null || "0".equals(preferencesManager.getAppFenceData(Common.appFenceRadius)) || TextUtils.isEmpty(preferencesManager.getFenceData(Common.latitude))) {
 
-                        MDM.closeForceLocation();
+                        MDM.getSingleInstance().closeForceLocation();
 
                         if (preferencesManager.getPolicyData(Common.middle_policy) != null) {
                             if ("0".equals(preferencesManager.getPolicyData(Common.middle_allowLocation))) {
-                                MDM.enableLocationService(false);
+                                MDM.getSingleInstance().enableLocationService(false);
                             } else {
-                                MDM.enableLocationService(true);
+                                MDM.getSingleInstance().enableLocationService(true);
                             }
                         } else {
                             if ("0".equals(preferencesManager.getPolicyData(Common.default_allowLocation))) {
-                                MDM.enableLocationService(false);
+                                MDM.getSingleInstance().enableLocationService(false);
                             } else {
-                                MDM.enableLocationService(true);
+                                MDM.getSingleInstance().enableLocationService(true);
                             }
                         }
                     }
@@ -246,19 +246,19 @@ public class TrajectoryPolice {
         //如果没有应用围栏的定位服务，则关闭
         if (preferencesManager.getAppFenceData(Common.appFenceRadius) == null || "0".equals(preferencesManager.getAppFenceData(Common.appFenceRadius)) || TextUtils.isEmpty(preferencesManager.getFenceData(Common.latitude))) {
 
-            MDM.closeForceLocation();
+            MDM.getSingleInstance().closeForceLocation();
 
             if (preferencesManager.getPolicyData(Common.middle_policy) != null) {
                 if ("0".equals(preferencesManager.getPolicyData(Common.middle_allowLocation))) {
-                    MDM.enableLocationService(false);
+                    MDM.getSingleInstance().enableLocationService(false);
                 } else {
-                    MDM.enableLocationService(true);
+                    MDM.getSingleInstance().enableLocationService(true);
                 }
             } else {
                 if ("0".equals(preferencesManager.getPolicyData(Common.default_allowLocation))) {
-                    MDM.enableLocationService(false);
+                    MDM.getSingleInstance().enableLocationService(false);
                 } else {
-                    MDM.enableLocationService(true);
+                    MDM.getSingleInstance().enableLocationService(true);
                 }
             }
         }

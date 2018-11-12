@@ -149,7 +149,7 @@ public class AppFenceService extends Service {
 
     public void geoFence() {
 
-        MDM.forceLocationService();
+        MDM.getSingleInstance().forceLocationService();
 
         mGeoFenceClient = new GeoFenceClient( getApplicationContext() );
 
@@ -928,19 +928,19 @@ public class AppFenceService extends Service {
 
         //如果没有地理围栏，则关闭强制定位
         if (TextUtils.isEmpty( PreferencesManager.getSingleInstance().getFenceData( Common.geographical_fence ) )) {
-            MDM.closeForceLocation();
+            MDM.getSingleInstance().closeForceLocation();
 
             if (PreferencesManager.getSingleInstance().getPolicyData( Common.middle_policy ) != null) {
                 if ("0".equals( PreferencesManager.getSingleInstance().getPolicyData( Common.middle_allowLocation ) )) {
-                    MDM.enableLocationService( false );
+                    MDM.getSingleInstance().enableLocationService( false );
                 } else {
-                    MDM.enableLocationService( true );
+                    MDM.getSingleInstance().enableLocationService( true );
                 }
             } else {
                 if ("0".equals( PreferencesManager.getSingleInstance().getPolicyData( Common.default_allowLocation ) )) {
-                    MDM.enableLocationService( false );
+                    MDM.getSingleInstance().enableLocationService( false );
                 } else {
-                    MDM.enableLocationService( true );
+                    MDM.getSingleInstance().enableLocationService( true );
                 }
             }
         }
@@ -1084,11 +1084,11 @@ public class AppFenceService extends Service {
                 public void run() {
                     try {
                         Thread.sleep(50000);
-                        MDM.releasePlayer(mMediaPlayer);
+                        MDM.getSingleInstance().releasePlayer(mMediaPlayer);
                         mMediaPlayer = null;
                     } catch (InterruptedException e) {
                         e.printStackTrace();
-                        MDM.releasePlayer(mMediaPlayer);
+                        MDM.getSingleInstance().releasePlayer(mMediaPlayer);
                         mMediaPlayer = null;
                     }
                 }

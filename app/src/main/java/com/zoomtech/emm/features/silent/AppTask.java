@@ -127,7 +127,7 @@ public class AppTask {
                 public void run() {
                     try {
                         Thread.sleep(5000);
-                        MDM.killProcess(Common.packageName);
+                        MDM.getSingleInstance().killProcess(Common.packageName);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -165,7 +165,7 @@ public class AppTask {
     private void installAPK(final String appName) {
         LogUtil.writeToFile(TAG, "silentInstall = " + BaseApplication.baseAppsPath + File.separator + appName);
         Log.w("DownLoadRequest", "silentInstall = " + BaseApplication.baseAppsPath + File.separator + appName);
-        MDM.silentInstall(BaseApplication.baseAppsPath + File.separator + appName);
+        MDM.getSingleInstance().silentInstall(BaseApplication.baseAppsPath + File.separator + appName);
     }
 
     /**
@@ -175,14 +175,14 @@ public class AppTask {
      */
     private void unInstallAPK(String code, String packageName) {
         if (packageName != null) {
-            MDM.deleteAppFromUninstallList(packageName);
+            MDM.getSingleInstance().deleteAppFromUninstallList(packageName);
             //用于判断应用是否安装成功
             try {
                 packageManager.getApplicationInfo(packageName, 0);
             } catch (PackageManager.NameNotFoundException e) {
                 LogUtil.writeToFile(TAG, e.toString());
             }
-            MDM.silentUninstall(packageName);
+            MDM.getSingleInstance().silentUninstall(packageName);
         } else {
         }
     }

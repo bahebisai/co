@@ -32,8 +32,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.zoomtech.emm.features.presenter.MDM.mMDMController;
-
 /**
  * Created by Administrator on 2017/8/18.
  */
@@ -69,15 +67,15 @@ public class FenceExcute {
             //允许定位
             if (preferencesManager.getPolicyData( Common.middle_policy ) != null) { //判断是否下发了限制策略
                 if ("1".equals( preferencesManager.getPolicyData( Common.middle_allowLocation ) )) {
-                    MDM.enableLocationService( true );
+                    MDM.getSingleInstance().enableLocationService( true );
                 } else {
-                    MDM.enableLocationService( false );
+                    MDM.getSingleInstance().enableLocationService( false );
                 }
             } else { //没有则使用默认策略
                 if ("1".equals( preferencesManager.getPolicyData( Common.default_allowLocation ) )) {
-                    MDM.enableLocationService( true );
+                    MDM.getSingleInstance().enableLocationService( true );
                 } else {
-                    MDM.enableLocationService( false );
+                    MDM.getSingleInstance().enableLocationService( false );
                 }
             }
         }
@@ -96,15 +94,15 @@ public class FenceExcute {
             if (preferencesManager.getFenceData(Common.twoDomainControl) != null && "1".equals(preferencesManager.getFenceData(Common.twoDomainControl))) {
                 //如果"双域配置执行"有直接返回就不执行"域切换"，因为双域配置执行执行优先级高
 
-                if (mMDMController.isInFgContainer()) {
-                    MDM.disableSwitching();
+                if (MDM.getSingleInstance().isInFgContainer()) {
+                    MDM.getSingleInstance().disableSwitching();
                 } else {
                     try {
-                        MDM.enableSwitching();
+                        MDM.getSingleInstance().enableSwitching();
                         Thread.sleep(1000);
-                        MDM.toSecurityContainer();
+                        MDM.getSingleInstance().toSecurityContainer();
                         Thread.sleep(1100);
-                        MDM.disableSwitching();
+                        MDM.getSingleInstance().disableSwitching();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -115,15 +113,15 @@ public class FenceExcute {
 
             if (preferencesManager.getFenceData(Common.allowContainSwitching) != null && "1".equals(preferencesManager.getFenceData(Common.allowContainSwitching))) {
                 //用于完成域的切换与禁止
-                if (mMDMController.isInFgContainer()) {
-                    MDM.disableSwitching();
+                if (MDM.getSingleInstance().isInFgContainer()) {
+                    MDM.getSingleInstance().disableSwitching();
                 } else {
                     try {
-                        MDM.enableSwitching();
+                        MDM.getSingleInstance().enableSwitching();
                         Thread.sleep(1000);
-                        MDM.toSecurityContainer();
+                        MDM.getSingleInstance().toSecurityContainer();
                         Thread.sleep(1100);
-                        MDM.disableSwitching();
+                        MDM.getSingleInstance().disableSwitching();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -140,9 +138,9 @@ public class FenceExcute {
                 String pwd = preferencesManager.getFenceData( Common.lockPwd );
                 //判断是处于地理围栏还是时间围栏
                 if (!TextUtils.isEmpty(geographical_fence)) {
-                    MDM.forceLockScreen(Common.lockTypes[4], pwd);
+                    MDM.getSingleInstance().forceLockScreen(Common.lockTypes[4], pwd);
                 } else {
-                    MDM.forceLockScreen(Common.lockTypes[3], pwd);
+                    MDM.getSingleInstance().forceLockScreen(Common.lockTypes[3], pwd);
                 }
             }
 
@@ -150,43 +148,43 @@ public class FenceExcute {
             if (preferencesManager.getFenceData( Common.allowMobileData ) != null && "1".equals( preferencesManager.getFenceData( Common.allowMobileData ) )) {
                 //禁止流量
                 Log.w( TAG, "设备配置执行---禁止流量" );
-                MDM.openDataConnectivity( false );
+                MDM.getSingleInstance().openDataConnectivity( false );
             }
 
             //不允许wifi
             if (preferencesManager.getFenceData( Common.allowCloseWifi ) != null && "1".equals( preferencesManager.getFenceData( Common.allowCloseWifi ) )) {
                 Log.w( TAG, "设备配置执行---不允许wifi" );
-                MDM.enableWifi( false );  //false
+                MDM.getSingleInstance().enableWifi( false );  //false
             }
 
             //不允许截屏
             if (preferencesManager.getFenceData( Common.banScreenshot ) != null && "1".equals( preferencesManager.getFenceData( Common.banScreenshot ) )) {
                 Log.w( TAG, "设备配置执行---不允许截屏" );
-                MDM.disableScreenShot();  //false
+                MDM.getSingleInstance().disableScreenShot();  //false
             }
 
             //不允许下拉栏
             if (preferencesManager.getFenceData( Common.allowDropdown ) != null && "1".equals( preferencesManager.getFenceData( Common.allowDropdown ) )) {
                 Log.w( TAG, "设备配置执行---不允许下拉栏" );
-                MDM.disableDropdown();  //false
+                MDM.getSingleInstance().disableDropdown();  //false
             }
 
             //不允许复位
             if (preferencesManager.getFenceData( Common.allowReset ) != null && "1".equals( preferencesManager.getFenceData( Common.allowReset ) )) {
                 Log.w( TAG, "设备配置执行---不允许复位" );
-                MDM.disableReset(); //false
+                MDM.getSingleInstance().disableReset(); //false
             }
 
             //不允许NFC
             if (preferencesManager.getFenceData( Common.allowNFC ) != null && "1".equals( preferencesManager.getFenceData( Common.allowNFC ) )) {
                 Log.w( TAG, "设备配置执行---不允许NFC" );
-                MDM.disableNfc( null );  //false
+                MDM.getSingleInstance().disableNfc( null );  //false
             }
 
             //不允许修改日期
             if (preferencesManager.getFenceData( Common.allowModifySystemtime ) != null && "1".equals( preferencesManager.getFenceData( Common.allowModifySystemtime ) )) {
                 Log.w( TAG, "设备配置执行---不允许修改日期" );
-                MDM.disableModifySystemtime();  //false
+                MDM.getSingleInstance().disableModifySystemtime();  //false
 
             }
 
@@ -201,7 +199,7 @@ public class FenceExcute {
                 int wifiId = -1; //表示失败
                 boolean wifiEnabled = wifiManager.isWifiEnabled();
                 Log.w( TAG, "wifiEnabled---允许wifi==" + wifiEnabled );
-                MDM.enableWifi( true );
+                MDM.getSingleInstance().enableWifi( true );
                 // WifiHelper.openWifi();
                 //  WifiHelper.open();
                 //  MDM.openWifiOnBG( OrderConfig.OpenWifiOnBG + "", true );
@@ -306,18 +304,18 @@ public class FenceExcute {
             //允许照相机
             if (preferencesManager.getFenceData( Common.allowCamera ) != null && "1".equals( preferencesManager.getFenceData( Common.allowCamera ) )) {
                 Log.w( TAG, "设备配置执行---不允许照相机" );
-                MDM.enableCamera( false );
+                MDM.getSingleInstance().enableCamera( false );
             }
 
             //允许蓝牙
             if (preferencesManager.getFenceData( Common.allowBluetooth ) != null && "1".equals( preferencesManager.getFenceData( Common.allowBluetooth ) )) {
                 Log.w( TAG, "设备配置执行---不允许蓝牙" );
-                MDM.enableBluetooth( false );
+                MDM.getSingleInstance().enableBluetooth( false );
             }
 
             if (preferencesManager.getFenceData( Common.mobileHotspot ) != null && "1".equals( preferencesManager.getFenceData( Common.mobileHotspot ) )) {
                 Log.w( TAG, "设备配置执行---不允许热点" );
-                MDM.enableWifiAP( false );
+                MDM.getSingleInstance().enableWifiAP( false );
             }
 
             //时间围栏需要修改地理定位服务
@@ -325,31 +323,31 @@ public class FenceExcute {
                 Log.w( TAG, "设备配置执行---不允许定位" );
                 if  (TextUtils.isEmpty( preferencesManager.getAppFenceData( Common.appFenceRadius ) ) ||
                         "0".equals( preferencesManager.getAppFenceData( Common.appFenceRadius ) ) ){
-                    MDM.enableLocationService( false );
+                    MDM.getSingleInstance().enableLocationService( false );
                 }
             }
 
             if (preferencesManager.getFenceData( Common.matTransmission ) != null && "1".equals( preferencesManager.getFenceData( Common.matTransmission ) )) {
                 Log.w( TAG, "设备配置执行---不允许USB" );
-                MDM.enableUsb( false );
+                MDM.getSingleInstance().enableUsb( false );
             }
 
             if (preferencesManager.getFenceData( Common.shortMessage ) != null && "1".equals( preferencesManager.getFenceData( Common.shortMessage ) )) {
                 Log.w( TAG, "设备配置执行---不允许短信" );
-                MDM.enableSms( false );
+                MDM.getSingleInstance().enableSms( false );
             }
 
             if (preferencesManager.getFenceData( Common.soundRecording ) != null && "1".equals( preferencesManager.getFenceData( Common.soundRecording ) )) {
                 Log.w( TAG, "设备配置执行---不允许录音" );
-                MDM.enableSoundRecording( false );
+                MDM.getSingleInstance().enableSoundRecording( false );
             }
 
             if (preferencesManager.getFenceData( Common.geo_telephone ) != null && "1".equals( preferencesManager.getFenceData( Common.geo_telephone ) )) {
-                MDM.enableTelePhone(false);
+                MDM.getSingleInstance().enableTelePhone(false);
             }
 
             if (preferencesManager.getFenceData( Common.geo_telephoneWhiteList ) != null && "1".equals( preferencesManager.getFenceData( Common.geo_telephoneWhiteList ) )) {
-                MDM.startPhoneWhite();
+                MDM.getSingleInstance().startPhoneWhite();
             }
 
 
@@ -372,15 +370,15 @@ public class FenceExcute {
 
                 if (preferencesManager.getPolicyData( Common.middle_policy ) != null) { //判断是否下发了限制策略
                     if ("1".equals( preferencesManager.getPolicyData( Common.middle_allowMobileData ) )) {
-                        MDM.openDataConnectivity( true ); //应该为禁用移动数据，需要开发
+                        MDM.getSingleInstance().openDataConnectivity( true ); //应该为禁用移动数据，需要开发
                     } else {
-                        MDM.openDataConnectivity( false );
+                        MDM.getSingleInstance().openDataConnectivity( false );
                     }
                 } else { //没有则使用默认策略
                     if ("1".equals( preferencesManager.getPolicyData( Common.default_allowMobileData ) )) {
-                        MDM.openDataConnectivity( true ); //应该为禁用移动数据，需要开发
+                        MDM.getSingleInstance().openDataConnectivity( true ); //应该为禁用移动数据，需要开发
                     } else {
-                        MDM.openDataConnectivity( false );
+                        MDM.getSingleInstance().openDataConnectivity( false );
                     }
                 }
             }
@@ -390,15 +388,15 @@ public class FenceExcute {
 
                 if (preferencesManager.getPolicyData( Common.middle_policy ) != null) { //判断是否下发了限制策略
                     if ("1".equals( preferencesManager.getPolicyData( Common.middle_allowWifi ) )) {
-                        MDM.enableWifi( true );
+                        MDM.getSingleInstance().enableWifi( true );
                     } else {
-                        MDM.enableWifi( false );
+                        MDM.getSingleInstance().enableWifi( false );
                     }
                 } else { //没有则使用默认策略
                     if ("1".equals( preferencesManager.getPolicyData( Common.default_allowWifi ) )) {
-                        MDM.enableWifi( true );
+                        MDM.getSingleInstance().enableWifi( true );
                     } else {
-                        MDM.enableWifi( false );
+                        MDM.getSingleInstance().enableWifi( false );
                     }
                 }
             }
@@ -428,15 +426,15 @@ public class FenceExcute {
 
                 if (preferencesManager.getPolicyData( Common.middle_policy ) != null) { //判断是否下发了限制策略
                     if ("1".equals( preferencesManager.getPolicyData( Common.middle_allowWifi ) )) {
-                        MDM.enableWifi( true );
+                        MDM.getSingleInstance().enableWifi( true );
                     } else {
-                        MDM.enableWifi( false );
+                        MDM.getSingleInstance().enableWifi( false );
                     }
                 } else { //没有则使用默认策略
                     if ("1".equals( preferencesManager.getPolicyData( Common.default_allowWifi ) )) {
-                        MDM.enableWifi( true );
+                        MDM.getSingleInstance().enableWifi( true );
                     } else {
-                        MDM.enableWifi( false );
+                        MDM.getSingleInstance().enableWifi( false );
                     }
                 }
             }
@@ -447,15 +445,15 @@ public class FenceExcute {
 
                 if (preferencesManager.getPolicyData( Common.middle_policy ) != null) { //判断是否下发了限制策略
                     if ("1".equals( preferencesManager.getPolicyData( Common.middle_allowCamera ) )) {
-                        MDM.enableCamera( true );
+                        MDM.getSingleInstance().enableCamera( true );
                     } else {
-                        MDM.enableCamera( false );
+                        MDM.getSingleInstance().enableCamera( false );
                     }
                 } else { //没有则使用默认策略
                     if ("1".equals( preferencesManager.getPolicyData( Common.default_allowCamera ) )) {
-                        MDM.enableCamera( true );
+                        MDM.getSingleInstance().enableCamera( true );
                     } else {
-                        MDM.enableCamera( false );
+                        MDM.getSingleInstance().enableCamera( false );
                     }
                 }
             }
@@ -466,15 +464,15 @@ public class FenceExcute {
 
                 if (preferencesManager.getPolicyData( Common.middle_policy ) != null) { //判断是否下发了限制策略
                     if ("1".equals( preferencesManager.getPolicyData( Common.middle_allowBluetooth ) )) {
-                        MDM.enableBluetooth( true );
+                        MDM.getSingleInstance().enableBluetooth( true );
                     } else {
-                        MDM.enableBluetooth( false );
+                        MDM.getSingleInstance().enableBluetooth( false );
                     }
                 } else { //没有则使用默认策略
                     if ("1".equals( preferencesManager.getPolicyData( Common.default_allowBluetooth ) )) {
-                        MDM.enableBluetooth( true );
+                        MDM.getSingleInstance().enableBluetooth( true );
                     } else {
-                        MDM.enableBluetooth( false );
+                        MDM.getSingleInstance().enableBluetooth( false );
                     }
                 }
             }
@@ -485,15 +483,15 @@ public class FenceExcute {
 
                 if (preferencesManager.getPolicyData( Common.middle_policy ) != null) { //判断是否下发了限制策略
                     if ("1".equals( preferencesManager.getPolicyData( Common.middle_allowMobileHotspot ) )) {
-                        MDM.enableWifiAP( true );
+                        MDM.getSingleInstance().enableWifiAP( true );
                     } else {
-                        MDM.enableWifiAP( false );
+                        MDM.getSingleInstance().enableWifiAP( false );
                     }
                 } else { //没有则使用默认策略
                     if ("1".equals( preferencesManager.getPolicyData( Common.default_allowWifiAP ) )) {
-                        MDM.enableWifiAP( true );
+                        MDM.getSingleInstance().enableWifiAP( true );
                     } else {
-                        MDM.enableWifiAP( false );
+                        MDM.getSingleInstance().enableWifiAP( false );
                     }
                 }
             }
@@ -504,15 +502,15 @@ public class FenceExcute {
 
                 if (preferencesManager.getPolicyData( Common.middle_policy ) != null) { //判断是否下发了限制策略
                     if ("1".equals( preferencesManager.getPolicyData( Common.middle_allowLocation ) )) {
-                        MDM.enableLocationService( true );
+                        MDM.getSingleInstance().enableLocationService( true );
                     } else {
-                        MDM.enableLocationService( false );
+                        MDM.getSingleInstance().enableLocationService( false );
                     }
                 } else { //没有则使用默认策略
                     if ("1".equals( preferencesManager.getPolicyData( Common.default_allowLocation ) )) {
-                        MDM.enableLocationService( true );
+                        MDM.getSingleInstance().enableLocationService( true );
                     } else {
-                        MDM.enableLocationService( false );
+                        MDM.getSingleInstance().enableLocationService( false );
                     }
                 }
             }
@@ -523,15 +521,15 @@ public class FenceExcute {
 
                 if (preferencesManager.getPolicyData( Common.middle_policy ) != null) { //判断是否下发了限制策略
                     if ("1".equals( preferencesManager.getPolicyData( Common.middle_allowUsb ) )) {
-                        MDM.enableUsb( true );
+                        MDM.getSingleInstance().enableUsb( true );
                     } else {
-                        MDM.enableUsb( false );
+                        MDM.getSingleInstance().enableUsb( false );
                     }
                 } else { //没有则使用默认策略
                     if ("1".equals( preferencesManager.getPolicyData( Common.default_allowUsb ) )) {
-                        MDM.enableUsb( true );
+                        MDM.getSingleInstance().enableUsb( true );
                     } else {
-                        MDM.enableUsb( false );
+                        MDM.getSingleInstance().enableUsb( false );
                     }
                 }
             }
@@ -542,15 +540,15 @@ public class FenceExcute {
 
                 if (preferencesManager.getPolicyData( Common.middle_policy ) != null) { //判断是否下发了限制策略
                     if ("1".equals( preferencesManager.getPolicyData( Common.middle_allowMessage ) )) {
-                        MDM.enableSms( true );
+                        MDM.getSingleInstance().enableSms( true );
                     } else {
-                        MDM.enableSms( false );
+                        MDM.getSingleInstance().enableSms( false );
                     }
                 } else { //没有则使用默认策略
                     if ("1".equals( preferencesManager.getPolicyData( Common.default_allowMessage ) )) {
-                        MDM.enableSms( true );
+                        MDM.getSingleInstance().enableSms( true );
                     } else {
-                        MDM.enableSms( false );
+                        MDM.getSingleInstance().enableSms( false );
                     }
                 }
             }
@@ -561,15 +559,15 @@ public class FenceExcute {
 
                 if (preferencesManager.getPolicyData( Common.middle_policy ) != null) { //判断是否下发了限制策略
                     if ("1".equals( preferencesManager.getPolicyData( Common.middle_allowSoundRecording ) )) {
-                        MDM.enableSoundRecording( true );
+                        MDM.getSingleInstance().enableSoundRecording( true );
                     } else {
-                        MDM.enableSoundRecording( false );
+                        MDM.getSingleInstance().enableSoundRecording( false );
                     }
                 } else { //没有则使用默认策略
                     if ("1".equals( preferencesManager.getPolicyData( Common.default_allowSoundRecording ) )) {
-                        MDM.enableSoundRecording( true );
+                        MDM.getSingleInstance().enableSoundRecording( true );
                     } else {
-                        MDM.enableSoundRecording( false );
+                        MDM.getSingleInstance().enableSoundRecording( false );
                     }
                 }
             }
@@ -577,15 +575,15 @@ public class FenceExcute {
             if (preferencesManager.getFenceData( Common.banScreenshot ) != null && "1".equals( preferencesManager.getFenceData( Common.banScreenshot ) )) {
                 if (preferencesManager.getPolicyData( Common.middle_policy ) != null) {
                     if ("1".equals( preferencesManager.getPolicyData( Common.middle_allowScreenshot ) )) {
-                        MDM.enableScreenShot( );
+                        MDM.getSingleInstance().enableScreenShot( );
                     } else {
-                        MDM.disableScreenShot();
+                        MDM.getSingleInstance().disableScreenShot();
                     }
                 } else { //没有则使用默认策略
                     if ("1".equals( preferencesManager.getPolicyData( Common.default_allowScreenshot ) )) {
-                        MDM.enableScreenShot();
+                        MDM.getSingleInstance().enableScreenShot();
                     } else {
-                        MDM.disableScreenShot();
+                        MDM.getSingleInstance().disableScreenShot();
                     }
                 }
             }
@@ -595,15 +593,15 @@ public class FenceExcute {
                 if (TextUtils.isEmpty( preferencesManager.getSafedesktopData("code") )) {
                     if (preferencesManager.getPolicyData(Common.middle_policy) != null) {
                         if ("1".equals(preferencesManager.getPolicyData(Common.middle_allowDropdown))) {
-                            MDM.enableDropdown();
+                            MDM.getSingleInstance().enableDropdown();
                         } else {
-                            MDM.disableDropdown();
+                            MDM.getSingleInstance().disableDropdown();
                         }
                     } else { //没有则使用默认策略
                         if ("1".equals(preferencesManager.getPolicyData(Common.default_allowDropdown))) {
-                            MDM.enableDropdown();
+                            MDM.getSingleInstance().enableDropdown();
                         } else {
-                            MDM.disableDropdown();
+                            MDM.getSingleInstance().disableDropdown();
                         }
                     }
                 }
@@ -614,15 +612,15 @@ public class FenceExcute {
 
                 if (preferencesManager.getPolicyData( Common.middle_policy ) != null) {
                     if ("1".equals( preferencesManager.getPolicyData( Common.middle_allowReset ) )) {
-                        MDM.enableReset( );
+                        MDM.getSingleInstance().enableReset( );
                     } else {
-                        MDM.disableReset();
+                        MDM.getSingleInstance().disableReset();
                     }
                 } else { //没有则使用默认策略
                     if ("1".equals( preferencesManager.getPolicyData( Common.default_allowReset ) )) {
-                        MDM.enableReset();
+                        MDM.getSingleInstance().enableReset();
                     } else {
-                        MDM.disableReset();
+                        MDM.getSingleInstance().disableReset();
                     }
                 }
             }
@@ -631,15 +629,15 @@ public class FenceExcute {
             if (preferencesManager.getFenceData( Common.allowNFC ) != null && "1".equals( preferencesManager.getFenceData( Common.allowNFC ) )) {
                 if (preferencesManager.getPolicyData( Common.middle_policy ) != null) {
                     if ("1".equals( preferencesManager.getPolicyData( Common.middle_allowNFC ) )) {
-                        MDM.enableNfc( null);
+                        MDM.getSingleInstance().enableNfc( null);
                     } else {
-                        MDM.disableNfc(null);
+                        MDM.getSingleInstance().disableNfc(null);
                     }
                 } else { //没有则使用默认策略
                     if ("1".equals( preferencesManager.getPolicyData( Common.default_allowNFC ) )) {
-                        MDM.enableNfc(null);
+                        MDM.getSingleInstance().enableNfc(null);
                     } else {
-                        MDM.disableNfc(null);
+                        MDM.getSingleInstance().disableNfc(null);
                     }
                 }
             }
@@ -649,15 +647,15 @@ public class FenceExcute {
 
                 if (preferencesManager.getPolicyData( Common.middle_policy ) != null) {
                     if ("1".equals( preferencesManager.getPolicyData( Common.middle_allowModifySystemtime ) )) {
-                        MDM.enableModifySystemtime();
+                        MDM.getSingleInstance().enableModifySystemtime();
                     } else {
-                        MDM.disableModifySystemtime();
+                        MDM.getSingleInstance().disableModifySystemtime();
                     }
                 } else { //没有则使用默认策略
                     if ("1".equals( preferencesManager.getPolicyData( Common.default_allowModifySystemtime ) )) {
-                        MDM.enableModifySystemtime();
+                        MDM.getSingleInstance().enableModifySystemtime();
                     } else {
-                        MDM.disableModifySystemtime();
+                        MDM.getSingleInstance().disableModifySystemtime();
                     }
                 }
             }
@@ -667,15 +665,15 @@ public class FenceExcute {
 
                 if (preferencesManager.getPolicyData( Common.middle_policy ) != null) {
                     if ("1".equals( preferencesManager.getPolicyData( Common.middle_telephone ) )) {
-                        MDM.enableTelePhone(true);
+                        MDM.getSingleInstance().enableTelePhone(true);
                     } else {
-                        MDM.enableTelePhone(false);
+                        MDM.getSingleInstance().enableTelePhone(false);
                     }
                 } else { //没有则使用默认策略
                     if ("1".equals( preferencesManager.getPolicyData( Common.default_allowTelephone ) )) {
-                        MDM.enableTelePhone(true);
+                        MDM.getSingleInstance().enableTelePhone(true);
                     } else {
-                        MDM.enableTelePhone(false);
+                        MDM.getSingleInstance().enableTelePhone(false);
                     }
                 }
             }
@@ -683,15 +681,15 @@ public class FenceExcute {
             if (preferencesManager.getFenceData( Common.geo_telephoneWhiteList ) != null && "1".equals( preferencesManager.getFenceData( Common.geo_telephoneWhiteList ) )) {
                 if (preferencesManager.getPolicyData( Common.middle_policy ) != null) {
                     if ("1".equals( preferencesManager.getPolicyData( Common.middle_telephoneWhiteList ) )) {
-                        MDM.startPhoneWhite();
+                        MDM.getSingleInstance().startPhoneWhite();
                     } else {
-                        MDM.stopPhoneWhite();
+                        MDM.getSingleInstance().stopPhoneWhite();
                     }
                 } else { //没有则使用默认策略
                     if ("1".equals( preferencesManager.getPolicyData( Common.default_allowTelephoneWhiteList ) )) {
-                        MDM.startPhoneWhite();
+                        MDM.getSingleInstance().startPhoneWhite();
                     } else {
-                        MDM.stopPhoneWhite();
+                        MDM.getSingleInstance().stopPhoneWhite();
                     }
                 }
             }
@@ -700,12 +698,12 @@ public class FenceExcute {
             //域切换到安全域后 不允许切换到生活域
             if (preferencesManager.getFenceData(Common.twoDomainControl) != null && "1".equals(preferencesManager.getFenceData(Common.twoDomainControl))) {
                 if (isCancel) {
-                    MDM.enableSwitching();
+                    MDM.getSingleInstance().enableSwitching();
                 } else {
                     try {
-                        MDM.enableSwitching();
+                        MDM.getSingleInstance().enableSwitching();
                         Thread.sleep(1000);
-                        MDM.toLifeContainer();
+                        MDM.getSingleInstance().toLifeContainer();
                         Thread.sleep(1100);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -716,17 +714,17 @@ public class FenceExcute {
             if (preferencesManager.getFenceData(Common.allowContainSwitching) != null && "1".equals(preferencesManager.getFenceData(Common.allowContainSwitching))) {
 
                 if (isCancel) {
-                    MDM.enableSwitching();
+                    MDM.getSingleInstance().enableSwitching();
                 } else {
-                    if (!mMDMController.isInFgContainer()) {
-                        MDM.disableSwitching();
+                    if (!MDM.getSingleInstance().isInFgContainer()) {
+                        MDM.getSingleInstance().disableSwitching();
                     } else {
                         try {
-                            MDM.enableSwitching();
+                            MDM.getSingleInstance().enableSwitching();
                             Thread.sleep(1000);
-                            MDM.toLifeContainer();
+                            MDM.getSingleInstance().toLifeContainer();
                             Thread.sleep(1100);
-                            MDM.disableSwitching();
+                            MDM.getSingleInstance().disableSwitching();
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -771,11 +769,11 @@ public class FenceExcute {
 
             Map<String, String> sec_white_list = new HashMap<>();
             sec_white_list = ConvertUtils.jsonStringToMap( list );
-            MDM.excuteChrome( sec_white_list );
-            MDM.showToDesk( sec_white_list );
+            MDM.getSingleInstance().excuteChrome( sec_white_list );
+            MDM.getSingleInstance().showToDesk( sec_white_list );
         } else {
             Log.w( TAG, "insideAndOutside false" );
-            MDM.cancelSecurityChrome();
+            MDM.getSingleInstance().cancelSecurityChrome();
         }
     }
 
@@ -857,10 +855,10 @@ public class FenceExcute {
 
                 if (BaseApplication.getNewsLifecycleHandler().isSameClassName( Lock2Activity.class.getSimpleName() )) {
                     Log.w( TAG, "切换到到安全桌面不隐藏虚拟键setToSecureDesktop--如果当前界面为锁屏界面则不跳转有锁屏界面跳转" );
-                    MDM.enableFingerNavigation(false);
-                    MDM.setKeyVisible( true );
-                    MDM.setRecentKeyVisible( false );
-                    MDM.setHomeKeyVisible( false );
+                    MDM.getSingleInstance().enableFingerNavigation(false);
+                    MDM.getSingleInstance().setKeyVisible( true );
+                    MDM.getSingleInstance().setRecentKeyVisible( false );
+                    MDM.getSingleInstance().setHomeKeyVisible( false );
 
 
                 } else {
@@ -903,9 +901,9 @@ public class FenceExcute {
                 Log.w( TAG, "切换到到安全桌面不隐藏虚拟键setToSecureDesktop--" + preferencesManager.getFenceData( Common.setToSecureDesktop ) );
                 if (BaseApplication.getNewsLifecycleHandler().isSameClassName( Lock2Activity.class.getSimpleName() )) {
                     Log.w( TAG, "切换到到安全桌面不隐藏虚拟键setToSecureDesktop--如果当前界面为锁屏界面则不跳转有锁屏界面跳转" );
-                    MDM.enableFingerNavigation(true);
-                    MDM.setRecentKeyVisible( true );
-                    MDM.setHomeKeyVisible( true );
+                    MDM.getSingleInstance().enableFingerNavigation(true);
+                    MDM.getSingleInstance().setRecentKeyVisible( true );
+                    MDM.getSingleInstance().setHomeKeyVisible( true );
 
 
                 } else {
@@ -973,9 +971,9 @@ public class FenceExcute {
                     } else {
                         Log.w( TAG, "围栏外如果没有安全桌面策略则就默认显示虚拟键，转到工作台" );
                         //如果没有则就默认显示虚拟键
-                        MDM.enableFingerNavigation(true);
-                        MDM.setRecentKeyVisible( true );
-                        MDM.setHomeKeyVisible( true );
+                        MDM.getSingleInstance().enableFingerNavigation(true);
+                        MDM.getSingleInstance().setRecentKeyVisible( true );
+                        MDM.getSingleInstance().setHomeKeyVisible( true );
                         if (BaseApplication.getNewsLifecycleHandler().isSameClassName( MainActivity.class.getSimpleName() )) {
                             //如果当前是工作台则不用重新跳转工作台,关闭定制界面
                             EventBus.getDefault().post( new NotifySafedesk( Common.safeActicivty_finsh ) );
@@ -1015,20 +1013,20 @@ public class FenceExcute {
         Log.w( TAG, "双域配置执行" );
         if ("1".equals( twoDomainControl )) {
             if (insideAndOutside) {
-                MDM.toSecurityContainer();
+                MDM.getSingleInstance().toSecurityContainer();
                 TheTang.getSingleInstance().getThreadPoolObject().submit( new Runnable() {
                     @Override
                     public void run() {
                         while (true) {
-                            if (mMDMController.isInFgContainer()) {
-                                MDM.disableSwitching();
+                            if (MDM.getSingleInstance().isInFgContainer()) {
+                                MDM.getSingleInstance().disableSwitching();
                                 break;
                             }
                         }
                     }
                 } );
             } else {
-                MDM.enableSwitching();
+                MDM.getSingleInstance().enableSwitching();
             }
         }
     }
@@ -1044,12 +1042,12 @@ public class FenceExcute {
                         Thread.sleep(5000);
                         NetWorkChangeService.sendFeedBackFalie();
 
-                        if (!mMDMController.isInFgContainer()) {
-                            MDM.enableSwitching();
+                        if (!MDM.getSingleInstance().isInFgContainer()) {
+                            MDM.getSingleInstance().enableSwitching();
                             Thread.sleep(2000);
-                            MDM.toSecurityContainer();
+                            MDM.getSingleInstance().toSecurityContainer();
                             Thread.sleep(1100);
-                            MDM.disableSwitching();
+                            MDM.getSingleInstance().disableSwitching();
                             NetWorkChangeService.sendFeedBackFalie();
                         } else {
                             break;
@@ -1076,12 +1074,12 @@ public class FenceExcute {
                         Thread.sleep(5000);
                         NetWorkChangeService.sendFeedBackFalie();
 
-                        if (mMDMController.isInFgContainer()) {
-                            MDM.enableSwitching();
+                        if (MDM.getSingleInstance().isInFgContainer()) {
+                            MDM.getSingleInstance().enableSwitching();
                             Thread.sleep(2000);
-                            MDM.toLifeContainer();
+                            MDM.getSingleInstance().toLifeContainer();
                             Thread.sleep(1100);
-                            MDM.disableSwitching();
+                            MDM.getSingleInstance().disableSwitching();
                             NetWorkChangeService.sendFeedBackFalie();
                         } else {
                             break;

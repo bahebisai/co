@@ -170,7 +170,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
                         @Override
                         public void sure() {
-                            MDM.openDataConnectivity(false);
+                            MDM.getSingleInstance().openDataConnectivity(false);
                         }
 
                         @Override

@@ -79,11 +79,12 @@ public class MDMOrderService extends Service{
     //MachineCardBindingReceiver mMachineCardBindingReceiver;
 
     SwitchLogReceiver mSwitchLogReceiver;
-
     LostComplianceReceiver mLostComplianceReceiver;
     private InnerRecevier innerReceivers;
 
     private RemoteBilder mBilder;
+
+    private MDM mMDM;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -96,6 +97,7 @@ public class MDMOrderService extends Service{
     @Override
     public void onCreate() {
         super.onCreate();
+        mMDM = MDM.getSingleInstance();
         TheTang.getSingleInstance().startForeground(this,getResources().getString(R.string.emm_runing),"EMM",14);
         //创建广播
         innerReceivers = new InnerRecevier();
@@ -155,7 +157,6 @@ public class MDMOrderService extends Service{
         IntentFilter lostFilter = new IntentFilter();
         lostFilter.addAction("lost_compliance");
         registerReceiver(mLostComplianceReceiver, lostFilter);
-
     }
 
     @Override
@@ -221,7 +222,7 @@ public class MDMOrderService extends Service{
                 if (!TextUtils.isEmpty( preferencesManager.getComplianceData( Common.securityChrome ) )) {
                     Map<String, String> sec_white_list = new HashMap<>();
                     sec_white_list = ConvertUtils.jsonStringToMap( preferencesManager.getComplianceData( Common.securityChrome_list ) );
-                    MDM.excuteChrome( sec_white_list );
+                    MDM.getSingleInstance().excuteChrome( sec_white_list );
                 }
 
                 //执行sd卡违规
@@ -232,13 +233,13 @@ public class MDMOrderService extends Service{
 
                 //执行SIM卡违规
                 if ("true".equals(preferencesManager.getComplianceData(Common.system_sim))) {
-                    MDM.excuteMachineCard(false);
+                    mMDM.excuteMachineCard(false);
                 }
 
                 //如果有地理围栏，则启动地理围栏
                 String geographical = preferencesManager.getFenceData( Common.geographical_fence );
                 if (!TextUtils.isEmpty( geographical ) && "true".equals( geographical )) {
-                    MDM.forceLocationService();
+                    mMDM.forceLocationService();
                     TheTang.getSingleInstance().startService( new Intent( TheTang.getSingleInstance().getContext(), GaodeGeographicalFenceService.class ) );
                 }
 
@@ -321,10 +322,10 @@ public class MDMOrderService extends Service{
      * 默认策略缓存
      */
     private static void storageLimitPolicy() {
-
+        MDM mdm = MDM.getSingleInstance();
         PreferencesManager preferencesManager = PreferencesManager.getSingleInstance();
 
-        if ( MDM.isSoundRecordingEnabled()) {
+        if (mdm.isSoundRecordingEnabled()) {
             preferencesManager.setPolicyData(Common.default_allowSoundRecording,"1");
         } else {
             preferencesManager.setPolicyData(Common.default_allowSoundRecording,"0");
@@ -336,73 +337,73 @@ public class MDMOrderService extends Service{
         //    preferencesManager.setPolicyData(Common.default_allowMobileData,"0");
         //}
 
-        if (MDM.isCameraEnabled()) {
+        if (mdm.isCameraEnabled()) {
             preferencesManager.setPolicyData(Common.default_allowCamera,"1");
         } else {
             preferencesManager.setPolicyData(Common.default_allowCamera,"0");
         }
 
-        if (MDM.isUsbEnabled()) {
+        if (mdm.isUsbEnabled()) {
             preferencesManager.setPolicyData(Common.default_allowUsb,"1");
         } else {
             preferencesManager.setPolicyData(Common.default_allowUsb,"0");
         }
 
-        if (MDM.isLocationServiceEnabled()) {
+        if (mdm.isLocationServiceEnabled()) {
             preferencesManager.setPolicyData(Common.default_allowLocation,"1");
         } else {
             preferencesManager.setPolicyData(Common.default_allowLocation,"0");
         }
 
-        if (MDM.isWifiEnabled()) {
+        if (mdm.isWifiEnabled()) {
             preferencesManager.setPolicyData(Common.default_allowWifi,"1");
         } else {
             preferencesManager.setPolicyData(Common.default_allowWifi,"0");
         }
 
-        if (MDM.isSmsEnabled()) {
+        if (mdm.isSmsEnabled()) {
             preferencesManager.setPolicyData(Common.default_allowMessage,"1");
         } else {
             preferencesManager.setPolicyData(Common.default_allowMessage,"0");
         }
 
-        if (MDM.isBluetoothEnabled()) {
+        if (mdm.isBluetoothEnabled()) {
             preferencesManager.setPolicyData(Common.default_allowBluetooth,"1");
         } else {
             preferencesManager.setPolicyData(Common.default_allowBluetooth,"0");
         }
 
-        if (MDM.isWifiAPEnabled()) {
+        if (mdm.isWifiAPEnabled()) {
             preferencesManager.setPolicyData(Common.default_allowWifiAP,"1");
         } else {
             preferencesManager.setPolicyData(Common.default_allowWifiAP,"0");
         }
 
-        if (MDM.isDropdownEnabled()) {
+        if (mdm.isDropdownEnabled()) {
             preferencesManager.setPolicyData(Common.default_allowDropdown,"1");
         } else {
             preferencesManager.setPolicyData(Common.default_allowDropdown,"0");
         }
 
-        if (MDM.isResetEnabled()) {
+        if (mdm.isResetEnabled()) {
             preferencesManager.setPolicyData(Common.default_allowReset,"1");
         } else {
             preferencesManager.setPolicyData(Common.default_allowReset,"0");
         }
 
-        if (MDM.isNfcEnabled(null) ){
+        if (mdm.isNfcEnabled(null) ){
             preferencesManager.setPolicyData(Common.default_allowNFC,"1");
         } else {
             preferencesManager.setPolicyData(Common.default_allowNFC,"0");
         }
 
-        if (MDM.isModifySystemtimeEnabled()) {
+        if (mdm.isModifySystemtimeEnabled()) {
             preferencesManager.setPolicyData(Common.default_allowModifySystemtime,"1");
         } else {
             preferencesManager.setPolicyData(Common.default_allowModifySystemtime,"0");
         }
 
-        if (MDM.isScreenShotEnabled()) {
+        if (mdm.isScreenShotEnabled()) {
             preferencesManager.setPolicyData(Common.default_allowScreenshot,"1");
         } else {
             preferencesManager.setPolicyData(Common.default_allowScreenshot,"0");
@@ -413,7 +414,7 @@ public class MDMOrderService extends Service{
         //preferencesManager.setPolicyData(Common.default_allowRestoreFactorySettings,policyData.allowRestoreFactorySettings);
         //preferencesManager.setPolicyData(Common.default_allowUpdateTime,policyData.allowUpdateTime);
 
-        if (MDM.isTelephoneEnabled()) {
+        if (mdm.isTelephoneEnabled()) {
             preferencesManager.setPolicyData(Common.default_allowTelephone,"1");
         } else {
             preferencesManager.setPolicyData(Common.default_allowTelephone,"0");
@@ -424,7 +425,6 @@ public class MDMOrderService extends Service{
         } else {
             preferencesManager.setPolicyData(Common.default_allowTelephoneWhiteList,"0");
         }
-
         preferencesManager.setPolicyData(Common.default_policy,"true");
     }
 
@@ -547,7 +547,7 @@ public class MDMOrderService extends Service{
                         DownLoadEntity mDownLoadEntity = DatabaseOperate.getSingleInstance().queryDownLoadFileByPackageName(info.packageName);
                         //如果没有该文件的下载信息，则直接删除
                         if (mDownLoadEntity == null) {
-                            MDM.deleteFile( new File( BaseApplication.baseAppsPath + File.separator + files[i].getName() ) );
+                            MDM.getSingleInstance().deleteFile( new File( BaseApplication.baseAppsPath + File.separator + files[i].getName() ) );
                             continue;
                         }
 
@@ -557,12 +557,12 @@ public class MDMOrderService extends Service{
                         }
 
                         //表示没有安装成功，或者安装成功没有及时删除相关数据
-                        String version = MDM.judgmentAppHadInstall( info.packageName );
+                        String version = MDM.getSingleInstance().judgmentAppHadInstall( info.packageName );
 
                         if (version != null) {
-                            if (!MDM.isAppNewVersion( version, info.versionName )) {
+                            if (!MDM.getSingleInstance().isAppNewVersion( version, info.versionName )) {
                                 DatabaseOperate.getSingleInstance().deleteDownLoadFile( mDownLoadEntity );
-                                MDM.deleteFile( new File( BaseApplication.baseAppsPath + File.separator + files[i].getName() ) );
+                                MDM.getSingleInstance().deleteFile( new File( BaseApplication.baseAppsPath + File.separator + files[i].getName() ) );
                             } else {
                                 final APKEvent event = new APKEvent(mDownLoadEntity, OrderConfig.SilentInstallAppication);
                                 AppTask appTask = new AppTask();

@@ -35,7 +35,7 @@ public class SystemComplianceService extends Service {
         registerReceiver(mSystemComplianceReceiver,mIntentFilter);
 
         //防止关机换卡
-        MDM.mountSDCard();
+        MDM.getSingleInstance().mountSDCard();
     }
 
     @Override

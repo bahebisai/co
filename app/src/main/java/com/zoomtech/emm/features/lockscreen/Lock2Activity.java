@@ -95,15 +95,15 @@ public class Lock2Activity extends BaseActivity implements View.OnClickListener 
                 //判断是否在安全局域里面
         if (!TextUtils.isEmpty( preferencesManager.getSecurityData( Common.safetyTosecureFlag ) )  ) {
                     if (!TextUtils.isEmpty( preferencesManager.getSecurityData( Common.secureDesktopFlag ) )){
-                        MDM.enableFingerNavigation(false);
-                        MDM.setKeyVisible( true );
-                        MDM.setRecentKeyVisible(false);
-                        MDM.setHomeKeyVisible(false);
+                        MDM.getSingleInstance().enableFingerNavigation(false);
+                        MDM.getSingleInstance().setKeyVisible( true );
+                        MDM.getSingleInstance().setRecentKeyVisible(false);
+                        MDM.getSingleInstance().setHomeKeyVisible(false);
                     }else {
                         //不执行任何动作，安全局域就算不打钩安全桌面就默认
-                        MDM.enableFingerNavigation(true);
-                        MDM.setRecentKeyVisible(true);
-                        MDM.setHomeKeyVisible(true);
+                        MDM.getSingleInstance().enableFingerNavigation(true);
+                        MDM.getSingleInstance().setRecentKeyVisible(true);
+                        MDM.getSingleInstance().setHomeKeyVisible(true);
                     }
 
                 }else {
@@ -114,14 +114,14 @@ public class Lock2Activity extends BaseActivity implements View.OnClickListener 
 
                         if ( ! TextUtils.isEmpty(preferencesManager.getSafedesktopData("code"))) {
                             Log.w(TAG, preferencesManager.getSafedesktopData("code") + "---隐藏虚拟机");
-                            MDM.enableFingerNavigation(false);
-                            MDM.setKeyVisible( true );
-                            MDM.setRecentKeyVisible(false);
-                            MDM.setHomeKeyVisible(false);
+                            MDM.getSingleInstance().enableFingerNavigation(false);
+                            MDM.getSingleInstance().setKeyVisible( true );
+                            MDM.getSingleInstance().setRecentKeyVisible(false);
+                            MDM.getSingleInstance().setHomeKeyVisible(false);
                         } else {
-                            MDM.enableFingerNavigation(true);
-                            MDM.setRecentKeyVisible(true);
-                            MDM.setHomeKeyVisible(true);
+                            MDM.getSingleInstance().enableFingerNavigation(true);
+                            MDM.getSingleInstance().setRecentKeyVisible(true);
+                            MDM.getSingleInstance().setHomeKeyVisible(true);
                         }
                     }else   if (
                             preferencesManager.getFenceData( Common.insideAndOutside) != null &&
@@ -130,14 +130,14 @@ public class Lock2Activity extends BaseActivity implements View.OnClickListener 
                         if ( !TextUtils.isEmpty(preferencesManager.getFenceData(Common.setToSecureDesktop))  &&
                                 !"2".equals(preferencesManager.getFenceData(Common.setToSecureDesktop)) &&
                                 "1".equals(preferencesManager.getFenceData(Common.setToSecureDesktop)) ){
-                            MDM.enableFingerNavigation(false);
-                            MDM.setKeyVisible( true );
-                            MDM.setRecentKeyVisible(false);
-                            MDM.setHomeKeyVisible(false);
+                            MDM.getSingleInstance().enableFingerNavigation(false);
+                            MDM.getSingleInstance().setKeyVisible( true );
+                            MDM.getSingleInstance().setRecentKeyVisible(false);
+                            MDM.getSingleInstance().setHomeKeyVisible(false);
                         }else {
-                            MDM.enableFingerNavigation(true);
-                            MDM.setRecentKeyVisible(true);
-                            MDM.setHomeKeyVisible(true);
+                            MDM.getSingleInstance().enableFingerNavigation(true);
+                            MDM.getSingleInstance().setRecentKeyVisible(true);
+                            MDM.getSingleInstance().setHomeKeyVisible(true);
                         }
 
                     }
@@ -215,9 +215,9 @@ public class Lock2Activity extends BaseActivity implements View.OnClickListener 
                                         }
                                         //不执行任何动作
                                         Log.e(TAG," Common.secureDesktop="+ secureDesktopFlag +"不执行任何动作");
-                                        MDM.enableFingerNavigation(true);
-                                        MDM.setRecentKeyVisible(true);
-                                        MDM.setHomeKeyVisible(true);
+                                        MDM.getSingleInstance().enableFingerNavigation(true);
+                                        MDM.getSingleInstance().setRecentKeyVisible(true);
+                                        MDM.getSingleInstance().setHomeKeyVisible(true);
 
                                     }
 
@@ -238,9 +238,9 @@ public class Lock2Activity extends BaseActivity implements View.OnClickListener 
                                                 openActivity( MainActivity.class );
                                                 EventBus.getDefault().post(new NotifySafedesk("finsh"));
                                             }
-                                            MDM.enableFingerNavigation(true);
-                                            MDM.setRecentKeyVisible(true);
-                                            MDM.setHomeKeyVisible(true);
+                                            MDM.getSingleInstance().enableFingerNavigation(true);
+                                            MDM.getSingleInstance().setRecentKeyVisible(true);
+                                            MDM.getSingleInstance().setHomeKeyVisible(true);
                                         }
                                     }else   if (
                                             preferencesManager.getFenceData( Common.insideAndOutside) != null &&
@@ -256,9 +256,9 @@ public class Lock2Activity extends BaseActivity implements View.OnClickListener 
                                                 openActivity( MainActivity.class );
                                                 EventBus.getDefault().post(new NotifySafedesk("finsh"));
                                             }
-                                            MDM.enableFingerNavigation(true);
-                                            MDM.setRecentKeyVisible(true);
-                                            MDM.setHomeKeyVisible(true);
+                                            MDM.getSingleInstance().enableFingerNavigation(true);
+                                            MDM.getSingleInstance().setRecentKeyVisible(true);
+                                            MDM.getSingleInstance().setHomeKeyVisible(true);
                                         }
 
 
@@ -457,9 +457,9 @@ public class Lock2Activity extends BaseActivity implements View.OnClickListener 
             intent.addCategory("android.intent.category.HOME");
             startActivity(intent);
 
-            MDM.enableFingerNavigation(true);
-            MDM.setRecentKeyVisible(true);
-            MDM.setHomeKeyVisible(true);
+            MDM.getSingleInstance().enableFingerNavigation(true);
+            MDM.getSingleInstance().setRecentKeyVisible(true);
+            MDM.getSingleInstance().setHomeKeyVisible(true);
             finish();
             ActivityCollector.removeAllLock2Activity();
          //   System.exit(0);

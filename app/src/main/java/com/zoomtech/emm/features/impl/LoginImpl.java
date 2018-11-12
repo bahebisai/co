@@ -34,7 +34,7 @@ public class LoginImpl extends BaseImpl<RequestService> {
     public void login(String username, String passWord) {
         String uuid = DeviceUtils.getUUID();
         LogUtil.writeToFile(TAG,"Login request!");
-        RequestBody body = DataParseUtil.loginToJson(mContext, username, passWord, MDM.getDeviceInfo());
+        RequestBody body = DataParseUtil.loginToJson(mContext, username, passWord, MDM.getSingleInstance().getDeviceInfo());
 
         if (mService != null) {
             LoginCallBack callBack = new LoginCallBack(new LoginEvent(uuid));

@@ -172,7 +172,7 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
                                 String password = preferencesManager.getSafedesktopData( "password" );
                                 if (password.equals( editText.getText().toString().trim() )) {
 
-                                    MDM.enableFingerNavigation(true);
+                                    MDM.getSingleInstance().enableFingerNavigation(true);
 //                                    HuaweiMDMController.getSingleInstance().setRecentKeyVisible( true );//bai
 //                                    HuaweiMDMController.getSingleInstance().setHomeKeyVisible( true );//bai
                                     dialog.dismiss();

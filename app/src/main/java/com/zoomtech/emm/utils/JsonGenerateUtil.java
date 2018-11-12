@@ -85,7 +85,7 @@ public class JsonGenerateUtil {
             deviceObject.put("main_phone_number", PhoneUtils.getLine1Number(context)[0]);
             deviceObject.put("vice_phone_number", PhoneUtils.getLine1Number(context)[1]);
 
-            List<String> deviceInfo = MDM.getDeviceInfo();
+            List<String> deviceInfo = MDM.getSingleInstance().getDeviceInfo();
             if (deviceInfo != null && deviceInfo.size() > 0) {
                 for (int i = 0; i < (deviceInfo.size() >= Common.deviceInfo1.length ? Common.deviceInfo1.length : deviceInfo.size()); i++) {
                     deviceObject.put(Common.deviceInfo1[i], deviceInfo.get(i));

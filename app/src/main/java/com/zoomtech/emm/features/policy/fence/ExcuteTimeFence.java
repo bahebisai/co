@@ -13,7 +13,6 @@ import com.zoomtech.emm.features.presenter.MDM;
 import com.zoomtech.emm.features.manager.PreferencesManager;
 import com.zoomtech.emm.features.presenter.TheTang;
 import org.greenrobot.eventbus.EventBus;
-import static com.zoomtech.emm.features.presenter.MDM.mMDMController;
 
 /**
  * Created by lenovo on 2017/8/17.
@@ -57,7 +56,7 @@ public class ExcuteTimeFence {
             if (insideAndOutside) {
                 //MDM.forceLockScreen(null);
             } else {
-                MDM.releaseLockScreen();
+                MDM.getSingleInstance().releaseLockScreen();
             }
         }
 
@@ -66,11 +65,11 @@ public class ExcuteTimeFence {
             if (insideAndOutside) {
                 //禁止流量
                 Log.w("testApp","设备配置执行---禁止流量");
-                MDM.openDataConnectivity(false);
+                MDM.getSingleInstance().openDataConnectivity(false);
             } else {
                 //允许流量
                 Log.w("testApp","设备配置执行---允许流量");
-                MDM.openDataConnectivity(true);
+                MDM.getSingleInstance().openDataConnectivity(true);
             }
         }
 
@@ -79,9 +78,9 @@ public class ExcuteTimeFence {
 
             if (insideAndOutside) {
                 Log.w("testApp","设备配置执行---不允许wifi");
-                MDM.enableWifi( false );  //false
+                MDM.getSingleInstance().enableWifi( false );  //false
             } else {
-                MDM.enableWifi( true );  //true
+                MDM.getSingleInstance().enableWifi( true );  //true
             }
         }
 
@@ -94,8 +93,8 @@ public class ExcuteTimeFence {
 
             if (insideAndOutside) {
 
-                MDM.enableWifi( true );
-                MDM.openWifiOnBG(OrderConfig.OpenWifiOnBG + "", true );
+                MDM.getSingleInstance().enableWifi( true );
+                MDM.getSingleInstance().openWifiOnBG(OrderConfig.OpenWifiOnBG + "", true );
 
                 //wifi 配置
                 if (policyBean.getConfigureWifi()!=null&& "1".equals(policyBean.getConfigureWifi())) {
@@ -176,18 +175,18 @@ public class ExcuteTimeFence {
         //允许照相机
         if (policyBean.getAllowCamera()!=null&& "1".equals(policyBean.getAllowCamera())) {
             if (insideAndOutside) {
-                MDM.enableCamera( false );
+                MDM.getSingleInstance().enableCamera( false );
             } else {
-                MDM.enableCamera( true );
+                MDM.getSingleInstance().enableCamera( true );
             }
         }
 
         //允许蓝牙
         if (policyBean.getAllowBluetooth()!=null&& "1".equals(policyBean.getAllowBluetooth())) {
             if (insideAndOutside) {
-                MDM.enableBluetooth( false );
+                MDM.getSingleInstance().enableBluetooth( false );
             } else {
-                MDM.enableBluetooth( true );
+                MDM.getSingleInstance().enableBluetooth( true );
             }
         }
 
@@ -197,10 +196,10 @@ public class ExcuteTimeFence {
         }
         if (policyBean.getAllowDomainSwitching()!=null&& "1".equals(policyBean.getAllowDomainSwitching())) {   //Common.hiddenNetwork
             if (insideAndOutside) {
-                MDM.toSecurityContainer();
+                MDM.getSingleInstance().toSecurityContainer();
             }
         } else {
-                MDM.toLifeContainer( );
+                MDM.getSingleInstance().toLifeContainer( );
         }
     }
 
@@ -284,21 +283,21 @@ public class ExcuteTimeFence {
         }
         if (policyBean.getTwoDomainControl()!=null&&"1".equals(policyBean.getTwoDomainControl())){
             if (insideAndOutside) {
-                MDM.toSecurityContainer( );
+                MDM.getSingleInstance().toSecurityContainer( );
 
                 TheTang.getSingleInstance().getThreadPoolObject().submit( new Runnable() {
                     @Override
                     public void run() {
                         while (true) {
-                            if (mMDMController.isInFgContainer()) {
-                                MDM.disableSwitching();
+                            if (MDM.getSingleInstance().isInFgContainer()) {
+                                MDM.getSingleInstance().disableSwitching();
                                 break;
                             }
                         }
                     }
                 });
             } else {
-                MDM.enableSwitching();
+                MDM.getSingleInstance().enableSwitching();
             }
         }
     }

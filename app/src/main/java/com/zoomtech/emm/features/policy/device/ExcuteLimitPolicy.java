@@ -217,22 +217,22 @@ public class ExcuteLimitPolicy {
     private static void excutePolicy(PolicyData policyData) {
         //允许wifi
         if ("0".equals(policyData.allowWifi)) {
-            MDM.enableWifi(false);
+            MDM.getSingleInstance().enableWifi(false);
         } else {
-            MDM.enableWifi(true);
+            MDM.getSingleInstance().enableWifi(true);
         }
 
         if ("0".equals(policyData.allowMobileHotspot)) { //没有
-            MDM.enableWifiAP(false);
+            MDM.getSingleInstance().enableWifiAP(false);
         } else {
-            MDM.enableWifiAP(true);
+            MDM.getSingleInstance().enableWifiAP(true);
         }
 
         //允许录音
         if ("0".equals(policyData.allowSoundRecording)) {
-            MDM.enableSoundRecording(false);
+            MDM.getSingleInstance().enableSoundRecording(false);
         } else {
-            MDM.enableSoundRecording(true);
+            MDM.getSingleInstance().enableSoundRecording(true);
         }
 
         //打开移动数据
@@ -244,9 +244,9 @@ public class ExcuteLimitPolicy {
 
         //允许照相机
         if ("0".equals(policyData.allowCamera)) {
-            MDM.enableCamera(false);
+            MDM.getSingleInstance().enableCamera(false);
         } else {
-            MDM.enableCamera(true);
+            MDM.getSingleInstance().enableCamera(true);
         }
 
         //允许定位
@@ -254,9 +254,9 @@ public class ExcuteLimitPolicy {
                 "0".equals( preferencesManager.getAppFenceData( Common.appFenceRadius ) )) {
             if (PreferencesManager.getSingleInstance().getFenceData( Common.geographical_fence ) == null) {
                 if ("0".equals( policyData.allowLocation )) {
-                    MDM.enableLocationService( false );
+                    MDM.getSingleInstance().enableLocationService( false );
                 } else {
-                    MDM.enableLocationService( true );
+                    MDM.getSingleInstance().enableLocationService( true );
                 }
             }
         }
@@ -270,78 +270,78 @@ public class ExcuteLimitPolicy {
 
         //打开移动热点
         if ("0".equals(policyData.allowMobileHotspot)) { //没有
-            MDM.enableWifiAP(false);
+            MDM.getSingleInstance().enableWifiAP(false);
         } else {
-            MDM.enableWifiAP(true);
+            MDM.getSingleInstance().enableWifiAP(true);
         }
 
         //允许短信
         if ("0".equals(policyData.allowMessage)) {
-            MDM.enableSms(false);
+            MDM.getSingleInstance().enableSms(false);
         } else {
-            MDM.enableSms(true);
+            MDM.getSingleInstance().enableSms(true);
         }
 
         //允许蓝牙
         if ("0".equals(policyData.allowBluetooth)) {
             LogUtil.writeToFile("ExcuteLimitPolicy",  "allowBluetooth");
-            MDM.enableBluetooth(false);
+            MDM.getSingleInstance().enableBluetooth(false);
         } else {
-            MDM.enableBluetooth(true);
+            MDM.getSingleInstance().enableBluetooth(true);
         }
 
         //允许USB
         if ("0".equals(policyData.allowUsb)) {
-            MDM.enableUsb(false);
+            MDM.getSingleInstance().enableUsb(false);
         } else {
-            MDM.enableUsb(true);
+            MDM.getSingleInstance().enableUsb(true);
         }
 
         //允许截屏
         if ("0".equals(policyData.allowScreenshot)) {
-            MDM.disableScreenShot();
+            MDM.getSingleInstance().disableScreenShot();
         } else {
-            MDM.enableScreenShot();
+            MDM.getSingleInstance().enableScreenShot();
         }
 
         //允许复位
         if ("0".equals(policyData.allowReset)) {
-            MDM.disableReset();
+            MDM.getSingleInstance().disableReset();
         } else {
-            MDM.enableReset();
+            MDM.getSingleInstance().enableReset();
         }
 
         //允许下拉栏
         if ("0".equals(policyData.allowDropdown)) {
-            MDM.disableDropdown();
+            MDM.getSingleInstance().disableDropdown();
         } else {
-            MDM.enableDropdown();
+            MDM.getSingleInstance().enableDropdown();
         }
 
         //允许NFC
         if ("0".equals(policyData.allowNFC)) {
-            MDM.disableNfc(null);
+            MDM.getSingleInstance().disableNfc(null);
         } else {
-            MDM.enableNfc(null);
+            MDM.getSingleInstance().enableNfc(null);
         }
 
         //允许修改日期
         if ("0".equals(policyData.allowModifySystemtime)) {
-            MDM.disableModifySystemtime();
+            MDM.getSingleInstance().disableModifySystemtime();
         } else {
-            MDM.enableModifySystemtime();
+            MDM.getSingleInstance().enableModifySystemtime();
         }
 
         if ("0".equals(policyData.allowTelephone)) {
-            MDM.enableTelePhone(false);
+            MDM.getSingleInstance().enableTelePhone(false);
         } else {
-            MDM.enableTelePhone(true);
+            MDM.getSingleInstance().enableTelePhone(true);
         }
 
         if ("0".equals(policyData.allowTelephoneWhiteList)) {
-            MDM.stopPhoneWhite();
+            MDM.getSingleInstance().stopPhoneWhite();
         } else {
-            MDM.startPhoneWhite();
+            MDM.getSingleInstance().startPhoneWhite();
         }
     }
 }

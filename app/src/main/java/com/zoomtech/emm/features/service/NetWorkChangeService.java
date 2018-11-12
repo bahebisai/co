@@ -103,8 +103,8 @@ public class NetWorkChangeService extends IntentService {
 
     //用于保持4G连接
     private void enableConnectivityData() {
-        if (!MDM.isDataConnectivityOpen()) {
-            MDM.openDataConnectivity(true);
+        if (!MDM.getSingleInstance().isDataConnectivityOpen()) {
+            MDM.getSingleInstance().openDataConnectivity(true);
         }
     }
 
@@ -210,7 +210,7 @@ public class NetWorkChangeService extends IntentService {
             }
         }
 
-        MDM.uploadLog( logId, preferencesManager.getLogData( "date" ) );
+        MDM.getSingleInstance().uploadLog( logId, preferencesManager.getLogData( "date" ) );
     }
 
     private void sendSwitchLog(Context context) {

@@ -112,9 +112,9 @@ public class InitActivity extends BaseActivity {
                 Intent intent = new Intent( this, MainActivity.class );
                 startActivity( intent );
 
-                MDM.enableFingerNavigation(true);
-                MDM.setRecentKeyVisible( true );
-                MDM.setHomeKeyVisible( true );
+                MDM.getSingleInstance().enableFingerNavigation(true);
+                MDM.getSingleInstance().setRecentKeyVisible( true );
+                MDM.getSingleInstance().setHomeKeyVisible( true );
             }
         } else if (
                 preferencesManager.getFenceData( Common.insideAndOutside ) != null && "true".

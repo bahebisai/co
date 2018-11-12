@@ -158,7 +158,7 @@ public class DownLoadTask extends BaseImpl<RequestService> /*implements Runnable
     private void downLoadError() {
         EventBus.getDefault().post( new CompleteEvent( downLoadEntity.code, "false", downLoadEntity.sendId ) );
         DatabaseOperate.getSingleInstance().deleteDownLoadFile( downLoadEntity );
-        MDM.deleteFile( new File( BaseApplication.baseAppsPath + File.separator + downLoadEntity.saveName ) );
+        MDM.getSingleInstance().deleteFile( new File( BaseApplication.baseAppsPath + File.separator + downLoadEntity.saveName ) );
     }
 
     /**

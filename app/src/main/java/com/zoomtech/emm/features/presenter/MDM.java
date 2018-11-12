@@ -27,6 +27,7 @@ import android.view.Display;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.miui.enterprise.sdk.APNConfig;
 import com.zoomtech.emm.R;
 import com.zoomtech.emm.base.BaseApplication;
 import com.zoomtech.emm.definition.Common;
@@ -39,7 +40,6 @@ import com.zoomtech.emm.features.event.NotifyEvent;
 import com.zoomtech.emm.features.event.SettingEvent;
 import com.zoomtech.emm.features.event.WhiteListEvent;
 import com.zoomtech.emm.features.excute.XiaomiMDMController;
-
 import com.zoomtech.emm.features.impl.SendMessageManager;
 import com.zoomtech.emm.features.impl.TelephoneWhiteListImpl;
 import com.zoomtech.emm.features.impl.WebclipImageImpl;
@@ -90,22 +90,16 @@ import java.util.Map;
  */
 
 public class MDM {
+    public final String TAG = MDM.class.getName();
 
-    public static final String TAG = "MDM";
-//    public static HuaweiMDMController mHuaweiMDMController;
-    private static XiaomiMDMController mMDMController;
-    public static TheTang mTheTang;
-    static Context mContext;
+    private Context mContext;
+    private XiaomiMDMController mMDMController;
+    private PreferencesManager preferencesManager = PreferencesManager.getSingleInstance();
+    private TheTang mTheTang;
 
-    static Bitmap bitmap = null;
+    private Bitmap bitmap = null;
+    private MDM.GpsLocationReceiver gpsLocationReceiver = null;
 
-    /**********************************************
-     * 位置服务相关接口
-     ********************************/
-
-    static MDM.GpsLocationReceiver gpsLocationReceiver = null;
-
-    static PreferencesManager preferencesManager = PreferencesManager.getSingleInstance();
 
     //单例
     private volatile static MDM mMDM;
@@ -164,7 +158,7 @@ public class MDM {
      * 系统切换
      ***************************************************/
 
-    public static void toLifeContainer() {
+    public void toLifeContainer() {
 
         LogUtil.writeToFile(TAG, "isInSecureContainer = " + mMDMController.isInSecureContainer());
         if (mMDMController.isInFgContainer()) {
@@ -177,7 +171,7 @@ public class MDM {
         }
     }
 
-    public static void toSecurityContainer() {
+    public void toSecurityContainer() {
 
         LogUtil.writeToFile(TAG, "isInSecureContainer = " + mMDMController.isInSecureContainer());
         if (!mMDMController.isInFgContainer()) {
@@ -192,25 +186,25 @@ public class MDM {
     /**
      * 域切换
      */
-    private static void switchContainer() {
+    private void switchContainer() {
         LogUtil.writeToFile(TAG, "switchContainer start");
         mMDMController.switchContainer();
         LogUtil.writeToFile(TAG, "switchContainer end");
     }
 
-    public static void disableSwitching() {
+    public void disableSwitching() {
         mMDMController.disableSwitching();
     }
 
-    public static void enableSwitching() {
+    public void enableSwitching() {
         mMDMController.enableSwitching();
     }
 
-    public static void isInSecureContainer(String code) {
+    public void isInSecureContainer(String code) {
         // mTheTang.feedBackAll( code, mMDMController.isInSecureContainer() );
     }
 
-    public static void isInFgContainer(String code) {
+    public void isInFgContainer(String code) {
         //mTheTang.feedBackAll( code, mMDMController.isInFgContainer() );
     }
 
@@ -223,7 +217,7 @@ public class MDM {
      * @param path
      * @return
      */
-    public static void silentInstall(final String path) {
+    public void silentInstall(final String path) {
         mMDMController.installApplication(path, null);
     }
 
@@ -233,31 +227,31 @@ public class MDM {
      * @param packageName
      * @return
      */
-    public static void silentUninstall(String packageName) {
+    public void silentUninstall(String packageName) {
         mMDMController.uninstallApplication(packageName);
     }
 
-    /*public static void queryPkgNameFromUninstallList(String code, String packageName) {
+    /*public void queryPkgNameFromUninstallList(String code, String packageName) {
         mTheTang.feedBackAll( code, mMDMController.queryPkgNameFromUninstallList( packageName ) );
     }
 
-    public static void addPkgNameToUninstallList(String code, String packageName) {
+    public void addPkgNameToUninstallList(String code, String packageName) {
         mTheTang.feedBackAll( code, mMDMController.addPkgNameToUninstallList( packageName ) );
     }
 
-    public static void deletePkgNameFromUninstallList(String code, String packageName) {
+    public void deletePkgNameFromUninstallList(String code, String packageName) {
         mTheTang.feedBackAll( code, mMDMController.deletePkgNameFromUninstallList( packageName ) );
     }
 
-    public static void queryPkgNameFromInstallList(String code, String packageName) {
+    public void queryPkgNameFromInstallList(String code, String packageName) {
         mTheTang.feedBackAll( code, mMDMController.queryPkgNameFromInstallList( packageName ) );
     }
 
-    public static void addPkgNameToInstallList(String code, String packageName) {
+    public void addPkgNameToInstallList(String code, String packageName) {
         mTheTang.feedBackAll( code, mMDMController.addPkgNameToInstallList( packageName ) );
     }
 
-    public static void deletePkgNameFromInstallList(String code, String packageName) {
+    public void deletePkgNameFromInstallList(String code, String packageName) {
         mTheTang.feedBackAll( code, mMDMController.deletePkgNameFromInstallList( packageName ) );
     }*/
 
@@ -265,237 +259,242 @@ public class MDM {
      * 外设相关
      ***************************************************/
 
-    public static void enableBluetooth(boolean enable) {
+    public void enableBluetooth(boolean enable) {
         mMDMController.enableBluetooth(enable);
     }
 
-    public static boolean isBluetoothEnabled() {
+    public boolean isBluetoothEnabled() {
         return mMDMController.isBluetoothEnabled();
     }
 
-    /*public static void queryMacFromBTSocketList(String code, String deviceMac) {
+    /*public void queryMacFromBTSocketList(String code, String deviceMac) {
         mTheTang.feedBackAll( code, mMDMController.queryMacFromBTSocketList( deviceMac ) );
     }
 
-    public static void addMacToBTSocketList(String code, String deviceMac) {
+    public void addMacToBTSocketList(String code, String deviceMac) {
         mTheTang.feedBackAll( code, mMDMController.addMacToBTSocketList( deviceMac ) );
     }
 
-    public static void deleteMacFromBTSocketList(String code, String deviceMac) {
+    public void deleteMacFromBTSocketList(String code, String deviceMac) {
         mTheTang.feedBackAll( code, mMDMController.deleteMacFromBTSocketList( deviceMac ) );
     }*/
 
-    public static void enableWifi(boolean enable) {
+    public void enableWifi(boolean enable) {
         mMDMController.enableWifi(enable);
     }
 
-    public static boolean isWifiEnabled() {
+    public boolean isWifiEnabled() {
         return mMDMController.isWifiEnabled();
     }
 
-    public static void openWifiOnBG(String code, boolean open) {
+    public void openWifiOnBG(String code, boolean open) {
         mMDMController.openWifiOnBG(open);
     }
 
-   /* public static void isWifiOpened(String code) {
+   /* public void isWifiOpened(String code) {
         mTheTang.feedBackAll( code, mMDMController.isWifiOpened() );
     }
 
-    public static void queryMacFromWifiList(String code, String deviceMac) {
+    public void queryMacFromWifiList(String code, String deviceMac) {
         mTheTang.feedBackAll( code, mMDMController.queryMacFromWifiList( deviceMac ) );
     }
 
-    public static void addMacToWifiList(String code, String deviceMac) {
+    public void addMacToWifiList(String code, String deviceMac) {
         mTheTang.feedBackAll( code, mMDMController.addMacToWifiList( deviceMac ) );
     }
 
-    public static void deleteMacFromWifiList(String code, String deviceMac) {
+    public void deleteMacFromWifiList(String code, String deviceMac) {
         mTheTang.feedBackAll( code, mMDMController.deleteMacFromWifiList( deviceMac ) );
     }*/
 
-    public static void enableWifiAP(/*String code,*/ boolean enable) {
+    public void enableWifiAP(/*String code,*/ boolean enable) {
         mMDMController.enableWifiAP(enable);
     }
 
-  /*  public static void isWifiAPEnabled(String code) {
+  /*  public void isWifiAPEnabled(String code) {
         mTheTang.feedBackAll( code, mMDMController.isWifiAPEnabled() );
     }*/
 
-    public static boolean isWifiAPEnabled() {
+    public boolean isWifiAPEnabled() {
         return mMDMController.isWifiAPEnabled();
     }
 
-   /* public static void queryMacFromWifiAPList(String code, String deviceMac) {
+   /* public void queryMacFromWifiAPList(String code, String deviceMac) {
         mTheTang.feedBackAll( code, mMDMController.queryMacFromWifiAPList( deviceMac ) );
     }
 
-    public static void addMacToWifiAPList(String code, String deviceMac) {
+    public void addMacToWifiAPList(String code, String deviceMac) {
         mTheTang.feedBackAll( code, mMDMController.addMacToWifiAPList( deviceMac ) );
     }
 
-    public static void deleteMacFromWifiAPList(String code, String deviceMac) {
+    public void deleteMacFromWifiAPList(String code, String deviceMac) {
         mTheTang.feedBackAll( code, mMDMController.deleteMacFromWifiAPList( deviceMac ) );
     }*/
 
     //WifiConfiguration配置
-   /* public static void setWifiApOpened(String code, WifiConfiguration wifiConfig, boolean opened) {
+   /* public void setWifiApOpened(String code, WifiConfiguration wifiConfig, boolean opened) {
         mTheTang.feedBackAll( code, mMDMController.setWifiApOpened( wifiConfig, opened ) );
     }
 
     //getWifiApState方法的返回值为Int类型
-    public static void getWifiApState(String code) {
+    public void getWifiApState(String code) {
         mTheTang.feedBack( code, mMDMController.getWifiApState() + "" );
     }
 
-    public static void isWifiAPOpened(String code) {
+    public void isWifiAPOpened(String code) {
         mTheTang.feedBackAll( code, mMDMController.isWifiAPOpened() );
     }*/
 
-    public static void openDataConnectivity(boolean isOpen) {
+    public void openDataConnectivity(boolean isOpen) {
         mMDMController.openDataConnectivity(isOpen);
     }
 
-    public static boolean isDataConnectivityOpen() {
+    public boolean isDataConnectivityOpen() {
         return mMDMController.isDataConnectivityOpen();
     }
 
     //WifiConfiguration
-    public static void enableUsb(boolean enable) {
+    public void enableUsb(boolean enable) {
         mMDMController.enableUsb(enable);
     }
 
-   /* public static void enableUsb(String code, boolean enable) {
+   /* public void enableUsb(String code, boolean enable) {
         mTheTang.feedBackAll( code, mMDMController.enableUsb( enable ) );
     }*/
 
-    public static boolean isUsbEnabled() {
+    public boolean isUsbEnabled() {
         return mMDMController.isUsbEnabled();
     }
 
-    public static void enableCamera(boolean enable) {
+    public void enableCamera(boolean enable) {
         mMDMController.enableCamera(enable);
     }
 
-    public static void enableCamera(String code, boolean enable) {
+    public void enableCamera(String code, boolean enable) {
         // mTheTang.feedBackAll( code, mMDMController.enableCamera( enable ) );
     }
 
-    public static boolean isCameraEnabled() {
+    public boolean isCameraEnabled() {
         return mMDMController.isCameraEnabled();
     }
 
-    public static void enableSoundRecording(boolean enable) {
+    public void enableSoundRecording(boolean enable) {
         mMDMController.enableSoundRecording(enable);
     }
 
-    /*public static void enableSoundRecording(String code, boolean enable) {
+    /*public void enableSoundRecording(String code, boolean enable) {
         mTheTang.feedBackAll( code, mMDMController.enableSoundRecording( enable ) );
     }*/
 
-    public static boolean isSoundRecordingEnabled(/*String code*/) {
+    public boolean isSoundRecordingEnabled(/*String code*/) {
         return mMDMController.isSoundRecordingEnabled();
     }
 
-    public static void enableNfc(String code) {
+    public void enableNfc(String code) {
         mMDMController.enableNfc();
     }
 
-    public static void disableNfc(String code) {
+    public void disableNfc(String code) {
         mMDMController.disableNfc();
     }
 
-    public static boolean enableScreenShot() {
+    public boolean enableScreenShot() {
         return mMDMController.enableScreenShot();
     }
 
-    public static boolean disableScreenShot() {
+    public boolean disableScreenShot() {
         return mMDMController.disableScreenShot();
     }
 
-    public static boolean isScreenShotEnabled() {
+    public boolean isScreenShotEnabled() {
         return mMDMController.isScreenShotEnabled();
     }
 
-    public static boolean enableDropdown() {
+    public boolean enableDropdown() {
         return mMDMController.enableDropdown();
     }
 
-    public static boolean disableDropdown() {
+    public boolean disableDropdown() {
         return mMDMController.disableDropdown();
     }
 
-    public static boolean isDropdownEnabled() {
+    public boolean isDropdownEnabled() {
         return mMDMController.isDropdownEnabled();
     }
 
-    public static void enableReset() {
+    public void enableReset() {
         mMDMController.enableReset();
     }
 
-    public static void disableReset() {
+    public void disableReset() {
         mMDMController.disableReset();
     }
 
-    public static boolean isResetEnabled() {
+    public boolean isResetEnabled() {
         return mMDMController.isResetEnabled();
     }
 
-    public static void enableModifySystemtime() {
-         mMDMController.enableModifySystemTime();
+    public void enableModifySystemtime() {
+        mMDMController.enableModifySystemTime();
     }
 
-    public static void disableModifySystemtime() {
-         mMDMController.disableModifySystemTime();
+    public void disableModifySystemtime() {
+        mMDMController.disableModifySystemTime();
     }
 
-    public static boolean isModifySystemtimeEnabled() {
+    public boolean isModifySystemtimeEnabled() {
         return mMDMController.isModifySystemTimeEnabled();
     }
 
-    public static boolean isNfcEnabled(String code) {
+    public boolean isNfcEnabled(String code) {
         return mMDMController.isNfcEnabled();
     }
 
-    /*public static void openNfc(String code) {
+    /*public void openNfc(String code) {
         mTheTang.feedBackAll( code, mMDMController.openNfc() );
     }
 
-    public static void closeNfc(String code) {
+    public void closeNfc(String code) {
         mTheTang.feedBackAll( code, mMDMController.closeNfc() );
     }*/
 
-    public static void enableSD(/*String code*/) {
+    public void enableSD(/*String code*/) {
         mMDMController.enableSD();
     }
 
-    public static void disableSD(/*String code*/) {
+    public void disableSD(/*String code*/) {
         mMDMController.disableSD();
     }
 
-    public static boolean createApn(/*String code,*/ ContentValues values) {
+    public boolean createApn(/*String code,*/ ContentValues values) {
         return mMDMController.createApn(values);
     }
 
-    public static void getApnList(String code) {
+    public void addApn(APNConfig config) {
+        mMDMController.addApn(config);
     }
 
-    /*public static void getApn(String code, int id) {
+    public List<APNConfig> getApnList() {
+        return mMDMController.getAPNList();
+    }
+
+    /*public void getApn(String code, int id) {
         mTheTang.feedBack( code, DataParseUtil.parseAPNContentValues( mMDMController.getApn( id ) ) );
     }
 
-    public static void getCurrentApn(String code) {
+    public void getCurrentApn(String code) {
         mTheTang.feedBack( code, mMDMController.getCurrentApn() );
     }
 
-    public static void setCurrentApn(String code, int id) {
+    public void setCurrentApn(String code, int id) {
         mTheTang.feedBackAll( code, mMDMController.setCurrentApn( id ) );
     }*/
 
-    public static void deleteApn(String code, String name) {
+    public void deleteApn(String code, String name) {
         mMDMController.deleteApn(name);
     }
 
-    public static void enableLocationService(String code, boolean enable) {
+    public void enableLocationService(String code, boolean enable) {
         gpsLocationReceiver = new MDM.GpsLocationReceiver(code);
         IntentFilter filter = new IntentFilter();
         filter.addAction("android.location.PROVIDERS_CHANGED");
@@ -504,25 +503,25 @@ public class MDM {
         mMDMController.enableLocationService(enable);
     }
 
-    public static void enableLocationService(boolean enable) {
+    public void enableLocationService(boolean enable) {
         mMDMController.enableLocationService(enable);
     }
 
-    public static boolean isLocationServiceEnabled() {
+    public boolean isLocationServiceEnabled() {
         return mMDMController.isLocationServiceEnabled();
     }
 
-    public static void openGps(boolean isSetOpen) {
+    public void openGps(boolean isSetOpen) {
         if (mMDMController instanceof XiaomiMDMController) {
             mMDMController.openGps(isSetOpen);
         }
     }
 
-    /*public static void openGpsOnBGSlient(String code) {
+    /*public void openGpsOnBGSlient(String code) {
         mTheTang.feedBackAll( code, mMDMController.openGpsOnBGSlient() );
     }
 
-    public static void isGpsOpenedOnBGSlient(String code) {
+    public void isGpsOpenedOnBGSlient(String code) {
         mTheTang.feedBackAll( code, mMDMController.isGpsOpenedOnBGSlient() );
     }*/
 
@@ -531,7 +530,7 @@ public class MDM {
      *
      * @param code
      */
-    public static void getLocationData(String code) {
+    public void getLocationData(String code) {
         Log.w(TAG, "getLocationData!");
         //需先强制关闭forceLocationService，然后打开能实现强制定位功能
         closeForceLocation();
@@ -553,7 +552,7 @@ public class MDM {
     /**
      * 获取定位
      */
-    public static void startLocationService(Context context) {//todo baii util ???
+    public void startLocationService(Context context) {//todo baii util ???
         Intent service_intent = new Intent(context, LocationService.class);
         context.startService(service_intent);
     }
@@ -561,14 +560,14 @@ public class MDM {
     /**
      * 强制定位服务
      */
-    public static void forceLocationService() {
+    public void forceLocationService() {
         mMDMController.forceLocationService(true);
     }
 
     /**
      * 取消强制定位服务
      */
-    public static void closeForceLocation() {
+    public void closeForceLocation() {
         mMDMController.forceLocationService(false);
     }
 
@@ -576,7 +575,7 @@ public class MDM {
      * 系统安全管理
      ************************************/
     //设置锁屏
-    public static void setScreenLock(String pwd) {
+    public void setScreenLock(String pwd) {
         /*int result = 0;
         try {
             result = mMDMController.setPassword( pwd );
@@ -594,14 +593,14 @@ public class MDM {
     }
 
     //判断是否锁屏
-   /* public static void isScreenOn(String code) {
+   /* public void isScreenOn(String code) {
         PowerManager pm = (PowerManager) mContext.getSystemService( Context.POWER_SERVICE );
         LogUtil.writeToFile( TAG, "feedback screen lock result!" );
         mTheTang.feedBackAll( code, !pm.isScreenOn() );
     }*/
 
     //强制锁屏
-    public static void forceLockScreen(String lockType, String pwd) {
+    public void forceLockScreen(String lockType, String pwd) {
 
         mTheTang.storyLockType(lockType);
 
@@ -619,11 +618,11 @@ public class MDM {
         feedbackPassword(pwd);
     }
 
-    private static void feedbackPassword(String password) {
+    private void feedbackPassword(String password) {
         JSONObject json = new JSONObject();
         try {
-            json.put( "alias", PreferencesManager.getSingleInstance().getData( "alias"));
-            json.put( "password", password );
+            json.put("alias", PreferencesManager.getSingleInstance().getData("alias"));
+            json.put("password", password);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -633,40 +632,40 @@ public class MDM {
     }
 
     //解锁，清除密码
-    public static void releaseLockScreen() {
+    public void releaseLockScreen() {
         setPasswordNone();
         Log.w(TAG, "屏幕解锁状态==" + mMDMController.setPasswordNone());
     }
 
     //设置虚拟Recent按键是否可见(多任务见)
-    public static void setRecentKeyVisible(boolean key) {
+    public void setRecentKeyVisible(boolean key) {
         mMDMController.setRecentKeyVisible(key);
     }
 
-    public static void setHomeKeyVisible(boolean key) {
+    public void setHomeKeyVisible(boolean key) {
         mMDMController.setHomeKeyVisible(key);
     }
 
-    public static void enableFingerNavigation(boolean enable) {
+    public void enableFingerNavigation(boolean enable) {
         mMDMController.enableFingerNavigation(enable);
     }
 
-    public static void setKeyVisible(boolean key) {
+    public void setKeyVisible(boolean key) {
         mMDMController.setKeyVisible(key);
     }
 
-    /*public static void setPassword(String code, String pwd) {
+    /*public void setPassword(String code, String pwd) {
         mTheTang.feedBack( code, mMDMController.setPassword( pwd ) + "" );
     }*/
 
-    public static void takeScreenShot() {
+    public void takeScreenShot() {
         mMDMController.takeScreenShot();
     }
 
     /**
      * 关机
      */
-    public static void setShutDown() {
+    public void setShutDown() {
         mMDMController.setShutDown();
     }
 
@@ -675,14 +674,14 @@ public class MDM {
      *
      * @param orderCode
      */
-    public static void setReboot(String orderCode) {
+    public void setReboot(String orderCode) {
         mMDMController.setReboot();
     }
 
     /**
      * 恢复出厂设置
      */
-    public static void setFactoryReset() {
+    public void setFactoryReset() {
         enableSwitching();//将域切换设置为允许
         ExcuteLimitPolicy.limitDefaultPolicy(); //先将系统恢复到默认状态再恢复出厂设置
         //modify by duanxin for bug189 on 2017.09.22
@@ -694,14 +693,14 @@ public class MDM {
      *
      * @param processName
      */
-    public static void killProcess(String processName) {
+    public void killProcess(String processName) {
         mMDMController.killProcess(processName);
     }
 
     /**
      * 用户数据擦除
      */
-    public static void wipeData() {
+    public void wipeData() {
         //modify by duanxin for bug200 on 2017.09.22
         setFactoryReset();
     }
@@ -710,25 +709,25 @@ public class MDM {
      * 电话服务管理
      ************************************/
 
-    public static void enableSms(boolean enable) {
+    public void enableSms(boolean enable) {
         mMDMController.enableSms(enable);
     }
 
-    public static boolean isSmsEnabled() {
+    public boolean isSmsEnabled() {
         return mMDMController.isSmsEnabled();
     }
 
-    public static void enableTelePhone(boolean enable) {
+    public void enableTelePhone(boolean enable) {
         //mTheTang.feedBackAll( code, mMDMController.enableTelephone( enable ) );
         mMDMController.enableTelephone(enable);
     }
 
-    public static boolean isTelephoneEnabled() {
+    public boolean isTelephoneEnabled() {
         //mTheTang.feedBackAll( code, mMDMController.isTelephoneEnabled() );
         return mMDMController.isTelephoneEnabled();
     }
 
-   /* public static void getAllContactInfo(String code) {
+   /* public void getAllContactInfo(String code) {
         /*
         ContactInfo返回值的数据格式：
         buf.append("id=" + id);
@@ -750,7 +749,7 @@ public class MDM {
      * 查询硬件及系统信息
      ******************************/
 
-    public static List<String> getDeviceInfo() {
+    public List<String> getDeviceInfo() {
         return mMDMController.getDeviceInfo();
     }
 
@@ -758,7 +757,7 @@ public class MDM {
      * 电话白名单
      *************************************************/
     //添加白名单
-    public static void addTelephonyWhiteList(List<TelephoyWhiteUser> listUser) {
+    public void addTelephonyWhiteList(List<TelephoyWhiteUser> listUser) {
 
         //insert telephony white data
         for (TelephoyWhiteUser mTelephoyWhiteUser : listUser) {
@@ -772,7 +771,7 @@ public class MDM {
     }
 
     //判断白名单是否添加成功，并反馈消息
-    private static void isAddSuccess(List<TelephoyWhiteUser> listUser, String id) {
+    private void isAddSuccess(List<TelephoyWhiteUser> listUser, String id) {
         for (TelephoyWhiteUser user : listUser) {
             if (!isTelephonyWhiteList(user.getUserId())) {
                 LogUtil.writeToFile(TAG, "false add Telephony Number = " + user.getTelephonyNumber());
@@ -786,11 +785,11 @@ public class MDM {
         }
     }
 
-    public static boolean isTelephonyWhiteList(String number) {
+    public boolean isTelephonyWhiteList(String number) {
         return DatabaseOperate.getSingleInstance().isTelephonyWhite(number);
     }
 
-   /* public static void isTelephonyWhiteListByNumber(String code, String number) {
+   /* public void isTelephonyWhiteListByNumber(String code, String number) {
         mTheTang.feedBackAll( code, DatabaseOperate.getSingleInstance().isTelephonyWhite( number ) );
     }*/
 
@@ -799,7 +798,7 @@ public class MDM {
      *
      * @param code
      */
-   /* public static void queryTelephonyWhiteList(String code) {
+   /* public void queryTelephonyWhiteList(String code) {
         mTheTang.feedBack( code, DataParseUtil.parseWhiteListToString(
                 DatabaseOperate.getSingleInstance().queryTelephonyWhite() ) );
     }*/
@@ -809,7 +808,7 @@ public class MDM {
      *
      * @param listUser
      */
-    public static void deleteTelephonyWhiteList(List<TelephoyWhiteUser> listUser, String id) {
+    public void deleteTelephonyWhiteList(List<TelephoyWhiteUser> listUser, String id) {
         DatabaseOperate.getSingleInstance().deleteTelephonyWhiteList(listUser);
         //delete telephony white data
         for (TelephoyWhiteUser mTelephoyWhiteUser : listUser) {
@@ -822,7 +821,7 @@ public class MDM {
      *
      * @param listUser
      */
-    private static void isDeleteSuccess(List<TelephoyWhiteUser> listUser, String id) {
+    private void isDeleteSuccess(List<TelephoyWhiteUser> listUser, String id) {
 
         for (TelephoyWhiteUser user : listUser) {
             if (isTelephonyWhiteList(user.getUserId())) {
@@ -840,7 +839,7 @@ public class MDM {
     /**
      * 更新电话白名单
      */
-    public static void updateTelepfohonyWhiteList() {
+    public void updateTelepfohonyWhiteList() {
         TelephoneWhiteListImpl mTelephoneWhiteListImpl = new TelephoneWhiteListImpl(mContext);
         mTelephoneWhiteListImpl.getTelephoneWhiteList();
     }
@@ -850,7 +849,7 @@ public class MDM {
      *
      * @param fileList
      */
-    public static void downloadFile(List<DownLoadEntity> fileList) {
+    public void downloadFile(List<DownLoadEntity> fileList) {
 
         if (fileList.isEmpty()) {
             return;
@@ -905,7 +904,7 @@ public class MDM {
     }
 
 
-    public static boolean isAppNewVersion(String localVersion, String onlineVersion) {
+    public boolean isAppNewVersion(String localVersion, String onlineVersion) {
 
         if (localVersion.equals(onlineVersion)) {
             return false;
@@ -939,7 +938,7 @@ public class MDM {
      *
      * @param downLoadEntity
      */
-    private static void storageAppInfo(DownLoadEntity downLoadEntity) {
+    private void storageAppInfo(DownLoadEntity downLoadEntity) {
         //如果该app已经存在或为EMM，不存入数据库
         if (Common.packageName.equals(downLoadEntity.packageName)) {
             return;
@@ -979,7 +978,7 @@ public class MDM {
      * @param packageName
      * @return
      */
-    public static String judgmentAppHadInstall(String packageName) {
+    public String judgmentAppHadInstall(String packageName) {
         PackageManager packageManager = mContext.getPackageManager();
         String version = null;
         try {
@@ -994,7 +993,7 @@ public class MDM {
     /**
      * 删除文件
      */
-    public static void deleteIssuedFile(List<DownLoadEntity> fileList) {
+    public void deleteIssuedFile(List<DownLoadEntity> fileList) {
         if (fileList.isEmpty()) {
             return;
         }
@@ -1024,7 +1023,7 @@ public class MDM {
      *
      * @param appList
      */
-    public static void silentUninstallApp(List<DownLoadEntity> appList) {
+    public void silentUninstallApp(List<DownLoadEntity> appList) {
         for (DownLoadEntity downLoadEntity : appList) {
             APKEvent apkEvent = new APKEvent(downLoadEntity, OrderConfig.SilentUninstallAppication);
             AppTask appTask = new AppTask();
@@ -1035,7 +1034,7 @@ public class MDM {
     /**
      * 清除密码
      */
-    public static void setPasswordNone() {
+    public void setPasswordNone() {
         boolean result = mMDMController.setPasswordNone();
 
         //解锁
@@ -1050,7 +1049,7 @@ public class MDM {
     /**
      * 播放铃声
      */
-    public static void playRingtones() {
+    public void playRingtones() {
         //判断设备是否处于安全区域，否则跳转到安全区域
         if (!mMDMController.isInFgContainer()) {
             mMDMController.switchContainer();
@@ -1074,9 +1073,9 @@ public class MDM {
      * 播放10秒歌曲
      */
 
-    static MediaPlayer mediaPlayer = null;
+    MediaPlayer mediaPlayer = null;
 
-    public static void playMusic() {
+    public void playMusic() {
         mediaPlayer = new MediaPlayer();
         try {
             mediaPlayer.setDataSource(mContext, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE));
@@ -1103,7 +1102,7 @@ public class MDM {
         }
     }
 
-    public static void releasePlayer(MediaPlayer mediaPlayer) {
+    public void releasePlayer(MediaPlayer mediaPlayer) {
         if (mediaPlayer != null) {
             mediaPlayer.stop();
 
@@ -1121,7 +1120,7 @@ public class MDM {
      *
      * @param mediaPlayer
      */
-    private static void showDialog(final MediaPlayer mediaPlayer) {
+    private void showDialog(final MediaPlayer mediaPlayer) {
 
         final WindowManager windowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
@@ -1141,7 +1140,7 @@ public class MDM {
      *
      * @param appBlackWhiteData
      */
-    public static void appBlackWhiteList(AppBlackWhiteData appBlackWhiteData) {
+    public void appBlackWhiteList(AppBlackWhiteData appBlackWhiteData) {
 
         //删除黑白名单
         if (appBlackWhiteData == null) {
@@ -1194,7 +1193,7 @@ public class MDM {
     }
 
     //用于黑白名单删除应用
-    static Handler appHandle = new Handler() {
+    Handler appHandle = new Handler() {
         @Override
         public void handleMessage(Message msg) {
 
@@ -1206,7 +1205,7 @@ public class MDM {
      *
      * @param app_list
      */
-    private static void excuteBlackList(List<String> app_list) {
+    private void excuteBlackList(List<String> app_list) {
         //将EMM与商城下发的应用清除出黑名单
         app_list.remove(mTheTang.getContext().getPackageName());
 
@@ -1231,7 +1230,7 @@ public class MDM {
      *
      * @param app_list
      */
-    private static void excuteWhiteList(List<String> app_list) {
+    private void excuteWhiteList(List<String> app_list) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -1266,7 +1265,7 @@ public class MDM {
      *
      * @param isCancel
      */
-    public static void excuteMachineCard(boolean isCancel) {
+    public void excuteMachineCard(boolean isCancel) {
         //用于停止上次运行的service
         if (isCancel) {
             mContext.stopService(new Intent(mContext, MachineCardBindingService.class));
@@ -1277,7 +1276,7 @@ public class MDM {
         mTheTang.startService(new Intent(mContext, MachineCardBindingService.class));
     }
 
-    public static void machineCard(PreferencesManager preferencesManager) {
+    public void machineCard(PreferencesManager preferencesManager) {
 
         //绑定一张卡
         /*String card_iccid = preferencesManager.getComplianceData(Common.iccid_card);
@@ -1350,7 +1349,7 @@ public class MDM {
             }
 
             sendMachinCardUnCompliance();
-        //卡槽一无卡，卡槽二有卡
+            //卡槽一无卡，卡槽二有卡
         } else if (TextUtils.isEmpty(iccid) && !TextUtils.isEmpty(iccid1)) {
 
             if (TextUtils.isEmpty(iccid_card1)) {
@@ -1373,7 +1372,7 @@ public class MDM {
             }
 
             sendMachinCardUnCompliance();
-        //卡槽一有卡，卡槽二有卡
+            //卡槽一有卡，卡槽二有卡
         } else if (!TextUtils.isEmpty(iccid) && !TextUtils.isEmpty(iccid1)) {
 
             //card_iccid与card_iccid1为空
@@ -1418,7 +1417,7 @@ public class MDM {
             }
 
             sendMachinCardUnCompliance();
-        //卡槽一无卡，卡槽二无卡
+            //卡槽一无卡，卡槽二无卡
         } else if (TextUtils.isEmpty(iccid) && TextUtils.isEmpty(iccid1)) {
             //如果有存储数据，则表示拔卡，违规
             if (!TextUtils.isEmpty(iccid_card) || !TextUtils.isEmpty(iccid_card1)) {
@@ -1430,19 +1429,19 @@ public class MDM {
     /**
      * 机卡绑定违规
      */
-    private static void sendMachineCardCompliance() {
+    private void sendMachineCardCompliance() {
 /*        SystemImpl systemImpl_ready = new SystemImpl(mContext);
         systemImpl_ready.sendSystemCompliance(Common.machine_card, "0", "1");*/
 //todo baii impl bbbbbbbbbbbbbbbbb
-        LogUtil.writeToFile( TAG, "systemCompliance!" );
-        MDM.excuteSystemCompliance();
+        LogUtil.writeToFile(TAG, "systemCompliance!");
+        excuteSystemCompliance();
         sendMachineCardComplianceInfo("0", "1");
     }
 
     /**
      * 机卡绑定合规
      */
-    private static void sendMachinCardUnCompliance() {
+    private void sendMachinCardUnCompliance() {
 /*        SystemImpl systemImpl_ready = new SystemImpl(mContext);
         systemImpl_ready.sendSystemCompliance(Common.machine_card, "1", "1");*/
         //todo baii impl bbbbbbbbbbbbbbbbb
@@ -1450,8 +1449,8 @@ public class MDM {
 
     }
 
-    private static void sendMachineCardComplianceInfo(String type, String state) {
-        String alias = PreferencesManager.getSingleInstance().getData( Common.alias);
+    private void sendMachineCardComplianceInfo(String type, String state) {
+        String alias = PreferencesManager.getSingleInstance().getData(Common.alias);
         String systemComplianceId = PreferencesManager.getSingleInstance().getComplianceData(Common.system_compliance_id);
         final JSONObject jsonObject = new JSONObject();
         try {
@@ -1470,7 +1469,7 @@ public class MDM {
     /**
      * 执行系统违规
      */
-    public static void excuteSystemCompliance() {
+    public void excuteSystemCompliance() {
         String pwd = PreferencesManager.getSingleInstance().getComplianceData(Common.system_compliance_pwd);
         if (TextUtils.isEmpty(pwd)) {
             setFactoryReset();
@@ -1482,7 +1481,7 @@ public class MDM {
     /**
      * 通过NetworkManager的setFirewallEnabled方法禁止手机上网，需要系统权限
      */
-    public static void forbiddenNetWork(boolean enable) {
+    public void forbiddenNetWork(boolean enable) {
         //设置系统防火墙
         Method method = null;
         try {
@@ -1506,7 +1505,7 @@ public class MDM {
      *
      * @param enable
      */
-    public static void enableMobileData(boolean enable) {
+    public void enableMobileData(boolean enable) {
         //设置系统防火墙
         Method method = null;
         try {
@@ -1529,7 +1528,7 @@ public class MDM {
      * @param aAllow
      * @return
      */
-    public static boolean setAppAccessNetwork(String aPkgName, boolean aAllow) {
+    public boolean setAppAccessNetwork(String aPkgName, boolean aAllow) {
 
         try {
             //int pkgUid = mContext.getPackageManager().getPackageUid(aPkgName, mContext.getUserId());
@@ -1563,7 +1562,7 @@ public class MDM {
     /**
      * 删除账户
      */
-    public static void deleteAccount() {
+    public void deleteAccount() {
 
         /*cleanDatabase();
         cleanSharePreference();
@@ -1583,7 +1582,7 @@ public class MDM {
     /**
      * 清除数据库（/data/data/com.xxx.xxx/databases）
      */
-    private static void cleanDatabase() {
+    private void cleanDatabase() {
         mContext.getFilesDir().getPath();
         deleteFilesByDirectory(new File(mContext.getDataDir().getPath() + "/databases"));
     }
@@ -1591,28 +1590,28 @@ public class MDM {
     /**
      * 清除SharePreference（/data/data/com.xxx.xxx/shared_prefs）
      */
-    private static void cleanSharePreference() {
-        deleteFilesByDirectory(new File(mContext.getDataDir().getPath()  + "/shared_prefs"));
+    private void cleanSharePreference() {
+        deleteFilesByDirectory(new File(mContext.getDataDir().getPath() + "/shared_prefs"));
     }
 
     /**
      * 清除内部缓存（/data/data/com.xxx.xxx/cache）
      */
-    private static void cleanInternalCache() {
+    private void cleanInternalCache() {
         deleteFilesByDirectory(mContext.getCacheDir());
     }
 
     /**
      * 清除外部缓存（/mnt/sdcard/android/data/com.xxx.xxx/cache）
      */
-    private static void cleanExternalCache() {
+    private void cleanExternalCache() {
         deleteFilesByDirectory(mContext.getExternalCacheDir());
     }
 
     /**
      * 清除（/data/data/com.xxx.xxx/files）下文件
      */
-    private static void cleanFiles() {
+    private void cleanFiles() {
         deleteFilesByDirectory(mContext.getFilesDir());
     }
 
@@ -1621,14 +1620,14 @@ public class MDM {
     /**
      * 清除自定义文件
      */
-    private static void cleanCustomFiles() {
+    private void cleanCustomFiles() {
         deleteFilesByDirectory(mContext.getExternalFilesDir(null));
     }
 
     /**
      * 退出应用
      */
-    private static void loginOut() {
+    private void loginOut() {
         Intent intent = new Intent();
         intent.setAction("login_out");
         mContext.sendBroadcast(intent);
@@ -1639,7 +1638,7 @@ public class MDM {
      *
      * @param directory
      */
-    private static void deleteFilesByDirectory(File directory) {
+    private void deleteFilesByDirectory(File directory) {
         if (directory != null && directory.exists() && directory.isDirectory()) {
             scanFile(directory);
         }
@@ -1650,7 +1649,7 @@ public class MDM {
      *
      * @param file
      */
-    private static void scanFile(File file) {
+    private void scanFile(File file) {
 
         for (File subFile : file.listFiles()) {
             if (subFile.isDirectory()) {
@@ -1666,7 +1665,7 @@ public class MDM {
      *
      * @param file
      */
-    public static void deleteFile(File file) {
+    public void deleteFile(File file) {
         if (file.exists()) {
             file.delete();
         }
@@ -1675,7 +1674,7 @@ public class MDM {
     /**
      * 获得所有设备信息
      */
-    public static void sendAllDeviceInfo() {
+    public void sendAllDeviceInfo() {
 /*        DeviceImpl deviceImpl = new DeviceImpl(mContext);
         deviceImpl.sendDeviceInfo(deviceUtil.getDeviceInfo());*/
 //todo impl bai 444444444444
@@ -1685,7 +1684,7 @@ public class MDM {
         manager.sendMessage(data);
     }
 
-    
+
     public boolean enableBluetoothOpp(boolean enable) {
         return false;
     }
@@ -1711,7 +1710,7 @@ public class MDM {
      * 删除用户
      *********************************/
 
-    public static class GpsLocationReceiver extends BroadcastReceiver {
+    public class GpsLocationReceiver extends BroadcastReceiver {
         String code;
 
         public GpsLocationReceiver(String code) {
@@ -1740,7 +1739,7 @@ public class MDM {
      *
      * @param packageName
      */
-    public static void addAppTONoUninstallList(String packageName) {
+    public void addAppTONoUninstallList(String packageName) {
         mMDMController.enableUninstallWhiteListFunction(true);
         mMDMController.addPkgNameToUninstallList(packageName);
     }
@@ -1750,7 +1749,7 @@ public class MDM {
      *
      * @param packageName
      */
-    public static void deleteAppFromUninstallList(String packageName) {
+    public void deleteAppFromUninstallList(String packageName) {
         if (mMDMController.queryPkgNameFromUninstallList(packageName)) {
             mMDMController.deletePkgNameFromUninstallList(packageName);
         }
@@ -1759,7 +1758,7 @@ public class MDM {
     /**
      * 上传异常log
      */
-    public static void uploadDebugLog(ExceptionLogData exceptionLogData) {
+    public void uploadDebugLog(ExceptionLogData exceptionLogData) {
 
         //判断是否在wifi环境下上传
         if ("1".equals(exceptionLogData.isWifiUpload)) {
@@ -1780,7 +1779,7 @@ public class MDM {
     /**
      * 上传Log
      */
-    public static void uploadLog(String id, String date) {
+    public void uploadLog(String id, String date) {
 /*        LogUploadImpl mLogUploadImpl = new LogUploadImpl(mContext);
         mLogUploadImpl.logUpload(id, date);*/
 //todo impl bai 7777777777777777
@@ -1805,9 +1804,9 @@ public class MDM {
             @Override
             public void onSuccess() {
                 PreferencesManager preferencesManager = PreferencesManager.getSingleInstance();
-                preferencesManager.removeLogData( "logId" );
-                preferencesManager.removeLogData( "isWifiUpload" );
-                preferencesManager.removeLogData( "date" );
+                preferencesManager.removeLogData("logId");
+                preferencesManager.removeLogData("isWifiUpload");
+                preferencesManager.removeLogData("date");
             }
 
             @Override
@@ -1826,7 +1825,7 @@ public class MDM {
     /**
      * 设备更新
      */
-    public static void deviceUpdate(List<DownLoadEntity> list) {
+    public void deviceUpdate(List<DownLoadEntity> list) {
 
         //mTheTang.showToastByRunnable( mContext, "EMM正在更新，请勿关机！", Toast.LENGTH_SHORT );
         mTheTang.addMessage(OrderConfig.device_update + "", "v" + list.get(0).version);
@@ -1836,7 +1835,7 @@ public class MDM {
     /**
      * 开启电话白名单
      */
-    public static void startPhoneWhite() {
+    public void startPhoneWhite() {
         preferencesManager.setOtherData(Common.white_phone, "true");
         if (!mMDMController.isCallWhiteListOpen()) {
             mMDMController.setCallWhiteList(true);
@@ -1853,7 +1852,7 @@ public class MDM {
     /**
      * 关闭电话白名单
      */
-    public static void stopPhoneWhite() {
+    public void stopPhoneWhite() {
         preferencesManager.setOtherData(Common.white_phone, "false");
         if (mMDMController.isCallWhiteListOpen()) {
             mMDMController.setCallWhiteList(false);
@@ -1867,7 +1866,7 @@ public class MDM {
         sendPhoneWhiteListStatus("0");
     }
 
-    private static void  sendPhoneWhiteListStatus(String status) {
+    private void sendPhoneWhiteListStatus(String status) {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("status", status);
@@ -1884,10 +1883,10 @@ public class MDM {
      *
      * @param packageName
      */
-    public static void forbiddenAppNetwork(String packageName) {
+    public void forbiddenAppNetwork(String packageName) {
         int uid = AppUtils.getAppUid(mContext, packageName);
-        MDM.mMDMController.executeShellToSetIptables("-N " + uid);
-        MDM.mMDMController.executeShellToSetIptables("-A OUTPUT -m owner --uid-owner " + uid + " -j DROP");
+        mMDMController.executeShellToSetIptables("-N " + uid);
+        mMDMController.executeShellToSetIptables("-A OUTPUT -m owner --uid-owner " + uid + " -j DROP");
     }
 
     /**
@@ -1895,15 +1894,15 @@ public class MDM {
      *
      * @param packageName
      */
-    public static void cancelForbiddenAppNetwork(String packageName) {
+    public void cancelForbiddenAppNetwork(String packageName) {
         int uid = AppUtils.getAppUid(mContext, packageName);
-        MDM.mMDMController.executeShellToSetIptables(" -D OUTPUT -m owner --uid-owner " + uid + " -j DROP ");
+        mMDMController.executeShellToSetIptables(" -D OUTPUT -m owner --uid-owner " + uid + " -j DROP ");
     }
 
     /**
      * 浏览器白名单
      */
-    public static void excuteIptables(String packageName, List<String> hosts) {
+    public void excuteIptables(String packageName, List<String> hosts) {
 
         if (hosts == null || hosts.size() == 0) {
             return;
@@ -1911,16 +1910,16 @@ public class MDM {
 
         int uid = AppUtils.getAppUid(mContext, packageName);
 
-        MDM.mMDMController.executeShellToSetIptables("-N " + uid);
-        MDM.mMDMController.executeShellToSetIptables("-A OUTPUT -m owner --uid-owner " + uid + " -j " + uid);
-        MDM.mMDMController.executeShellToSetIptables("-F " + uid);
-        MDM.mMDMController.executeShellToSetIptables("-A " + uid + " -p tcp -m string --string Host: --algo bm -j MARK --set-mark 1");
+        mMDMController.executeShellToSetIptables("-N " + uid);
+        mMDMController.executeShellToSetIptables("-A OUTPUT -m owner --uid-owner " + uid + " -j " + uid);
+        mMDMController.executeShellToSetIptables("-F " + uid);
+        mMDMController.executeShellToSetIptables("-A " + uid + " -p tcp -m string --string Host: --algo bm -j MARK --set-mark 1");
 
         for (String host : hosts) {
-            MDM.mMDMController.executeShellToSetIptables("-A " + uid + " -p tcp -m mark --mark 1 -m string --string " + host + " --algo bm -j ACCEPT");
+            mMDMController.executeShellToSetIptables("-A " + uid + " -p tcp -m mark --mark 1 -m string --string " + host + " --algo bm -j ACCEPT");
         }
 
-        MDM.mMDMController.executeShellToSetIptables("-A " + uid + " -p tcp -m mark --mark 1 -j REJECT");
+        mMDMController.executeShellToSetIptables("-A " + uid + " -p tcp -m mark --mark 1 -j REJECT");
     }
 
     /**
@@ -1928,9 +1927,9 @@ public class MDM {
      *
      * @param packageName
      */
-    public static void cancelIPtable(String packageName) {
+    public void cancelIPtable(String packageName) {
         int uid = AppUtils.getAppUid(mContext, packageName);
-        MDM.mMDMController.executeShellToSetIptables("-F " + uid);
+        mMDMController.executeShellToSetIptables("-F " + uid);
     }
 
     /**
@@ -1939,7 +1938,7 @@ public class MDM {
      * @param code
      * @param securityChromeData
      */
-    public static void excuteSecurityChrome(String code, SecurityChromeData securityChromeData) {
+    public void excuteSecurityChrome(String code, SecurityChromeData securityChromeData) {
 
         if (securityChromeData == null) {
 
@@ -2010,7 +2009,7 @@ public class MDM {
      *
      * @param sec_white_list
      */
-    public static void excuteChrome(Map<String, String> sec_white_list) {
+    public void excuteChrome(Map<String, String> sec_white_list) {
 
         if (sec_white_list == null) {
             return;
@@ -2038,7 +2037,7 @@ public class MDM {
      * @param uid
      * @return
      */
-    public static boolean isProcessWork(int uid) {
+    public boolean isProcessWork(int uid) {
         boolean isWork = false;
         ActivityManager myAM = (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningAppProcessInfo> myList = myAM.getRunningAppProcesses();
@@ -2060,7 +2059,7 @@ public class MDM {
      *
      * @param sec_white_list
      */
-    public static void showToDesk(Map<String, String> sec_white_list) {
+    public void showToDesk(Map<String, String> sec_white_list) {
 
         if (sec_white_list == null)
             return;
@@ -2106,7 +2105,7 @@ public class MDM {
     /**
      * 删除安全浏览器
      */
-    public static void deleteSecurityChrome() {
+    public void deleteSecurityChrome() {
 
         cancelIPtable("com.android.browser");
 
@@ -2145,7 +2144,7 @@ public class MDM {
     /**
      * 取消安全浏览器
      */
-    public static void cancelSecurityChrome() {
+    public void cancelSecurityChrome() {
         cancelIPtable("com.android.browser");
 
         int uid = AppUtils.getAppUid(mContext, "com.android.browser");
@@ -2184,7 +2183,7 @@ public class MDM {
      *
      * @param deleteAppData
      */
-    public static void deleteApp(DeleteAppData deleteAppData) {
+    public void deleteApp(DeleteAppData deleteAppData) {
         if (deleteAppData == null) {
             return;
         }
@@ -2197,7 +2196,7 @@ public class MDM {
         }
         mTheTang.addMessage(OrderConfig.delete_app + "", app_name);
 
-        MDM.silentUninstall(deleteAppData.packageName);
+        silentUninstall(deleteAppData.packageName);
     }
 
     /**
@@ -2205,7 +2204,7 @@ public class MDM {
      *
      * @param settingAboutData
      */
-    public static void excuteSettingAbout(SettingAboutData settingAboutData) {
+    public void excuteSettingAbout(SettingAboutData settingAboutData) {
         mTheTang.storageSettingAboutData(settingAboutData);
         EventBus.getDefault().post(new SettingEvent());
     }
@@ -2215,7 +2214,7 @@ public class MDM {
      *
      * @param safetyLimitData
      */
-    public static void storageSafetyLimitData(SafetyLimitData safetyLimitData) {
+    public void storageSafetyLimitData(SafetyLimitData safetyLimitData) {
 
         preferencesManager.setSecurityData(Common.banCamera, safetyLimitData.banCamera);
         preferencesManager.setSecurityData(Common.banWifi, safetyLimitData.banWifi);
@@ -2244,7 +2243,7 @@ public class MDM {
     /**
      * 挂载SDCard
      */
-    public static synchronized void mountSDCard() {
+    public synchronized void mountSDCard() {
 
         String sd = preferencesManager.getComplianceData(Common.system_sd_id);
 
@@ -2264,8 +2263,8 @@ public class MDM {
 /*            SystemImpl systemImpl_ready = new SystemImpl(TheTang.getSingleInstance().getContext());
             systemImpl_ready.sendSystemCompliance(Common.sd_card, "0", "0");*/
             //todo baii impl bbbbbbbbbbbbbbbbb
-            LogUtil.writeToFile( TAG, "systemCompliance!" );
-            MDM.excuteSystemCompliance();
+            LogUtil.writeToFile(TAG, "systemCompliance!");
+            excuteSystemCompliance();
             sendMachineCardComplianceInfo("0", "0");
             //}
         } else {
@@ -2283,16 +2282,40 @@ public class MDM {
     /**
      * 弹出SDCard
      */
-    public static synchronized void ejectSDCard() {
+    public synchronized void ejectSDCard() {
         //未违规的情况下做违规处理，多次违规不做重复操作
         //if (!"true".equals( mPreferencesManager.getComplianceData( Common.hadSystemCompliance ) )) {
         // mPreferencesManager.setComplianceData( Common.hadSystemCompliance, "true" );
 /*        SystemImpl systemImpl_ready = new SystemImpl(mContext);
         systemImpl_ready.sendSystemCompliance(Common.sd_card, "0", "0");*/
         //todo baii impl bbbbbbbbbbbbbbbbb
-        LogUtil.writeToFile( TAG, "systemCompliance!" );
-        MDM.excuteSystemCompliance();
+        LogUtil.writeToFile(TAG, "systemCompliance!");
+        excuteSystemCompliance();
         sendMachineCardComplianceInfo("0", "0");
         //}
+    }
+
+    public void setCallWhiteList(List<String> callWhiteList) {
+        mMDMController.setCallWhiteList(callWhiteList);
+    }
+
+    public boolean isInFgContainer() {
+        return mMDMController.isInFgContainer();
+    }
+
+    public void setHome(String pkgName) {
+        mMDMController.setHome(pkgName);
+    }
+
+    public boolean isCallAutoRecord() {
+        return mMDMController.isCallAutoRecord();
+    }
+
+    public void setCallAutoRecord(boolean open) {
+        mMDMController.setCallAutoRecord(open);
+    }
+
+    public void setCallAutoRecordDir(String path) {
+        mMDMController.setCallAutoRecordDir(path);
     }
 }

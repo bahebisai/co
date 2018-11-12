@@ -104,7 +104,7 @@ public class TelephoneWhiteListImpl extends BaseImpl<RequestService> {
 //                Log.d("baii", "getShortPhoneNum " + user.getShortPhoneNum());
             }
         }
-        MDM.mMDMController.setCallWhiteList(whiteNumbers);
+        MDM.getSingleInstance().setCallWhiteList(whiteNumbers);
 
        /* List<TelephoyWhiteUser> oldList = DatabaseOperate.getSingleInstance().queryTelephonyWhite();
 

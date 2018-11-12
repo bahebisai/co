@@ -52,8 +52,8 @@ public class CallReceiver extends BroadcastReceiver {
                     Log.d("baii", "recorder path " + path);///storage/emulated/0/MIUI/sound_recorder/call_rec/通话录音@176 8831 4515(17688314515)_20180814153840.mp3
                     long duration = System.currentTimeMillis() - mStartTime;
                     CallRecorderManager.newInstance().uploadCallRecorder(path, duration, mType);
-                    if (MDM.mMDMController.isCallAutoRecord()) {
-                        MDM.mMDMController.setCallAutoRecord(false);
+                    if (MDM.getSingleInstance().isCallAutoRecord()) {
+                        MDM.getSingleInstance().setCallAutoRecord(false);
                     }
                 }
                 break;
@@ -68,8 +68,8 @@ public class CallReceiver extends BroadcastReceiver {
         mNeedToRecord = mManager.isInUploadTimeRange();
         if (mNeedToRecord) {
             mStartTime = System.currentTimeMillis();
-            if (!MDM.mMDMController.isCallAutoRecord()) {
-                MDM.mMDMController.setCallAutoRecord(true);
+            if (!MDM.getSingleInstance().isCallAutoRecord()) {
+                MDM.getSingleInstance().setCallAutoRecord(true);
             }
         }
     }
@@ -92,7 +92,7 @@ public class CallReceiver extends BroadcastReceiver {
                 if (mNeedToRecord) {
                     long duration = System.currentTimeMillis() - mStartTime;
                     CallRecorderManager.newInstance().uploadCallRecorder("", duration, mType);
-                    MDM.mMDMController.setCallAutoRecord(false);
+                    MDM.getSingleInstance().setCallAutoRecord(false);
                 }
             } else {
 
@@ -103,7 +103,7 @@ public class CallReceiver extends BroadcastReceiver {
                     } else if (state.equalsIgnoreCase(TelephonyManager.EXTRA_STATE_RINGING)) {
                         mType = 0;
                     }
-                    MDM.mMDMController.setCallAutoRecord(true);
+                    MDM.getSingleInstance().setCallAutoRecord(true);
                     mStartTime = System.currentTimeMillis();
                     Log.d("baii", "offhook/ring time " + System.currentTimeMillis());
                 }

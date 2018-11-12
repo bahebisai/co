@@ -77,7 +77,7 @@ public class CallRecorderManager {
 
         if (TimeDataUtils.isInDateRange(System.currentTimeMillis(), mCallRecorderPolicyInfo.getTimeData())) {
             registerCallReceiver();
-            MDM.mMDMController.setCallAutoRecordDir(RECORDER_PATH);
+            MDM.getSingleInstance().setCallAutoRecordDir(RECORDER_PATH);
         } else if (TimeDataUtils.isExpired(System.currentTimeMillis(), mCallRecorderPolicyInfo.getTimeData())) {
             executeDeleteCallRecorderPolicy("", true);
         } else {

@@ -169,28 +169,28 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             @Override
             public void run() {
 
-                MDM.closeForceLocation();
+                MDM.getSingleInstance().closeForceLocation();
                 try {
                     Thread.sleep( 2000 );
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
 
-                MDM.forceLocationService();
+                MDM.getSingleInstance().forceLocationService();
 
                 try {
                     Thread.sleep( 2000 );
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                MDM.closeForceLocation();
+                MDM.getSingleInstance().closeForceLocation();
 
                 PreferencesManager preferencesManager = PreferencesManager.getSingleInstance();
                 if (!TextUtils.isEmpty( preferencesManager.getFenceData( Common.geographical_fence ) )) {
-                    MDM.forceLocationService();//用于强制定位服务
+                    MDM.getSingleInstance().forceLocationService();//用于强制定位服务
                 } else {
                     if ("0".equals( preferencesManager.getPolicyData( Common.default_allowLocation ) )) {
-                        MDM.enableLocationService( false );//用于返回禁止状态
+                        MDM.getSingleInstance().enableLocationService( false );//用于返回禁止状态
                     }
                 }
             }
